@@ -50,7 +50,9 @@ dependencies {
   // https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-yaml
   implementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.11.3'
   
-
+  // https://mvnrepository.com/artifact/com.googlecode.aima-java/aima-core
+  implementation group: 'com.googlecode.aima-java', name: 'aima-core', version: '3.0.0'
+  
     //compile 'net.sf.jung:jung2:2.0.1'
   api 'net.sf.jung:jung-graph-impl:2.0.1'
   api 'net.sf.jung:jung-algorithms:2.0.1'
