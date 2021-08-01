@@ -1,18 +1,19 @@
 package examples.MDP;
 
 import java.util.Hashtable;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import aima.core.probability.mdp.TransitionProbabilityFunction;
 
 public class HTNTransitionProbabilityFunction implements Comparable<TransitionProbabilityFunction<HTNState, HTNAction>>{
 
-	private Hashtable<HtnMdpTransition<HTNState, HTNAction2>, Double> transitionToProbability ;
+	private LinkedHashMap<HtnMdpTransition<HTNState, HTNAction2>, Double> transitionToProbability ;
 	private List<HTNState> terminalStates;
 
 	public HTNTransitionProbabilityFunction(List<HTNState> terminalStates) {
 		this.terminalStates = terminalStates;
-		transitionToProbability =  new Hashtable<HtnMdpTransition<HTNState, HTNAction2>, Double>();
+		transitionToProbability =  new LinkedHashMap<HtnMdpTransition<HTNState, HTNAction2>, Double>();
 
 
 	}
@@ -37,7 +38,7 @@ public class HTNTransitionProbabilityFunction implements Comparable<TransitionPr
 		}
 	}
 
-	public Hashtable<HtnMdpTransition<HTNState, HTNAction2>, Double> getTransitionProbabilityModel() {
+	public LinkedHashMap<HtnMdpTransition<HTNState, HTNAction2>, Double> getTransitionProbabilityModel() {
 		return transitionToProbability;
 	}
 	

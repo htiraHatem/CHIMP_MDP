@@ -1,6 +1,7 @@
 package examples.MDP;
 
 import java.util.Hashtable;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -44,7 +45,7 @@ public class HtnMdpFactory<HTNState, HTNAction extends Action> implements Markov
 		return actionsFunction.actions();
 	}
 
-	public Hashtable<HtnMdpTransition<examples.MDP.HTNState, HTNAction2>, Double> transitionProbability(HTNState sDelta, HTNState s, HTNAction2 a) {
+	public LinkedHashMap<HtnMdpTransition<examples.MDP.HTNState, HTNAction2>, Double> transitionProbability(HTNState sDelta, HTNState s, HTNAction2 a) {
 		return hTNTransitionProbabilityFunction.getTransitionProbabilityModel();
 
 	}

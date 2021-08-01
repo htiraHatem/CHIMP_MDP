@@ -263,7 +263,7 @@ public class HTNNetworkToMDP {
 		
 		
 		PolicyIteration<HTNState, HTNAction> pi = new PolicyIteration<HTNState, HTNAction>(
-				new ModifiedPolicyEvaluation<HTNState, HTNAction>(100, 
+				new ModifiedPolicyEvaluation<HTNState, HTNAction>(300, 
 						1.0));
 		
 //		System.out.print(
