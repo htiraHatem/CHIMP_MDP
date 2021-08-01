@@ -1,0 +1,36 @@
+; This is the ITA example 1
+; 
+
+(defdomain basic (
+  (:operator (!moveTo ?l1 ?l2 ?v) 
+             ((has ?v) (at ?l1)) ;preconds
+             ((at ?l1))   ;delete list
+             ((at ?l2)))  ;add list
+  (:operator (!getVehicle ?v) 
+             () 
+             () 
+             ((has ?v)))
+
+  (:method (goTo ?l)
+    ()
+    ((!getVehicle car) (obtainVehicle) (!moveTo ?l))
+  )
+
+  (:method (obtainVehicle)
+    ((at home))
+    ((!moveTo home airport car) (!getVehicle plane))
+	((at home))
+    ((!moveTo home harbor car) (!getVehicle ship))
+  )
+  
+  (:method (moveTo ?l)
+    ((has plane))
+    ((!moveTo airport nyc plane) (!moveTo nyc london plane))
+	((has ship))
+    ((!moveTo harbor soton ship) (!moveTo soton london ship))
+	((has ship))
+    ((!moveTo harbor lpool ship) (!moveTo lpool london ship))
+  )
+
+ )
+)

@@ -1,0 +1,2 @@
+(defproblem problem gotolondon
+  ((at home)) ((goTo london)))
