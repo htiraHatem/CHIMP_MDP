@@ -1,0 +1,26 @@
+digraph {
+ size="8.5,11";
+"5" [label="{[~at(airport), has(plane), has(car), at(london), ~at(nyc), ~at(home)]} r:5.0"];
+"9" [label="{[has(ship), ~at(lpool), has(car), at(london), ~at(home), ~at(harbor)]} r:5.0"];
+"11" [label="{[has(ship), has(car), at(london), ~at(home), ~at(soton), ~at(harbor)]} r:5.0"];
+"0" [label="{[at(home)]} r:0.0"];
+"1" [label="{[at(home), has(car)]} r:1.0"];
+"2" [label="{[at(airport), has(car), ~at(home)]} r:2.0"];
+"3" [label="{[at(airport), has(plane), has(car), ~at(home)]} r:3.0"];
+"4" [label="{[~at(airport), has(plane), has(car), ~at(home), at(nyc)]} r:4.0"];
+"6" [label="{[at(harbor), has(car), ~at(home)]} r:2.0"];
+"7" [label="{[has(ship), at(harbor), has(car), ~at(home)]} r:3.0"];
+"8" [label="{[has(ship), has(car), ~at(home), at(lpool), ~at(harbor)]} r:4.0"];
+"10" [label="{[has(ship), at(soton), has(car), ~at(home), ~at(harbor)]} r:4.0"];
+"0" -> "1" [ label="getVehicle(car)" ];
+"1" -> "2" [ label="moveTo(home,airport,car)" ];
+"1" -> "6" [ label="moveTo(home,harbor,car)" ];
+"2" -> "3" [ label="getVehicle(plane)" ];
+"3" -> "4" [ label="moveTo(airport,nyc,plane)" ];
+"4" -> "5" [ label="moveTo(nyc,london,plane)" ];
+"6" -> "7" [ label="getVehicle(ship)" ];
+"7" -> "8" [ label="moveTo(harbor,lpool,ship)" ];
+"7" -> "10" [ label="moveTo(harbor,soton,ship)" ];
+"8" -> "9" [ label="moveTo(lpool,london,ship)" ];
+"10" -> "11" [ label="moveTo(soton,london,ship)" ];
+}

@@ -1,5 +1,6 @@
 package examples.MDP;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -128,19 +129,19 @@ public class HTNTransitionProbabilityFunction implements Comparable<TransitionPr
 //		return result;
 //	}
 
-//	public List<MDPTransition<STATE_TYPE, ACTION_TYPE>> getTransitionsWithStartingStateAndAction(
-//			STATE_TYPE s, ACTION_TYPE a) {
-//		List<MDPTransition<STATE_TYPE, ACTION_TYPE>> result = new ArrayList<MDPTransition<STATE_TYPE, ACTION_TYPE>>();
-//		for (MDPTransition<STATE_TYPE, ACTION_TYPE> transition : transitionToProbability
-//				.keySet()) {
-//			if ((transition.getInitialState().equals(s))
-//					&& (transition.getAction().equals(a))) {
-//				result.add(transition);
-//			}
-//		}
-//		return result;
-//	}
-//
+	public List<HtnMdpTransition> getTransitionsWithStartingStateAndAction(
+			HTNState s, HTNAction a) {
+		List<HtnMdpTransition> result = new ArrayList<HtnMdpTransition>();
+		for (HtnMdpTransition<HTNState, HTNAction> transition : transitionToProbability
+				.keySet()) {
+			if ((transition.getInitialState().equals(s))
+					&& (transition.getAction().equals(a))) {
+				result.add(transition);
+			}
+		}
+		return result;
+	}
+
 //	public ACTION_TYPE randomActionFor(STATE_TYPE s) {
 //		List<MDPTransition<STATE_TYPE, ACTION_TYPE>> transitions = getTransitionsStartingWith(s);
 //		MDPTransition<STATE_TYPE, ACTION_TYPE> randomTransition = Util

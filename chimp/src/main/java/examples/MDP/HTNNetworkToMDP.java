@@ -2,6 +2,7 @@ package examples.MDP;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -10,26 +11,13 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
-import com.google.common.collect.Sets;
-
-import aima.core.agent.Action;
-import aima.core.environment.cellworld.Cell;
-import aima.core.environment.cellworld.CellWorldAction;
-import aima.core.probability.example.MDPFactory;
-import aima.core.probability.mdp.MarkovDecisionProcess;
 import aima.core.probability.mdp.Policy;
-import aima.core.probability.mdp.TransitionProbabilityFunction;
-import aima.core.probability.mdp.impl.MDP;
 import aima.core.probability.mdp.impl.ModifiedPolicyEvaluation;
 import aima.core.probability.mdp.search.PolicyIteration;
-import aima.core.util.Util;
 import edu.cmu.ita.htn.Constraint;
 import edu.cmu.ita.htn.HTNDomain;
 import edu.cmu.ita.htn.HTNExpander;
@@ -41,6 +29,7 @@ import edu.cmu.ita.htn.TaskNetwork;
 import edu.cmu.ita.htn.parser.HTNParser;
 import edu.cmu.ita.mdp.TransitionMatrix;
 import edu.cmu.ita.mdp.aima.MDPState;
+import ui.Dot2Graph;
 
 /**
  * @author meneguzzi , 
@@ -220,8 +209,6 @@ public class HTNNetworkToMDP {
 			// create states
 			Set<HTNState> states = createMDPStates(mStates, tasks);
 
-			// get final not final states
-			List<HTNState> nonFinalStates = new ArrayList<HTNState>();
 			List<HTNState> finalStates = new ArrayList<HTNState>();
 
 			// get transition function
@@ -236,44 +223,41 @@ public class HTNNetworkToMDP {
 //		for(HTNAction2 act :actions.actions())
 //			System.out.println("Actions transition: " + 	    transitionModel.getTransitionProbability1(new ArrayList<>(states).get(0), act, new ArrayList<>(states).get(1)));
 
-			for (HTNState s : states) {
-				System.out.println("isFinal: " + s.isFinal());
-
-				if (s.isFinal()) {
-					finalStates.add(s);
-				} else {
-					nonFinalStates.add(s);
-				}
-			}
-
-			System.out.println("finalStates: " + finalStates.size());
-			System.out.println("nonFinalStates: " + nonFinalStates.size());
+	
 
 			// get or create reward function
 			HTNReward rewardFunction = createRewardFunction(states, fullyExpanded);
 
-			System.out.println("==========NonfinalStates: ");
-			for (int i = 0; i < nonFinalStates.size(); i++)
-				System.out.println("state: " + nonFinalStates.get(i) + " || reward : "
-						+ rewardFunction.getRewardFor(nonFinalStates.get(i)));
+//			System.out.println("==========NonfinalStates: ");
+//			for (int i = 0; i < nonFinalStates.size(); i++)
+//				System.out.println("state: " + nonFinalStates.get(i) + " || reward : "
+//						+ rewardFunction.getRewardFor(nonFinalStates.get(i)));
+//
+//			System.out.println("==========finalStates: ");
 
-			System.out.println("==========finalStates: ");
-
-			MarkovDecisionProcess<HTNState, HTNAction> mdp = new HtnMdpFactory<HTNState, HTNAction>(states,
+			HtnMdpFactory<HTNState, HTNAction> mdp = new HtnMdpFactory<HTNState, HTNAction>(states,
 					new ArrayList<>(states).get(0), actions, transitionModel, rewardFunction);
 
+			System.out.println("finalStates: " + mdp.getFinalstates().size());
+			System.out.println("nonFinalStates: " + mdp.getNonFinalStates().size());
 			for (int i = 0; i < finalStates.size(); i++)
 				System.out.println("state: " + finalStates.get(i) + " || reward : " + mdp.reward(finalStates.get(i)));
-			// rewardFunction.getRewardFor(finalStates.get(i)));
 
-			// to check tansition get ..
-			// hTNTransitionProbabilityFunction.getTransitionProbability(sDelta, a, s);
 
+			//convert to dot language
+			String mdpGraph = "src/main/java/examples/MDP/gotolondon/ita-problemMDP.dot";
+
+			if (mdpGraph != null ) {
+				FileWriter writer = new FileWriter(mdpGraph);
+				logger.info("Writing MDP Graph into " + mdpGraph);
+				Dot2Graph.printMDPDot(writer, mdp, true);
+				writer.close();
+				
+			}
+			
 			PolicyIteration<HTNState, HTNAction> pi = new PolicyIteration<HTNState, HTNAction>(
 					new ModifiedPolicyEvaluation<HTNState, HTNAction>(50, 1.0));
 
-//		System.out.print(
-//				mdp.actions(new ArrayList<>(states).get(0)));
 
 			Policy<HTNState, HTNAction> policy = pi.policyIteration(mdp);
 			System.out.println();
@@ -282,9 +266,7 @@ public class HTNNetworkToMDP {
 				System.out.println(s.label + "  policy  :  " + policy.action(s));
 
 			}
-//		System.out.println( new ArrayList<>(states).get(0).toString());
-//		
-//		System.out.println("(1,1) = " + policy.action(new ArrayList<>(states).get(0)));
+
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (Exception e) {

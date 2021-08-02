@@ -1,5 +1,7 @@
 package examples.MDP;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import aima.core.agent.Action;
@@ -17,7 +19,10 @@ public class HtnMdpFactory<HTNState, HTNAction extends Action> implements Markov
 	private HTNState initialState = null;
 	private examples.MDP.HTNAction actionsFunction = null;
 	private HTNTransitionProbabilityFunction hTNTransitionProbabilityFunction = null;
+	
 	private HTNReward rewardFunction = null;
+	public List<HTNState> finalstates = new ArrayList<HTNState>();
+	public List<HTNState> nonFinalStates = new ArrayList<HTNState>();
 
 	public HtnMdpFactory(Set<HTNState> states2, HTNState initialState, HTNAction actions,
 			HTNTransitionProbabilityFunction hTNTransitionProbabilityFunction, HTNReward rewardFunction) {
@@ -26,6 +31,7 @@ public class HtnMdpFactory<HTNState, HTNAction extends Action> implements Markov
 		this.actionsFunction = (examples.MDP.HTNAction) actions;
 		this.hTNTransitionProbabilityFunction = hTNTransitionProbabilityFunction;
 		this.rewardFunction = rewardFunction;
+		setFinalstates();
 	}
 
 	@Override
@@ -49,13 +55,36 @@ public class HtnMdpFactory<HTNState, HTNAction extends Action> implements Markov
 	@SuppressWarnings("unchecked")
 	@Override
 	public Set<HTNAction> actions(HTNState s) {
-		return (Set<HTNAction>) actionsFunction.actions();
-
+		return (Set<HTNAction>) actionsFunction.actions(); // right!
 	}
 
 	@Override
 	public double reward(HTNState s) {
 		return rewardFunction.getRewardFor((examples.MDP.HTNState) s);
 	}
+	
+	public void setFinalstates() {
+		for (HTNState s : states) {
+			if (((examples.MDP.HTNState) s).isFinal()) {
+				finalstates.add(s);
+			} else {
+				nonFinalStates.add(s);
+			}
+		}
+	}
+
+	public List<HTNState> getFinalstates() {
+		return finalstates;
+	}
+
+	public List<HTNState> getNonFinalStates() {
+		return nonFinalStates;
+	}
+
+	public HTNTransitionProbabilityFunction gethTNTransitionProbabilityFunction() {
+		return hTNTransitionProbabilityFunction;
+	}
+
+	
 
 }
