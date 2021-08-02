@@ -3,37 +3,67 @@
  */
 package examples.MDP;
 
-
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 import aima.core.agent.Action;
-import aima.core.environment.cellworld.CellWorldAction;
- 
+
 /**
  * @author Hatem
  *
  */
+
 public class HTNAction implements Action {
 
+	protected int id;
 
-	private  Set<HTNAction2> _actions;
+	protected String name;
 
-
-	public HTNAction() {
-		_actions = new LinkedHashSet<HTNAction2>();
-	}
+	private Set<HTNAction> _actions;
 
 	/**
 	 * 
-	 * @return a set of the actual actions.
 	 */
-	public  final Set<HTNAction2> actions() {
+
+	public HTNAction(int id, String label) {
+		this.id = id;
+		this.name = label;
+	}
+
+	public HTNAction() {
+		_actions = new LinkedHashSet<HTNAction>();
+	}
+
+	/**
+	 * @return the id
+	 */
+	public final int getId() {
+		return id;
+	}
+
+	/**
+	 * @return the name
+	 */
+	public final String getName() {
+		return name;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return id + ":" + name;
+	}
+
+	public Set<HTNAction> actions() {
 		return _actions;
 	}
-	
-	public final void SetAction(HTNAction2 a) {		
-		 _actions.add(new HTNAction2(a.getId(), a.getName()));
+
+	public final void SetAction(HTNAction a) {
+		_actions.add(new HTNAction(a.getId(), a.getName()));
 	}
 
 	@Override

@@ -14,29 +14,26 @@ import aima.core.probability.mdp.search.PolicyIteration;
 public class TestScenario1 {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		
-		//nearst exit
-		//CellWorld<Double> cw = new CellWorld<Double>(4, 3, -1.6484);
-		
+
+		// nearst exit
+		// CellWorld<Double> cw = new CellWorld<Double>(4, 3, -1.6484);
+
 		// avoid the exit
 		CellWorld<Double> cw = new CellWorld<Double>(4, 3, 5.0);
-		
-		//wall
+
+		// wall
 		cw.removeCell(2, 2);
 		cw.removeCell(3, 2);
 
-		//cw.getCellAt(3, 3).setContent(-0.02);
+		// cw.getCellAt(3, 3).setContent(-0.02);
 
-		//Terminal states
+		// Terminal states
 		cw.getCellAt(4, 2).setContent(1.0);
-		cw.getCellAt(1,3 ).setContent(-1.0);
-		//cw.getCellAt(4, 2).setContent(-1.0);
-		
-		
-		MarkovDecisionProcess<Cell<Double>, CellWorldAction> mdp = MDPFactory
-				.createMDPForFigure17_3(cw);
-		
+		cw.getCellAt(1, 3).setContent(-1.0);
+		// cw.getCellAt(4, 2).setContent(-1.0);
+
+		MarkovDecisionProcess<Cell<Double>, CellWorldAction> mdp = MDPFactory.createMDPForFigure17_3(cw);
+
 		for (Cell<Double> s : mdp.states()) {
 			System.out.println("state : " + s.toString());
 			for (Action a : mdp.actions(s)) {
@@ -44,29 +41,25 @@ public class TestScenario1 {
 
 			}
 		}
-		
 
-		for(CellWorldAction a: CellWorldAction.actions())
-		System.out.println("transitionProbability 1,1 -->" + a.name()+"--> 1,2 = "
-				+ mdp.transitionProbability(cw.getCellAt(1, 2), cw.getCellAt(1, 1), a));
-		
+		for (CellWorldAction a : CellWorldAction.actions())
+			System.out.println("transitionProbability 1,1 -->" + a.name() + "--> 1,2 = "
+					+ mdp.transitionProbability(cw.getCellAt(1, 2), cw.getCellAt(1, 1), a));
+
 		System.out.println("===================== ");
 
-		for(CellWorldAction a: CellWorldAction.actions())
-		System.out.println("transitionProbability 1,3 -->" + a.name()+"--> 1,2 = "
-				+ mdp.transitionProbability(cw.getCellAt(1, 2), cw.getCellAt(1, 3), a));
-		
+		for (CellWorldAction a : CellWorldAction.actions())
+			System.out.println("transitionProbability 1,3 -->" + a.name() + "--> 1,2 = "
+					+ mdp.transitionProbability(cw.getCellAt(1, 2), cw.getCellAt(1, 3), a));
+
 //		System.out.println("transitionProbability 1,1 -->up--> 1,2 = "
 //				+ mdp.transitionProbability(cw.getCellAt(1, 2), cw.getCellAt(1, 1), CellWorldAction.Down));
 
-		
-		//------------------------------
-		
-	
+		// ------------------------------
+
 		PolicyIteration<Cell<Double>, CellWorldAction> pi = new PolicyIteration<Cell<Double>, CellWorldAction>(
-				new ModifiedPolicyEvaluation<Cell<Double>, CellWorldAction>(50,
-						1.0));
-		
+				new ModifiedPolicyEvaluation<Cell<Double>, CellWorldAction>(50, 1.0));
+
 		Policy<Cell<Double>, CellWorldAction> policy = pi.policyIteration(mdp);
 
 		System.out.println("(1,1) = " + policy.action(cw.getCellAt(1, 1)));

@@ -8,50 +8,46 @@ import aima.core.probability.mdp.TransitionProbabilityFunction;
 
 public class HTNTransitionProbabilityFunction implements Comparable<TransitionProbabilityFunction<HTNState, HTNAction>>{
 
-	private LinkedHashMap<HtnMdpTransition<HTNState, HTNAction2>, Double> transitionToProbability ;
+	private LinkedHashMap<HtnMdpTransition<HTNState, HTNAction>, Double> transitionToProbability ;
 	private List<HTNState> terminalStates;
 
 	public HTNTransitionProbabilityFunction(List<HTNState> terminalStates) {
 		this.terminalStates = terminalStates;
-		transitionToProbability =  new LinkedHashMap<HtnMdpTransition<HTNState, HTNAction2>, Double>();
+		transitionToProbability =  new LinkedHashMap<HtnMdpTransition<HTNState, HTNAction>, Double>();
 
 
 	}
 
 	public void setTransitionProbability(HTNState initialState,
-			HTNAction2 action, HTNState finalState, double probability) {
+			HTNAction action, HTNState finalState, double probability) {
 		if (!(initialState.isFinal())) {
-			HtnMdpTransition<HTNState, HTNAction2> t = new HtnMdpTransition<HTNState, HTNAction2>(
+			HtnMdpTransition<HTNState, HTNAction> t = new HtnMdpTransition<HTNState, HTNAction>(
 					initialState, action, finalState);
 			transitionToProbability.put(t, probability);
 		}
 	}
 
-	public double getTransitionProbability(HTNState initialState,
-			HTNAction action, HTNState finalState) {
+	public LinkedHashMap<HtnMdpTransition<HTNState, HTNAction>, Double> getTransitionProbabilityModel() {
+		return transitionToProbability;
+	}
+	
+	public void display() {
+		for (HtnMdpTransition<HTNState, HTNAction> transition : transitionToProbability
+				.keySet()) {
+			System.out.println( " \n" +transition.toString() + " -> "
+					+ transitionToProbability.get(transition));
+		}
+	}
+
+	public Double getTransitionProbability(HTNState s, HTNAction a, HTNState sDelta) {
 		HtnMdpTransition<HTNState, HTNAction> key = new HtnMdpTransition<HTNState, HTNAction>(
-				initialState, action, finalState);
+				s, a, sDelta);
 		if (transitionToProbability.keySet().contains(key)) {
 			return transitionToProbability.get(key);
 		} else {
 			return 0.0;
 		}
 	}
-
-	public LinkedHashMap<HtnMdpTransition<HTNState, HTNAction2>, Double> getTransitionProbabilityModel() {
-		return transitionToProbability;
-	}
-	
-	public void display() {
-		//StringBuffer buf = new StringBuffer();
-		for (HtnMdpTransition<HTNState, HTNAction2> transition : transitionToProbability
-				.keySet()) {
-			System.out.println( " \n" +transition.toString() + " -> "
-					+ transitionToProbability.get(transition));
-		}
-		//return buf.toString();
-	}
-
 //	public Pair<HTNState, Double> getTransitionWithMaximumExpectedUtility(
 //			STATE_TYPE s, MDPUtilityFunction<HTNState> uf) {
 //
@@ -82,9 +78,6 @@ public class HTNTransitionProbabilityFunction implements Comparable<TransitionPr
 //
 //	}
 
-	private boolean isTerminal(HTNState s) {
-		return terminalStates.contains(s);
-	}
 
 //	private Pair<ACTION_TYPE, Double> getActionWithMaximumUtility(
 //			Hashtable<ACTION_TYPE, Double> actionsToUtilities) {
@@ -161,4 +154,5 @@ public class HTNTransitionProbabilityFunction implements Comparable<TransitionPr
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
 }

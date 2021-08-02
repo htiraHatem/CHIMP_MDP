@@ -6,11 +6,13 @@ import aima.core.agent.Action;
 import aima.core.probability.mdp.RewardFunction;
 import edu.cmu.ita.mdp.aima.MDPState;
 
+/**
+ * author by Hatem
+ */
 public class HTNReward implements Comparable<RewardFunction<HTNState>> {
 
 	@Override
 	public int compareTo(RewardFunction<HTNState> o) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 	
@@ -20,8 +22,8 @@ public class HTNReward implements Comparable<RewardFunction<HTNState>> {
 		stateToReward = new Hashtable<HTNState, Double>();
 	}
 
-	public double getRewardFor(HTNState htnState) {
-		return stateToReward.get(htnState);
+	public double getRewardFor(HTNState s) {
+		return stateToReward.get(s);
 	}
 
 	public void setReward(HTNState sp, Double reward) {

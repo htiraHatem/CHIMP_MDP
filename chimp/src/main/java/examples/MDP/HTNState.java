@@ -1,6 +1,3 @@
-/**
- * Created on Jan 22, 2011 for project ita-htn2mdp by meneguzzi
- */
 package examples.MDP;
 
 import java.util.LinkedList;
