@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.io.Writer;
 import java.text.DecimalFormat;
 import java.util.List;
+import java.util.Map;
 
 import examples.MDP.HTNAction;
 import examples.MDP.HTNState;
@@ -19,7 +20,7 @@ import examples.MDP.HtnMdpTransition;
 
 public class Dot2Graph {
 
-	public static void printMDPDot(Writer writer, HtnMdpFactory<HTNState, HTNAction> source, boolean printState) throws IOException {
+	public static void printMDPDot(Writer writer, HtnMdpFactory<HTNState, HTNAction> source, boolean printState, Map<HTNState, Double> policy) throws IOException {
 		PrintWriter out = new PrintWriter(writer);
 		DecimalFormat df = new DecimalFormat("0.00");
 		
@@ -28,10 +29,16 @@ public class Dot2Graph {
 
 		if(printState) {
 			for(HTNState s:source.getFinalstates()) {
-				out.println("\""+s.getId()+"\" [label=\""+s.getLabel()+" r:"+source.reward(s)+"\"];");
+				out.print("\""+s.getId()+"\" [label=\""+s.getLabel()+" (r:"+source.reward(s) + " )");
+				if(policy != null)
+					out.print( ", Utility : "+policy.get(s));
+				out.println(" \"];");
 			}
 			for(HTNState s:source.getNonFinalStates()) {
-				out.println("\""+s.getId()+"\" [label=\""+s.getLabel()+" (reward:"+source.reward(s)+") \"];");
+				out.print("\""+s.getId()+"\" [label=\""+s.getLabel()+" (reward:"+source.reward(s)+ " )");
+				if(policy != null)
+					out.print( ", Utility : "+policy.get(s));
+				out.println(" \"];");
 			}
 		}
 		
@@ -47,7 +54,7 @@ public class Dot2Graph {
 						out.print(" [ label=\""+a.getName());
 						double prob = source.gethTNTransitionProbabilityFunction().getTransitionProbability(is, a, ds);
 						//if(prob != 1) {
-							out.print(" (ProbTrans : "+df.format(prob) + ")");
+						out.print(" (ProbTrans : "+df.format(prob) + ")");
 						//}
 						out.println("\" ];");
 					}

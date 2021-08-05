@@ -6,18 +6,16 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import aima.core.probability.mdp.Policy;
-import aima.core.probability.mdp.impl.ModifiedPolicyEvaluation;
-import aima.core.probability.mdp.search.PolicyIteration;
+import aima.core.probability.mdp.search.ValueIteration;
 import edu.cmu.ita.htn.Constraint;
 import edu.cmu.ita.htn.HTNDomain;
 import edu.cmu.ita.htn.HTNExpander;
@@ -83,7 +81,10 @@ public class HTNNetworkToMDP {
 		return 1;
 	}
 
-	private final static HTNReward createRewardFunction(Set<HTNState> states, TaskNetwork fullyExpanded) {
+	
+	// a reward	is proportional to distance to the goal
+	//length to the goal task
+	private final static HTNReward createProportionalRewardFunction(Set<HTNState> states, TaskNetwork fullyExpanded) {
 		HTNReward rewardFunction = new HTNReward() {
 		};
 		for (HTNState sp : states) {
@@ -94,6 +95,21 @@ public class HTNNetworkToMDP {
 			reward = kappa * reward;
 			rewardFunction.setReward(sp, reward);
 			;
+		}
+		return rewardFunction;
+	}
+	
+	// a reward	is constant everywhere except the goal
+	private final static HTNReward createConstantRewardFunction(Set<HTNState> states, TaskNetwork fullyExpanded) {
+		HTNReward rewardFunction = new HTNReward() {
+		};
+		for (HTNState sp : states) {
+			double reward = getBaseReward(sp.htnState);
+
+			if(!sp.isFinal)
+			rewardFunction.setReward(sp, reward * -0.04);
+			else
+			rewardFunction.setReward(sp, reward * 1);
 		}
 		return rewardFunction;
 	}
@@ -226,8 +242,10 @@ public class HTNNetworkToMDP {
 	
 
 			// get or create reward function
-			HTNReward rewardFunction = createRewardFunction(states, fullyExpanded);
+			//HTNReward rewardFunction = createProportionalRewardFunction(states, fullyExpanded);
+			HTNReward rewardFunction = createConstantRewardFunction(states, fullyExpanded);
 
+			
 //			System.out.println("==========NonfinalStates: ");
 //			for (int i = 0; i < nonFinalStates.size(); i++)
 //				System.out.println("state: " + nonFinalStates.get(i) + " || reward : "
@@ -243,6 +261,32 @@ public class HTNNetworkToMDP {
 			for (int i = 0; i < finalStates.size(); i++)
 				System.out.println("state: " + finalStates.get(i) + " || reward : " + mdp.reward(finalStates.get(i)));
 
+			
+			
+			// Policy iteration
+//			PolicyIteration<HTNState, HTNAction> pi = new PolicyIteration<HTNState, HTNAction>(
+//					new ModifiedPolicyEvaluation<HTNState, HTNAction>(50, 1.0));
+//
+//
+//			Policy<HTNState, HTNAction> policy = pi.policyIteration(mdp);
+//			System.out.println();
+//
+//			for (HTNState s : states) {
+//				System.out.println(s.label + "  policy  :  " + policy.action(s));
+//			}
+			
+			//value iteration
+
+			
+			ValueIteration<HTNState, HTNAction> pi = new ValueIteration<HTNState, HTNAction>(1.0);
+
+
+			Map<HTNState, Double> policy = pi.valueIteration(mdp, 0.0001);
+
+			
+			for (Entry<HTNState, Double> s : policy.entrySet()) {
+				System.out.println( s.getKey() +"  :  " + s.getValue());
+			}
 
 			//convert to dot language
 			String mdpGraph = "src/main/java/examples/MDP/gotolondon/gotolondonGraph.dot";
@@ -250,21 +294,9 @@ public class HTNNetworkToMDP {
 			if (mdpGraph != null ) {
 				FileWriter writer = new FileWriter(mdpGraph);
 				logger.info("Writing MDP Graph into " + mdpGraph);
-				Dot2Graph.printMDPDot(writer, mdp, true);
+				Dot2Graph.printMDPDot(writer, mdp, true ,policy );
 				writer.close();
 				
-			}
-			
-			PolicyIteration<HTNState, HTNAction> pi = new PolicyIteration<HTNState, HTNAction>(
-					new ModifiedPolicyEvaluation<HTNState, HTNAction>(50, 1.0));
-
-
-			Policy<HTNState, HTNAction> policy = pi.policyIteration(mdp);
-			System.out.println();
-
-			for (HTNState s : states) {
-				System.out.println(s.label + "  policy  :  " + policy.action(s));
-
 			}
 
 		} catch (FileNotFoundException e) {
