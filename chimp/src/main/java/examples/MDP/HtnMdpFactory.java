@@ -44,12 +44,11 @@ public class HtnMdpFactory<HTNState, HTNAction extends Action> implements Markov
 		return initialState;
 	}
 
+	// from s -- a : action --> to Sdelta
 	@Override
 	public double transitionProbability(HTNState sDelta, HTNState s, HTNAction a) {
-
 		return hTNTransitionProbabilityFunction.getTransitionProbability((examples.MDP.HTNState) s,
 				(examples.MDP.HTNAction) a, (examples.MDP.HTNState) sDelta);
-
 	}
 
 	@SuppressWarnings("unchecked")

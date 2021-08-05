@@ -31,7 +31,7 @@ public class Dot2Graph {
 				out.println("\""+s.getId()+"\" [label=\""+s.getLabel()+" r:"+source.reward(s)+"\"];");
 			}
 			for(HTNState s:source.getNonFinalStates()) {
-				out.println("\""+s.getId()+"\" [label=\""+s.getLabel()+" r:"+source.reward(s)+"\"];");
+				out.println("\""+s.getId()+"\" [label=\""+s.getLabel()+" (reward:"+source.reward(s)+") \"];");
 			}
 		}
 		
@@ -46,9 +46,9 @@ public class Dot2Graph {
 					if(is!=ds) {
 						out.print(" [ label=\""+a.getName());
 						double prob = source.gethTNTransitionProbabilityFunction().getTransitionProbability(is, a, ds);
-						if(prob != 1) {
-							out.print(":"+df.format(prob));
-						}
+						//if(prob != 1) {
+							out.print(" (ProbTrans : "+df.format(prob) + ")");
+						//}
 						out.println("\" ];");
 					}
 				}
