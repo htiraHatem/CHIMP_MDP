@@ -1,5 +1,5 @@
 digraph {
- size="8.5,11";
+ size="18,11";
 "5" [label="{[~at(airport), has(plane), has(car), at(london), ~at(nyc), ~at(home)]} r:5.0"];
 "9" [label="{[has(ship), ~at(lpool), has(car), at(london), ~at(home), ~at(harbor)]} r:5.0"];
 "11" [label="{[has(ship), has(car), at(london), ~at(home), ~at(soton), ~at(harbor)]} r:5.0"];

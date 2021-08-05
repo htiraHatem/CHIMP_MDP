@@ -245,7 +245,7 @@ public class HTNNetworkToMDP {
 
 
 			//convert to dot language
-			String mdpGraph = "src/main/java/examples/MDP/gotolondon/ita-problemMDP.dot";
+			String mdpGraph = "src/main/java/examples/MDP/gotolondon/gotolondonGraph.dot";
 
 			if (mdpGraph != null ) {
 				FileWriter writer = new FileWriter(mdpGraph);
