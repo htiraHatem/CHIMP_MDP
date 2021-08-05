@@ -15,6 +15,9 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.logging.Logger;
 
+import aima.core.probability.mdp.Policy;
+import aima.core.probability.mdp.impl.ModifiedPolicyEvaluation;
+import aima.core.probability.mdp.search.PolicyIteration;
 import aima.core.probability.mdp.search.ValueIteration;
 import edu.cmu.ita.htn.Constraint;
 import edu.cmu.ita.htn.HTNDomain;
@@ -176,13 +179,22 @@ public class HTNNetworkToMDP {
 						HTNState si = lstate.get(i);
 						HTNState sj = lstate.get(j);
 						transitionModel.setTransitionProbability(si, action, sj, prob);
-						System.out.print(transitionModel.getTransitionProbabilityModel().size());
-						// (si, action, sj, prob);
+						
+						// update transition to test
+						HTNState s1 = lstate.get(1);//getCare
+						HTNState s2 = lstate.get(2);//at airport
+						HTNState s3 = lstate.get(6);//at Harbor
+						
+						if(si.equals(s1) && sj.equals(s2))
+							transitionModel.setTransitionProbability(si, action, sj, 0.1);
+
+						if(si.equals(s1) && sj.equals(s3))
+							transitionModel.setTransitionProbability(si, action, sj, 0.9);
+						
 					}
 				}
 			}
 		}
-
 		return transitionModel;
 	}
 
@@ -264,29 +276,29 @@ public class HTNNetworkToMDP {
 			
 			
 			// Policy iteration
-//			PolicyIteration<HTNState, HTNAction> pi = new PolicyIteration<HTNState, HTNAction>(
-//					new ModifiedPolicyEvaluation<HTNState, HTNAction>(50, 1.0));
-//
-//
-//			Policy<HTNState, HTNAction> policy = pi.policyIteration(mdp);
-//			System.out.println();
-//
-//			for (HTNState s : states) {
-//				System.out.println(s.label + "  policy  :  " + policy.action(s));
-//			}
+			PolicyIteration<HTNState, HTNAction> pi = new PolicyIteration<HTNState, HTNAction>(
+					new ModifiedPolicyEvaluation<HTNState, HTNAction>(50, 1.0));
+
+
+			Policy<HTNState, HTNAction> policy = pi.policyIteration(mdp);
+			System.out.println();
+
+			for (HTNState s : states) {
+				System.out.println(s.label + "  policy  :  " + policy.action(s));
+			}
 			
 			//value iteration
 
 			
-			ValueIteration<HTNState, HTNAction> pi = new ValueIteration<HTNState, HTNAction>(1.0);
-
-
-			Map<HTNState, Double> policy = pi.valueIteration(mdp, 0.0001);
-
-			
-			for (Entry<HTNState, Double> s : policy.entrySet()) {
-				System.out.println( s.getKey() +"  :  " + s.getValue());
-			}
+//			ValueIteration<HTNState, HTNAction> pi = new ValueIteration<HTNState, HTNAction>(1.0);
+//
+//
+//			Map<HTNState, Double> policy = pi.valueIteration(mdp, 0.0001);
+//
+//			
+//			for (Entry<HTNState, Double> s : policy.entrySet()) {
+//				System.out.println( s.getKey() +"  :  " + s.getValue());
+//			}
 
 			//convert to dot language
 			String mdpGraph = "src/main/java/examples/MDP/gotolondon/gotolondonGraph.dot";
@@ -294,7 +306,7 @@ public class HTNNetworkToMDP {
 			if (mdpGraph != null ) {
 				FileWriter writer = new FileWriter(mdpGraph);
 				logger.info("Writing MDP Graph into " + mdpGraph);
-				Dot2Graph.printMDPDot(writer, mdp, true ,policy );
+				Dot2Graph.printMDPDot(writer, mdp, true ,null );
 				writer.close();
 				
 			}
