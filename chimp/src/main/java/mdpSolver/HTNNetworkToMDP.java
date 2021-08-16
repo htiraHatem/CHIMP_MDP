@@ -1,4 +1,4 @@
-package examples.MDP;
+package mdpSolver;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -87,7 +87,7 @@ public class HTNNetworkToMDP {
 	
 	// a reward	is proportional to distance to the goal
 	//length to the goal task
-	private final static HTNReward createProportionalRewardFunction(Set<HTNState> states, TaskNetwork fullyExpanded) {
+	public final static HTNReward createProportionalRewardFunction(Set<HTNState> states, TaskNetwork fullyExpanded) {
 		HTNReward rewardFunction = new HTNReward() {
 		};
 		for (HTNState sp : states) {
@@ -103,7 +103,7 @@ public class HTNNetworkToMDP {
 	}
 	
 	// a reward	is constant everywhere except the goal
-	private final static HTNReward createConstantRewardFunction(Set<HTNState> states, TaskNetwork fullyExpanded) {
+	public final static HTNReward createConstantRewardFunction(Set<HTNState> states, TaskNetwork fullyExpanded) {
 		HTNReward rewardFunction = new HTNReward() {
 		};
 		for (HTNState sp : states) {
@@ -117,7 +117,7 @@ public class HTNNetworkToMDP {
 		return rewardFunction;
 	}
 
-	private final static HTNAction createMDPActions(List<Task> tasks) {
+	public final static HTNAction createMDPActions(List<Task> tasks) {
 		HashSet<String> uniqueActions = new HashSet<String>();
 		HTNAction actions = new HTNAction();
 		int id = 0;
@@ -131,7 +131,7 @@ public class HTNNetworkToMDP {
 		return actions;
 	}
 
-	private final static HTNTransitionProbabilityFunction createTransitionModel(HTNAction actions,
+	public final static HTNTransitionProbabilityFunction createTransitionModel(HTNAction actions,
 			TaskNetwork fullyExpanded, Set<HTNState> states, List<HTNState> finalStates) {
 		logger.info("Creating Transition Model for MDP");
 

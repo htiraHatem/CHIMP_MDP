@@ -1,4 +1,4 @@
-package examples.MDP;
+package mdpSolver;
 
 import edu.cmu.ita.htn.Constraint;
 import edu.cmu.ita.htn.Task;

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package examples.MDP;
+package mdpSolver;
 
 import java.util.LinkedHashSet;
 import java.util.Set;

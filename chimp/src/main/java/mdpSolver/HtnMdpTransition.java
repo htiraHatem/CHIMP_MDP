@@ -1,4 +1,4 @@
-package examples.MDP;
+package mdpSolver;
 
 import aima.core.util.datastructure.Triplet;
 

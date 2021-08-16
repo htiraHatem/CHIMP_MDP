@@ -1,4 +1,4 @@
-package examples.MDP;
+package mdpSolver;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -6,6 +6,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import aima.core.probability.mdp.TransitionProbabilityFunction;
+import mdpSolver.HTNAction;
+import mdpSolver.HTNState;
+import mdpSolver.HtnMdpTransition;
 
 public class HTNTransitionProbabilityFunction implements Comparable<TransitionProbabilityFunction<HTNState, HTNAction>>{
 

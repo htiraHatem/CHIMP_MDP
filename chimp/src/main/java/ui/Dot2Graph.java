@@ -8,10 +8,10 @@ import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
 
-import examples.MDP.HTNAction;
-import examples.MDP.HTNState;
-import examples.MDP.HtnMdpFactory;
-import examples.MDP.HtnMdpTransition;
+import mdpSolver.HTNAction;
+import mdpSolver.HTNState;
+import mdpSolver.HtnMdpFactory;
+import mdpSolver.HtnMdpTransition;
 
 /**
  * @author meneguzzi , 
