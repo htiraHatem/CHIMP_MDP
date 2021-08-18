@@ -96,6 +96,10 @@ public class CHIMP {
 			this.problem.addArgumentSymbols(extractSymbolicConstants(this.domain));
 		}
 		
+		public ClassicHybridDomain getDomain() {
+			return domain;
+		}
+
 		/**
 		 * 
 		 * @param valOH The heuristic that shall be used by the HTNPlanner. Default: UnifyFewestsubsEarliesttasksNewestbindingsValOH

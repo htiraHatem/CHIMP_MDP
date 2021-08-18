@@ -1,9 +1,16 @@
 package htn.htnExpanderDecomposition;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import edu.cmu.ita.htn.HTNDomain;
 import edu.cmu.ita.htn.Method;
+import edu.cmu.ita.htn.State;
+import edu.cmu.ita.htn.Task;
 import jason.asSemantics.Unifier;
 
-class MethodOption {
+class MethodOption  extends HTNDomain {
 	final Method m;
 	final Unifier un;
 	int hashCodeCache;
@@ -19,6 +26,30 @@ class MethodOption {
 	
 	public final Unifier getUnifier() {
 		return un;
+	}
+	
+	public List<MethodOption> findMethodsFor1(Task task, State s, Unifier u) {
+		List<MethodOption> options = new ArrayList<MethodOption>();
+		
+		Unifier newU = new Unifier();
+		for(Method m:methods) {
+			newU.compose(u);
+			Iterator<Unifier> iu;
+			if(newU.unifies(m.getTask(), task) && (iu = m.getPossibleUnifiers(s, newU)) != null) {
+				while(iu.hasNext()) {
+					MethodOption option = new MethodOption(m, iu.next());
+					//we only add methods that do not already exist
+					if(!options.contains(option)) {
+						options.add(option);
+					}
+				}
+				newU = new Unifier();
+			} else {
+				newU.clear();
+			}
+		}
+		
+		return options;
 	}
 	
 	/* (non-Javadoc)
