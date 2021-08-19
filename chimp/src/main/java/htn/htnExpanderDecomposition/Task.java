@@ -23,7 +23,12 @@ public class Task extends edu.cmu.ita.htn.Task {
 	public Task(String sTask) throws Exception {
 		super(sTask);
 	}
+
 	
+	public Task(edu.cmu.ita.htn.Task a) {
+		super(a);
+		}
+
 	public Unifier getUn() {
 		return un;
 	}

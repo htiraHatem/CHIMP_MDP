@@ -46,13 +46,13 @@ public class HTNExpander {
 		mStateBefore = new HashMap<Task, MultiState>();
 	}
 	
-	public TaskNetwork createFullyExpandedHTN(State s0, HTNTaskNetwork problem, HTNDomain domain) {
+	public TaskNetwork createFullyExpandedHTN(State s0, HTNTaskNetwork problem, HTNChimpDomain domain) {
 		initialState = new MultiState(s0);
 		return fullDecomposition(problem, domain);
 	}
     
     
-	private final TaskNetwork fullDecomposition(TaskNetwork problem, HTNDomain domain) {
+	private final TaskNetwork fullDecomposition(TaskNetwork problem, HTNChimpDomain domain) {
 		//At this point we have finished expanding the HTN
 		if(problem.allTasksArePrimitive() && getUnresolvedTask((HTNTaskNetwork) problem) == null) {
 			return problem;
@@ -146,8 +146,8 @@ public class HTNExpander {
 	        HTNChimpDomain HTNd = new HTNChimpDomain(builder) ;
 	        
 	        HTNExpander expander = new HTNExpander();
-//			TaskNetwork fullyExpanded = expander.createFullyExpandedHTN(
-//					S0_, tasknetwork, HTNd);
+			TaskNetwork fullyExpanded = expander.createFullyExpandedHTN(
+					S0_, tasknetwork, HTNd);
 
 
 	        System.out.println("Found plan? " + chimp.generatePlan());
@@ -196,11 +196,11 @@ public class HTNExpander {
 	 * @param u
 	 * @return
 	 */
-	private final Collection<MethodOption> findMethodsFor(Task t, TaskNetwork network, HTNDomain domain, Unifier u) {
+	private final Collection<MethodOption> findMethodsFor(Task t, TaskNetwork network, HTNChimpDomain domain, Unifier u) {
 		List<MethodOption> options = new ArrayList<MethodOption>();
 		MultiState ms = mStateBefore(t,network);
 		for(State s:ms) {
-			for(MethodOption o: ((MethodOption) domain).findMethodsFor1(t, s, u)) {
+			for(MethodOption o:  domain.findMethodsFor1(t, s, u)) {
 				//We need to check that the same option has not been generated from a previous state
 				if(!options.contains(o)) {
 					options.add(o);

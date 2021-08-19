@@ -132,7 +132,7 @@ public class HTNNetworkToMDP {
 	}
 
 	public final static HTNTransitionProbabilityFunction createTransitionModel(HTNAction actions,
-			TaskNetwork fullyExpanded, Set<HTNState> states, List<HTNState> finalStates) {
+			TaskNetwork fullyExpanded, Set<HTNState> states, List<HTNState> finalStates) throws Exception {
 		logger.info("Creating Transition Model for MDP");
 
 		HTNTransitionProbabilityFunction transitionModel = new HTNTransitionProbabilityFunction(finalStates);

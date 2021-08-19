@@ -44,6 +44,11 @@ public abstract class PlanReportroryItem {
 	protected final IntArg[] integerArguments;
 	protected final EffectTemplate[] effects;
 	protected AdditionalConstraintTemplate[] additionalConstraints;
+	
+	public HTNPrecondition[] getPreconditions() {
+		return preconditions;
+	}
+
 	protected IntegerConstraintTemplate[] integerConstraintTemplates;
 	protected List<SpatialConstraintTemplate> rectangularConstraintTemplates;
 	

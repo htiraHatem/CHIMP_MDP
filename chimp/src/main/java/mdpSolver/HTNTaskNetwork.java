@@ -12,6 +12,7 @@ import org.metacsp.framework.Variable;
 import org.metacsp.multi.symbols.SymbolicVariable;
 
 import edu.cmu.ita.htn.Constraint;
+import edu.cmu.ita.htn.HTNFactory;
 import edu.cmu.ita.htn.TaskNetwork;
 import fluentSolver.FluentNetworkSolver;
 import htn.htnExpanderDecomposition.Task;
@@ -28,16 +29,17 @@ import htn.htnExpanderDecomposition.Task;
 		protected List<Task> tasks;
 
 		
-		HTNTaskNetwork (TaskNetwork network){
+		HTNTaskNetwork (TaskNetwork network) throws Exception{
 			super(network);
 			this.constraints = new HashSet<Constraint>(super.getConstraints());
 			this.orderedTasks = new LinkedList<Task>();
 			for( edu.cmu.ita.htn.Task a :super.getOrderedTasks()) {
-				orderedTasks.add( (Task) a);
+				Task t =  new Task(a);
+				orderedTasks.add(t);
 			}
 			this.tasks = new ArrayList<Task>();
 			for( edu.cmu.ita.htn.Task a :super.tasks) {
-				tasks.add( (Task) a);
+				tasks.add( new Task(a));
 			}
 		}
 		

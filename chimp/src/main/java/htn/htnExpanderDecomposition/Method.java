@@ -13,6 +13,7 @@ import edu.cmu.ita.htn.HTNDomain;
 import edu.cmu.ita.htn.LogicExpression;
 import edu.cmu.ita.htn.State;
 import edu.cmu.ita.htn.TaskNetwork;
+import htn.HTNMethod;
 
 /**
  * @author meneguzzi
@@ -31,6 +32,16 @@ public class Method {
 	public Method(String name, Task task, TaskNetwork taskNetwork) {
 		this(name,task,null,taskNetwork);
 	}
+	
+	
+//	public Method(HTNMethod hTNmethod) {
+//		hTNmethod.getName();
+//		// add getter to plan repositeroyt....
+//		//hTNmethod.get();
+//		
+//		
+//		//this(name,task,null,taskNetwork);
+//	}
 	
 	/**
 	 * 
