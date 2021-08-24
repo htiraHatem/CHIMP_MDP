@@ -143,7 +143,7 @@ public class HTNExpander {
 	        
 	       
 	        HTNTaskNetwork tasknetwork = new HTNTaskNetwork(fluentSolver);
-	        HTNChimpDomain HTNd = new HTNChimpDomain(builder) ;
+	        HTNChimpDomain HTNd =  HTNChimpDomain.parseHTNChimpDomain(builder) ;
 	        
 	        HTNExpander expander = new HTNExpander();
 			TaskNetwork fullyExpanded = expander.createFullyExpandedHTN(

@@ -18,6 +18,7 @@ import edu.cmu.ita.htn.State;
 import edu.cmu.ita.htn.Task;
 import edu.cmu.ita.htn.TaskNetwork;
 import edu.cmu.ita.htn.LogicExpressionImpl.LogicalOp;
+import edu.cmu.ita.htn.parser.ParseException;
 import edu.cmu.ita.htn.parser.Token;
 import htn.EffectTemplate;
 import htn.HTNPrecondition;
@@ -35,6 +36,10 @@ public class HTNChimpDomain extends HTNDomain {
 		this.instances = new HashMap<Task, Task>();
 	}
 
+	public HTNChimpDomain() {
+		super();
+	}
+	
 	public HTNChimpDomain(CHIMPBuilder builder) {
 		super();
 		ClassicHybridDomain a = builder.getDomain();
@@ -101,6 +106,22 @@ public class HTNChimpDomain extends HTNDomain {
 //                    	pre = Proposition.FALSE;
 
 			}
+			
+			
+			// get effects : subelements
+			boolean ordered = true;
+			List<Task> tl = new ArrayList<Task>();
+			for (EffectTemplate eff : i.getEffects()) {
+
+				List<String> effArg = Arrays.asList(eff.getInputArgs());
+				String head1 = convertLISPAtom(eff.getName(), effArg);
+
+				// TODO check paranthese error !!
+				Task sub = HTNFactory.createTask(head1);
+
+				tl.add(sub);
+			}
+			tn = createTaskNetwork(tl, ordered);
 
 			Method m = new Method(head, t, pre, tn);
 			this.addMethod(m);
@@ -109,6 +130,29 @@ public class HTNChimpDomain extends HTNDomain {
 		this.instances = new HashMap<Task, Task>();
 	}
 
+
+	public static HTNChimpDomain parseHTNChimpDomain(CHIMPBuilder builder) throws ParseException {
+		HTNChimpDomain domain = new HTNChimpDomain();
+
+	    domain = new  HTNChimpDomain(builder);
+	    try {
+	                domain.postProcessPrimitiveTasks();
+	        } catch(Exception e) {
+	          throw new ParseException(e.getMessage());
+	        }
+	    return domain;
+	  }
+	
+	  private final TaskNetwork createTaskNetwork(List< Task > tasks, boolean ordered) {
+	        if(ordered) {
+	                return new TaskNetwork(tasks.toArray(new Task[0]));
+	        } else {
+	                TaskNetwork tn = new TaskNetwork();
+	                for(Task t:tasks) tn.addTask(t);
+	                return tn;
+	        }
+	  }
+	  
 	private final String convertLISPTerms(List<String> terms) {
 		if (terms == null || terms.isEmpty()) {
 			return "";
