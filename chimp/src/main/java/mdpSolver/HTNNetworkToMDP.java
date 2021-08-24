@@ -143,7 +143,7 @@ public class HTNNetworkToMDP {
 
 		for (HTNAction action : actions.actions()) {
 			TransitionMatrix matrix = new TransitionMatrix(states.size());
-			for (Constraint c : new HTNTaskNetwork(fullyExpanded).getConstraints()) {
+			for (Constraint c : fullyExpanded.getConstraints()) {
 				if (c.getTask2().getActionName().equals(action.getName())) {
 					HTNState i = stateTable.get(c.getTask1());
 					HTNState j = stateTable.get(c.getTask2());

@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import edu.cmu.ita.htn.HTNDomain;
@@ -20,6 +21,7 @@ import edu.cmu.ita.htn.TaskNetwork;
 import edu.cmu.ita.htn.LogicExpressionImpl.LogicalOp;
 import edu.cmu.ita.htn.parser.ParseException;
 import edu.cmu.ita.htn.parser.Token;
+import examples.MDP.TestVI;
 import htn.EffectTemplate;
 import htn.HTNPrecondition;
 import htn.PlanReportroryItem;
@@ -56,10 +58,11 @@ public class HTNChimpDomain extends HTNDomain {
 				Proposition p;
 				String fluent = convertLISPAtom(pr.getFluenttype(), Arrays.asList(pr.getArguments()));
 				p = new Proposition(fluent);// log_expr();
-				pre = (pre == null) ? new LogicExpressionImpl(p, LogicalOp.none)
+				
+				pre = (pre == null) ? p
 						: new LogicExpressionImpl(pre, LogicalOp.and, p);
-//                    if (pre == null)
-//                    	pre = Proposition.FALSE;
+                    if (pre == null)
+                    	pre = Proposition.FALSE;
 
 				// add negative effects
 				if (pr.isNegativeEffect())
@@ -100,7 +103,7 @@ public class HTNChimpDomain extends HTNDomain {
 				Proposition p;
 				String fluent = convertLISPAtom(pr.getFluenttype(), Arrays.asList(pr.getArguments()));
 				p = new Proposition(fluent);// log_expr();
-				pre = (pre == null) ? new LogicExpressionImpl(p, LogicalOp.none)
+				pre = (pre == null) ? p//new LogicExpressionImpl(p, LogicalOp.none)
 						: new LogicExpressionImpl(pre, LogicalOp.and, p);
 //                    if (pre == null)
 //                    	pre = Proposition.FALSE;
@@ -116,7 +119,7 @@ public class HTNChimpDomain extends HTNDomain {
 				List<String> effArg = Arrays.asList(eff.getInputArgs());
 				String head1 = convertLISPAtom(eff.getName(), effArg);
 
-				// TODO check paranthese error !!
+				// TODO createPrimitiveTask not all normal tasks
 				Task sub = HTNFactory.createTask(head1);
 
 				tl.add(sub);

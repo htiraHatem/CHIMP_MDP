@@ -1,0 +1,22 @@
+(Problem
+
+(ArgumentSymbols
+london
+home airport harbor ship
+car plan
+)
+
+
+(Fluent f1 agent_at(home))
+(Constraint Release[0,0](f1))
+
+#(Fluent f2 has(car))
+#(Constraint Release[0,0](f2))
+
+
+#(Task t1 !getVehicle(car))
+#(Task t1 !moveTo(home airport car))
+#(Task t1 obtainVehicle())
+(Task t1 goTo(london))
+
+)

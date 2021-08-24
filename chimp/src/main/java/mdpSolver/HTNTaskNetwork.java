@@ -29,16 +29,16 @@ import htn.htnExpanderDecomposition.Task;
 		protected List<Task> tasks;
 
 		
-		HTNTaskNetwork (TaskNetwork network) throws Exception{
+		public HTNTaskNetwork (TaskNetwork network){
 			super(network);
 			this.constraints = new HashSet<Constraint>(super.getConstraints());
 			this.orderedTasks = new LinkedList<Task>();
-			for( edu.cmu.ita.htn.Task a :super.getOrderedTasks()) {
+			for(Task a :((HTNTaskNetwork) network).getOrderedTasks1()) {
 				Task t =  new Task(a);
 				orderedTasks.add(t);
 			}
 			this.tasks = new ArrayList<Task>();
-			for( edu.cmu.ita.htn.Task a :super.tasks) {
+			for(Task a :((HTNTaskNetwork) network).getTasks1()) {
 				tasks.add( new Task(a));
 			}
 		}

@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.metacsp.framework.ConstraintNetwork;
 import org.metacsp.framework.ConstraintSolver;
@@ -30,7 +31,8 @@ import planner.CHIMP;
 public class HTNExpander {
 
     static final boolean PRINT_PLAN = true;
-    
+	private static final Logger logger = Logger.getLogger(HTNExpander.class.getName());
+
 	/**
 	 * A cache for the states after executing a primitive task, this one should be kept to the end of the algorithm.
 	 */
@@ -53,16 +55,17 @@ public class HTNExpander {
     
     
 	private final TaskNetwork fullDecomposition(TaskNetwork problem, HTNChimpDomain domain) {
+		HTNTaskNetwork ChimpProblem = new HTNTaskNetwork(problem);
 		//At this point we have finished expanding the HTN
-		if(problem.allTasksArePrimitive() && getUnresolvedTask((HTNTaskNetwork) problem) == null) {
-			return problem;
+		if(ChimpProblem.allTasksArePrimitive() && getUnresolvedTask(ChimpProblem) == null) {
+			return ChimpProblem;
 		}
-		Task t = getUnresolvedTask((HTNTaskNetwork) problem);
+		Task t = getUnresolvedTask(ChimpProblem);
 		//Remove this print just for debugging purposes
 		//debugPrintHTN(t, problem);
 		if(t.isPrimitive()) {
 			System.out.print("*");
-			List<Operator> ops = findOperatorsFor(t, problem, domain, t.getUn());
+			List<Operator> ops = findOperatorsFor(t, ChimpProblem, domain, t.getUn());
 			if(ops.isEmpty()) {
 				throw new RuntimeException("No operators found for task "+t);
 			}
@@ -74,11 +77,11 @@ public class HTNExpander {
 			
 			//Here, we will have to compute the mState
 			@SuppressWarnings("unused")
-			MultiState possibleState = mState(t, problem);
+			MultiState possibleState = mState(t, ChimpProblem);
 			
-			TaskNetwork nTn = fullDecomposition(problem, domain);
+			TaskNetwork nTn = fullDecomposition(ChimpProblem, domain);
 			if(nTn == null) {
-				throw new RuntimeException("Could not continue to decompose network "+problem);
+				throw new RuntimeException("Could not continue to decompose network "+ChimpProblem);
 //				logger.warning("Could not continue to decompose network "+problem);
 //				return null;
 			} else {
@@ -89,13 +92,13 @@ public class HTNExpander {
 			System.out.print("|");
 			Unifier un = new Unifier();
 			
-			Collection<MethodOption> active = findMethodsFor(t, problem, domain, un);
+			Collection<MethodOption> active = findMethodsFor(t, ChimpProblem, domain, un);
 			if(active.isEmpty()) {
-				throw new RuntimeException("No options found for task "+t+" in network "+problem);
-//				logger.warning("No options found for task "+t+" in network "+problem);
-//				return null;
+				//throw new RuntimeException("No options found for task "+t+" in network "+problem);
+				logger.warning("No options found for task "+t+" in network "+ChimpProblem);
+				//return null;
 			}
-			HTNTaskNetwork network = deltaStar((HTNTaskNetwork) problem, t, active, false, domain);
+			HTNTaskNetwork network = deltaStar( ChimpProblem, t, active, false, domain);
 			
 			return fullDecomposition(network, domain);
 		}
@@ -103,8 +106,8 @@ public class HTNExpander {
     
 	public static void main(String[] args) throws Exception {
 		
-		 String problemFile = "domains/mobipick/simple_navigation/problem.pdl";
-	        String domainFile = "domains/mobipick/simple_navigation/domain.ddl";
+		 String problemFile = "src/main/java/examples/MDP/gotolondon/problem.pdl";
+	        String domainFile = "src/main/java/examples/MDP/gotolondon/domain.ddl";
 
 //	        String problemFile = "problems/test_m_serve_coffee_problem_1.pdl";
 //	        String domainFile = "domains/ordered_domain.ddl";
@@ -142,28 +145,27 @@ public class HTNExpander {
 	        ConstraintNetwork graph = fluentSolver.getConstraintNetwork();
 	        
 	       
-	        HTNTaskNetwork tasknetwork = new HTNTaskNetwork(fluentSolver);
-	        HTNChimpDomain HTNd =  HTNChimpDomain.parseHTNChimpDomain(builder) ;
-	        
-	        HTNExpander expander = new HTNExpander();
-			TaskNetwork fullyExpanded = expander.createFullyExpandedHTN(
-					S0_, tasknetwork, HTNd);
+//	        HTNTaskNetwork tasknetwork = new HTNTaskNetwork(fluentSolver);
+//	        HTNChimpDomain HTNd =  HTNChimpDomain.parseHTNChimpDomain(builder) ;
+//	        
+//	        HTNExpander expander = new HTNExpander();
+//			TaskNetwork fullyExpanded = expander.createFullyExpandedHTN(
+//					S0_, tasknetwork, HTNd);
 
 
 	        System.out.println("Found plan? " + chimp.generatePlan());
-            Variable[] planVector = chimp.extractActions();
 
 //	        chimp.printStats(System.out);
 
-//	        if (PRINT_PLAN) {
-//	            Variable[] planVector = chimp.extractActions();
-//	            int c = 0;
-//	            for (Variable act : planVector) {
-//	                if (act.getComponent() != null)
-//	                    System.out.println(c++ + ".\t" + act);
-//	            }
-//	            chimp.printFullPlan();
-//	        }
+	        if (PRINT_PLAN) {
+	            Variable[] planVector = chimp.extractActions();
+	            int c = 0;
+	            for (Variable act : planVector) {
+	                if (act.getComponent() != null)
+	                    System.out.println(c++ + ".\t" + act);
+	            }
+	            chimp.printFullPlan();
+	        }
 
 	}
 	
@@ -249,7 +251,7 @@ public class HTNExpander {
 		assert(network.hasTask(task));
 		
 		if(!inPlace) {
-			network = (HTNTaskNetwork) new TaskNetwork(network);
+			network = new HTNTaskNetwork(network);
 		}
 		
 		List<Constraint> constraintsAfter = network.findConstraintsWithTaskAfter(task);
