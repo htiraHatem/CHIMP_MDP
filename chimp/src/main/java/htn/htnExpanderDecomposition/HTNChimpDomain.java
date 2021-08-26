@@ -12,7 +12,6 @@ import edu.cmu.ita.htn.HTNDomain;
 import edu.cmu.ita.htn.HTNFactory;
 import edu.cmu.ita.htn.LogicExpression;
 import edu.cmu.ita.htn.LogicExpressionImpl;
-import edu.cmu.ita.htn.Method;
 import edu.cmu.ita.htn.Operator;
 import edu.cmu.ita.htn.Proposition;
 import edu.cmu.ita.htn.State;
@@ -27,15 +26,18 @@ import htn.HTNPrecondition;
 import htn.PlanReportroryItem;
 import hybridDomainParsing.ClassicHybridDomain;
 import jason.asSemantics.Unifier;
+import mdpSolver.HTNTaskNetwork;
 import planner.CHIMP.CHIMPBuilder;
 
 public class HTNChimpDomain extends HTNDomain {
+	ArrayList<Method> htnMethods = new ArrayList<Method>();
+	HashMap<htn.htnExpanderDecomposition.Task, htn.htnExpanderDecomposition.Task> htnInstances = new HashMap<htn.htnExpanderDecomposition.Task, htn.htnExpanderDecomposition.Task>();
 
 	public HTNChimpDomain(List<Method> methods, List<Task> tasks) {
 		super();
-		this.methods = new ArrayList<Method>(methods);
+		this.htnMethods = new ArrayList<Method>(methods);
 		this.actions = new ArrayList<Task>(tasks);
-		this.instances = new HashMap<Task, Task>();
+		this.htnInstances = new HashMap<htn.htnExpanderDecomposition.Task, htn.htnExpanderDecomposition.Task>();
 	}
 
 	public HTNChimpDomain() {
@@ -53,7 +55,9 @@ public class HTNChimpDomain extends HTNDomain {
 
 			LogicExpression pre = null;
 			State del = new State();
-
+			if(i.getPreconditions().length<1)
+				pre = Proposition.TRUE;
+			else
 			for (HTNPrecondition pr : i.getPreconditions()) {
 				Proposition p;
 				String fluent = convertLISPAtom(pr.getFluenttype(), Arrays.asList(pr.getArguments()));
@@ -68,7 +72,7 @@ public class HTNChimpDomain extends HTNDomain {
 				if (pr.isNegativeEffect())
 					del.add(p);
 			}
-
+			
 			State add = new State();
 			for (EffectTemplate eff : i.getEffects()) {
 				String fluent = convertLISPAtom(eff.getName(), Arrays.asList(eff.getInputArgs()));
@@ -99,6 +103,9 @@ public class HTNChimpDomain extends HTNDomain {
 			head = convertLISPAtom(i.getName(), pars);
 			Task t = HTNFactory.createTask(head);
 
+			if(i.getPreconditions().length<1)
+				pre = Proposition.TRUE;
+			else
 			for (HTNPrecondition pr : i.getPreconditions()) {
 				Proposition p;
 				String fluent = convertLISPAtom(pr.getFluenttype(), Arrays.asList(pr.getArguments()));
@@ -126,13 +133,30 @@ public class HTNChimpDomain extends HTNDomain {
 			}
 			tn = createTaskNetwork(tl, ordered);
 
-			Method m = new Method(head, t, pre, tn);
+			Method m = new Method(head, new htn.htnExpanderDecomposition.Task(t), pre, tn);
 			this.addMethod(m);
 		}
 
 		this.instances = new HashMap<Task, Task>();
 	}
 
+	public void addMethod(Method m) {
+		this.htnMethods.add(m);
+	}
+	
+	public  HashMap<htn.htnExpanderDecomposition.Task, htn.htnExpanderDecomposition.Task> getInstances() {
+
+		return this.htnInstances;
+	}
+	
+//	public  HashMap<htn.htnExpanderDecomposition.Task, htn.htnExpanderDecomposition.Task> getInstances() {
+//		HashMap<htn.htnExpanderDecomposition.Task, htn.htnExpanderDecomposition.Task> tasks = new HashMap<htn.htnExpanderDecomposition.Task, htn.htnExpanderDecomposition.Task>();
+//		for(Task i : instances.values()) {
+//			((List<Method>) tasks).addAll(new htn.htnExpanderDecomposition.Task(i));
+//		}
+//		return tasks;
+//	}
+	
 
 	public static HTNChimpDomain parseHTNChimpDomain(CHIMPBuilder builder) throws ParseException {
 		HTNChimpDomain domain = new HTNChimpDomain();
@@ -180,6 +204,8 @@ public class HTNChimpDomain extends HTNDomain {
 			return term;
 		}
 	}
+	
+	
 
 	private final String convertLISPAtom(String head, List<String> terms) {
 		return convertLISPTerm(head) + convertLISPTerms(terms);
@@ -189,7 +215,7 @@ public class HTNChimpDomain extends HTNDomain {
 		List<MethodOption> options = new ArrayList<MethodOption>();
 
 		Unifier newU = new Unifier();
-		for (Method m : methods) {
+		for (Method m : htnMethods) {
 			newU.compose(u);
 			Iterator<Unifier> iu;
 			if (newU.unifies(m.getTask(), task) && (iu = m.getPossibleUnifiers(s, newU)) != null) {
@@ -208,4 +234,44 @@ public class HTNChimpDomain extends HTNDomain {
 
 		return options;
 	}
+	
+	public List<MethodOption> findMethodsFor1(Task task, Unifier un) {
+		List<MethodOption> options = new ArrayList<MethodOption>();
+		
+		Unifier newUn = new Unifier();
+		for(Method m:htnMethods) {
+			newUn.compose(un);
+			if(newUn.unifies(m.getTask(), task) ) {
+				options.add(new MethodOption(m, newUn));
+				newUn = new Unifier();
+			} else {
+				newUn.clear();
+			}
+		}
+		
+		return options;
+	}
+	
+	public void postProcessPrimitiveTasks() throws Exception {
+		for(Method m:htnMethods) {
+			for(Task task:m.getTaskNetwork().getTasks1()) {
+				Unifier un = new Unifier();
+				//If a task has no possible substitutions, either the task is primitive 
+				//(so we find an operator to associate to it), or the domain is poorly specified
+				if(this.findMethodsFor1(task, un).isEmpty()) {
+					un = new Unifier();
+					List<Operator> opers = findOperatorsFor(task, un);
+					if(opers.isEmpty()) {
+						throw new Exception("Invalid domain: task "+task+" has no applicable methods and no associated operators");
+					} else {
+						if(opers.size() > 1) {
+							//logger.warning("More than one operator is applicable to primitive task "+task+" "+opers);
+						}
+						task.op = opers.get(0);
+					}
+				}
+			}
+		}
+	}
+
 }

@@ -26,21 +26,41 @@ import htn.htnExpanderDecomposition.Task;
 	public class HTNTaskNetwork extends TaskNetwork {
 		protected HashSet<Constraint> constraints;
 		protected LinkedList<Task> orderedTasks;
-		protected List<Task> tasks;
+		protected List<Task> tasks ;
 
+		public HTNTaskNetwork() {
+			super();
+			this.constraints = new HashSet<Constraint>();
+			this.tasks = new ArrayList<Task>();
+			this.orderedTasks = new LinkedList<Task>();
+		}
 		
 		public HTNTaskNetwork (TaskNetwork network){
 			super(network);
 			this.constraints = new HashSet<Constraint>(super.getConstraints());
 			this.orderedTasks = new LinkedList<Task>();
-			for(Task a :((HTNTaskNetwork) network).getOrderedTasks1()) {
-				Task t =  new Task(a);
-				orderedTasks.add(t);
+			if (network instanceof HTNTaskNetwork) {
+				//if(((HTNTaskNetwork) network).getOrderedTasks().size()>0)
+				for (Task a : ((HTNTaskNetwork) network).getOrderedTasks1()) {
+					Task t = new Task(a);
+					orderedTasks.add(t);
+				}
+				this.tasks = new ArrayList<Task>();
+				for (Task a : ((HTNTaskNetwork) network).getTasks1()) {
+					tasks.add(new Task(a));
+				}
+			} else {
+				for (edu.cmu.ita.htn.Task a : network.getOrderedTasks()) {
+					Task t = new Task(a);
+					orderedTasks.add(t); 
+				}
+				this.tasks = new ArrayList<Task>();
+				for (edu.cmu.ita.htn.Task a : network.getTasks()) {
+					tasks.add(new Task(a));
+				}
+
 			}
-			this.tasks = new ArrayList<Task>();
-			for(Task a :((HTNTaskNetwork) network).getTasks1()) {
-				tasks.add( new Task(a));
-			}
+
 		}
 		
 		public HTNTaskNetwork (FluentNetworkSolver network) throws Exception{
@@ -70,15 +90,156 @@ import htn.htnExpanderDecomposition.Task;
 		}
 		
 		
+
+
 		public HashSet<Constraint> getConstraints() {
-			return super.getConstraints();
+			return this.constraints;
 		}
+
 		
 		public LinkedList<Task> getOrderedTasks1(){
+				if(orderedTasks.size() != tasks.size()) {
+					topologicalSort();
+				}
+				return orderedTasks;
+			}
+		
+		private HashSet<Constraint> backupC = new HashSet<Constraint>();
+		private final List<Task> remaining = new ArrayList<Task>();
+		/**
+		 * Uses a topological sorting algorithm to impose total order in the tasks of this network.
+		 * @param task1
+		 * @param task2
+		 * @return
+		 */
+		private final List<Task> topologicalSort() {
+			this.remaining.addAll(tasks);
+			
+			this.backupC.clear();
+			for(Constraint i : constraints) {
+			System.out.print(	this.backupC.add(i));
+			}
+			backupC.addAll(constraints);
+			
+			while(!remaining.isEmpty()) {
+				Task t = findZeroDegreeTask(remaining);
+				assert(t!=null);
+				if(t == null) {
+					//throw new RuntimeException("Trying to sort a cyclic graph "+backupC+" \n "+HTNDotConverter.printHTNDot(backupC));
+				}
+				orderedTasks.offerFirst(t);
+				remaining.remove(t);
+				this.removeConstraintsAbout(t);
+//				this.removeConstraints(findConstraintsWithTaskAfter(t));
+//				this.removeConstraints(findConstraintsWithTaskBefore(t));
+			}
+			this.getConstraints().addAll(backupC);
+			
 			return orderedTasks;
+		
 		}
+			private final Task findZeroDegreeTask(Collection<Task> tasks) {
+				for(Task t:tasks) {
+					if(findConstraintsWithTaskBefore(t).size()==0) {
+						return t;
+					}
+				}
+				return null;
+			}
 		
 		public List<Task> getTasks1(){
 			return tasks;
+		}
+		
+		/**
+		 * Adds a new task to this network.
+		 * @param t
+		 */
+		public void addTask(Task t) {
+			this.tasks.add(t);
+			this.orderedTasks.clear();
+		}
+		
+		/**
+		 * Removes the specified task from the network as well as any constraints referring to this task.
+		 * 
+		 * @param task
+		 * @return
+		 */
+		
+		public boolean removeTask(Task task) {
+			if(tasks.remove(task)) {
+				removeConstraintsAbout(task);
+				return true;
+			} else {
+				return false;
+			}
+		}
+		
+		private final void removeConstraintsAbout(Task task) {
+			for(Iterator<Constraint> i = this.getConstraints().iterator(); i.hasNext(); ) {
+				Constraint c = i.next();
+				if(c.getTask1() == task || c.getTask2() == task) {
+					i.remove();
+				}
+			}
+		}
+		
+		public boolean removeConstraint(Constraint c) {
+			return getConstraints().remove(c);
+		}
+		
+		/**
+		 * Helper method
+		 * @param consts
+		 */
+		
+		public void addConstraints1(Collection<Constraint> consts) {
+			for(Constraint c: consts) {
+				this.getConstraints().add(c);
+			}
+			this.orderedTasks.clear();
+		}
+		
+		public final List<Constraint> findConstraintsWithTaskAfter(Task t) {
+			List<Constraint> relConsts = new ArrayList<Constraint>();
+			for(Constraint c:getConstraints()) {
+				if(c.getTask2().equals(t)) {
+					relConsts.add(c);
+				}
+			}
+			return relConsts;
+		}
+		
+		public final List<Constraint> findConstraintsWithTaskBefore(Task t) {
+			List<Constraint> relConsts = new ArrayList<Constraint>();
+			for(Constraint c:getConstraints()) {
+				if(c.getTask1().equals(t)) {
+					relConsts.add(c);
+				}
+			}
+			return relConsts;
+		}
+		
+		public boolean allTasksArePrimitive() {
+			for(Task t: tasks) {
+				if(!t.isPrimitive()) {
+					return false;
+				}
+			}
+			
+			return true;
+		}
+		
+		public Task getFirstTask() {
+			return getOrderedTasks1().getFirst();
+		}
+		
+		/**
+		 * Returns the last task in this network
+		 * @return
+		 */
+		public Task getLastTask() {
+			return getOrderedTasks1().getLast();
 		}
 	}

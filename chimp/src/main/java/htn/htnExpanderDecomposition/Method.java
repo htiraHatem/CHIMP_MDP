@@ -4,6 +4,7 @@
 package htn.htnExpanderDecomposition;
 
 import jason.asSemantics.Unifier;
+import mdpSolver.HTNTaskNetwork;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -24,12 +25,12 @@ public class Method {
 	
 	protected Task task;
 	protected LogicExpression precond;
-	protected TaskNetwork taskNetwork;
+	protected HTNTaskNetwork taskNetwork;
 	
 	/**
 	 * 
 	 */
-	public Method(String name, Task task, TaskNetwork taskNetwork) {
+	public Method(String name, Task task, HTNTaskNetwork taskNetwork) {
 		this(name,task,null,taskNetwork);
 	}
 	
@@ -46,13 +47,21 @@ public class Method {
 	/**
 	 * 
 	 */
-	public Method(String name, Task task, LogicExpression precond, TaskNetwork taskNetwork) {
+	public Method(String name, Task task, LogicExpression precond, HTNTaskNetwork taskNetwork) {
 		this.name = name;
 		this.task = task;
 		this.precond = precond;
 		this.taskNetwork = taskNetwork;
 	}
 	
+	public Method(String head, Task task2, LogicExpression pre, TaskNetwork tn) {
+		this.name = head;
+		this.task = task2;
+		this.precond = pre;
+		this.taskNetwork = new HTNTaskNetwork(tn);
+		}
+
+
 	/**
 	 * @return the name
 	 */
@@ -75,7 +84,7 @@ public class Method {
 	/**
 	 * @return the taskNetwork
 	 */
-	public final TaskNetwork getTaskNetwork() {
+	public final HTNTaskNetwork getTaskNetwork() {
 		return taskNetwork;
 	}
 	
@@ -86,17 +95,17 @@ public class Method {
 	 * @return
 	 * TODO Fix this for when the same task is executed multiple times
 	 */
-	protected TaskNetwork getInstantiatedTaskNetwork(HTNDomain domain, Unifier un) {
-		TaskNetwork tnInstance = new TaskNetwork();
+	protected HTNTaskNetwork getInstantiatedTaskNetwork(HTNChimpDomain domain, Unifier un) {
+		HTNTaskNetwork tnInstance = new HTNTaskNetwork();
 		
 		HashMap<Task, Task> instMap = new HashMap<Task, Task>();
 //		Task instMap[] = new Task[this.taskNetwork.tasks.size()];
 		                          
 		
-		for(edu.cmu.ita.htn.Task t:taskNetwork.getTasks()) {
+		for(Task t:taskNetwork.getTasks1()) {
 //		for(int i=0; i<taskNetwork.tasks.size(); i++) {
 //			Task t = taskNetwork.tasks.get(i);
-			Task tInstance = (Task) domain.instantiateTask(t, un);
+			Task tInstance =  Task.instantiateTask(t, un, domain.getInstances());
 			instMap.put((Task) t, tInstance);
 //			instMap[i] = tInstance;
 			tnInstance.addTask(tInstance);
@@ -152,4 +161,6 @@ public class Method {
 	public String toString() {
 		return "<"+name+","+precond+","+task+","+taskNetwork.getOrderedTasks()+">";
 	}
+
+
 }

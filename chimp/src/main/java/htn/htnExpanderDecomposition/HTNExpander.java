@@ -21,12 +21,14 @@ import edu.cmu.ita.htn.Operator;
 import edu.cmu.ita.htn.Proposition;
 import edu.cmu.ita.htn.State;
 import edu.cmu.ita.htn.TaskNetwork;
+import edu.cmu.ita.htn.parser.ParseException;
 import fluentSolver.FluentNetworkSolver;
 import htn.valOrderingHeuristics.UnifyDeepestWeightNewestbindingsValOH;
 import hybridDomainParsing.DomainParsingException;
 import jason.asSemantics.Unifier;
 import mdpSolver.HTNTaskNetwork;
 import planner.CHIMP;
+import planner.CHIMP.CHIMPBuilder;
 
 public class HTNExpander {
 
@@ -104,6 +106,7 @@ public class HTNExpander {
 		}
 	}
     
+
 	public static void main(String[] args) throws Exception {
 		
 		 String problemFile = "src/main/java/examples/MDP/gotolondon/problem.pdl";
@@ -145,12 +148,12 @@ public class HTNExpander {
 	        ConstraintNetwork graph = fluentSolver.getConstraintNetwork();
 	        
 	       
-//	        HTNTaskNetwork tasknetwork = new HTNTaskNetwork(fluentSolver);
-//	        HTNChimpDomain HTNd =  HTNChimpDomain.parseHTNChimpDomain(builder) ;
-//	        
-//	        HTNExpander expander = new HTNExpander();
-//			TaskNetwork fullyExpanded = expander.createFullyExpandedHTN(
-//					S0_, tasknetwork, HTNd);
+	        HTNTaskNetwork tasknetwork = new HTNTaskNetwork(fluentSolver);
+	        HTNChimpDomain HTNd =  HTNChimpDomain.parseHTNChimpDomain(builder) ;
+	        
+	        HTNExpander expander = new HTNExpander();
+			TaskNetwork fullyExpanded = expander.createFullyExpandedHTN(
+					S0_, tasknetwork, HTNd);
 
 
 	        System.out.println("Found plan? " + chimp.generatePlan());
@@ -264,23 +267,24 @@ public class HTNExpander {
 		for(MethodOption mo:options) {
 			assert(mo.m.getTask().equals(task));
 			//logger.info("Expanding task '"+task+"' with method '"+mo.m+"'");
-			HTNTaskNetwork subst = (HTNTaskNetwork) mo.getMethod().getInstantiatedTaskNetwork(domain, mo.un);
+			HTNTaskNetwork substChimp =mo.getMethod().getInstantiatedTaskNetwork((HTNChimpDomain) domain, mo.un);
 			
-			for(Task t:subst.getTasks1()) {
+			//HTNTaskNetwork substChimp = new HTNTaskNetwork(subst); 
+			for(Task t:substChimp.getTasks1()) {
 				network.addTask(t);
 			}
 			
 			for(Constraint c:constraintsBefore) {
-				network.addBeforeConstraint(subst.getLastTask(), c.getTask2());
+				network.addBeforeConstraint(substChimp.getLastTask(), c.getTask2());
 			}
 			
 			for(Constraint c:constraintsAfter) {
 				//We only add a precedence constraint to tasks whose possible states (pState(s0, c.task1, network)) support this method
-				if(mState((Task) c.getTask1(),network).supports(mo.getMethod().getPrecond(), mo.getUnifier())) {
-					network.addBeforeConstraint(c.getTask1(), subst.getFirstTask());
+				if(mState((Task) c.getTask1(),network).supports(mo.getMethod().getPreconds(), mo.getUnifier())) {
+					network.addBeforeConstraint(c.getTask1(), substChimp.getFirstTask());
 				}
 			}
-			network.addConstraints(subst.getConstraints());
+			network.addConstraints1(substChimp.getConstraints());
 		}
 		
 		return network;
