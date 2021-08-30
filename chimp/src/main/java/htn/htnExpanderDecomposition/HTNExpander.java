@@ -32,153 +32,149 @@ import planner.CHIMP.CHIMPBuilder;
 
 public class HTNExpander {
 
-    static final boolean PRINT_PLAN = true;
+	static final boolean PRINT_PLAN = true;
 	private static final Logger logger = Logger.getLogger(HTNExpander.class.getName());
 
 	/**
-	 * A cache for the states after executing a primitive task, this one should be kept to the end of the algorithm.
+	 * A cache for the states after executing a primitive task, this one should be
+	 * kept to the end of the algorithm.
 	 */
 	private final HashMap<Task, MultiState> resolvedTasks;
 	/**
-	 * A cache for mStateBefore, this one should be flushed constantly throughout execution
+	 * A cache for mStateBefore, this one should be flushed constantly throughout
+	 * execution
 	 */
 	private final HashMap<Task, MultiState> mStateBefore;
 	private MultiState initialState;
-    
+
 	public HTNExpander() {
 		resolvedTasks = new HashMap<Task, MultiState>();
 		mStateBefore = new HashMap<Task, MultiState>();
 	}
-	
+
 	public TaskNetwork createFullyExpandedHTN(State s0, HTNTaskNetwork problem, HTNChimpDomain domain) {
 		initialState = new MultiState(s0);
 		return fullDecomposition(problem, domain);
 	}
-    
-    
+
 	private final TaskNetwork fullDecomposition(TaskNetwork problem, HTNChimpDomain domain) {
 		HTNTaskNetwork ChimpProblem = new HTNTaskNetwork(problem);
-		//At this point we have finished expanding the HTN
-		if(ChimpProblem.allTasksArePrimitive() && getUnresolvedTask(ChimpProblem) == null) {
+		// At this point we have finished expanding the HTN
+		if (ChimpProblem.allTasksArePrimitive() && getUnresolvedTask(ChimpProblem) == null) {
 			return ChimpProblem;
 		}
 		Task t = getUnresolvedTask(ChimpProblem);
 		System.out.println(t.toString());
 
-		//Remove this print just for debugging purposes
-		//debugPrintHTN(t, problem);
-		if(t.isPrimitive()) {
+		// Remove this print just for debugging purposes
+		// debugPrintHTN(t, problem);
+		if (t.isPrimitive()) {
 			System.out.print("*");
 			List<Operator> ops = findOperatorsFor(t, ChimpProblem, domain, t.getUn());
-			if(ops.isEmpty()) {
-				throw new RuntimeException("No operators found for task "+t);
+			if (ops.isEmpty()) {
+				throw new RuntimeException("No operators found for task " + t);
 			}
-			Operator active = ops.get(0);//domain.findOperatorsFor(t, t.un).get(0);
-			t.setOp(active); 
-			if(active == null) {
-				throw new RuntimeException("Tried to apply an invalid operator for task "+t);
+			Operator active = ops.get(0);// domain.findOperatorsFor(t, t.un).get(0);
+			t.setOp(active);
+			if (active == null) {
+				throw new RuntimeException("Tried to apply an invalid operator for task " + t);
 			}
-			
-			//Here, we will have to compute the mState
+
+			// Here, we will have to compute the mState
 			@SuppressWarnings("unused")
 			MultiState possibleState = mState(t, ChimpProblem);
-			
+
 			TaskNetwork nTn = fullDecomposition(ChimpProblem, domain);
-			if(nTn == null) {
-				throw new RuntimeException("Could not continue to decompose network "+ChimpProblem);
+			if (nTn == null) {
+				throw new RuntimeException("Could not continue to decompose network " + ChimpProblem);
 //				logger.warning("Could not continue to decompose network "+problem);
 //				return null;
 			} else {
 				return nTn;
 			}
-			
+
 		} else {
 			System.out.print("|");
 			Unifier un = new Unifier();
-			
-			Collection<MethodOption> active = findMethodsFor(t, ChimpProblem, domain, un);
-			if(active.isEmpty()) {
-				//throw new RuntimeException("No options found for task "+t+" in network "+problem);
-				logger.warning("No options found for task "+t+" in network "+ChimpProblem);
-				//return null;
-			}
-			System.out.println("before delta star" + problem.getConstraints().size());
-			HTNTaskNetwork network = deltaStar( ChimpProblem, t, active, false, domain);
 
-			System.out.println("after delta star" + problem.getConstraints().size());
+			Collection<MethodOption> active = findMethodsFor(t, ChimpProblem, domain, un);
+			if (active.isEmpty()) {
+				// throw new RuntimeException("No options found for task "+t+" in network
+				// "+problem);
+				logger.warning("No options found for task " + t + " in network " + ChimpProblem);
+				// return null;
+			}
+			// System.out.println("before delta star" + problem.getConstraints().size());
+			HTNTaskNetwork network = deltaStar(ChimpProblem, t, active, false, domain);
+
+			// System.out.println("after delta star" + problem.getConstraints().size());
 			return fullDecomposition(network, domain);
 		}
 	}
-    
 
 	public static void main(String[] args) throws Exception {
-		
-		 String problemFile = "src/main/java/examples/MDP/gotolondon/problem.pdl";
-	        String domainFile = "src/main/java/examples/MDP/gotolondon/domain.ddl";
+
+		String problemFile = "src/main/java/examples/MDP/gotolondon/problem.pdl";
+		String domainFile = "src/main/java/examples/MDP/gotolondon/domain.ddl";
 
 //	        String problemFile = "problems/test_m_serve_coffee_problem_1.pdl";
 //	        String domainFile = "domains/ordered_domain.ddl";
 
-	        ValueOrderingH valOH = new UnifyDeepestWeightNewestbindingsValOH();
+		ValueOrderingH valOH = new UnifyDeepestWeightNewestbindingsValOH();
 
-	        CHIMP.CHIMPBuilder builder;
+		CHIMP.CHIMPBuilder builder;
 
-	        try {
-	            builder = new CHIMP.CHIMPBuilder(domainFile, problemFile)
-	                    .valHeuristic(valOH)
-	                    .htnUnification(true);
+		try {
+			builder = new CHIMP.CHIMPBuilder(domainFile, problemFile).valHeuristic(valOH).htnUnification(true);
 
-	        } catch (DomainParsingException e) {
-	            e.printStackTrace();
-	            return;
-	        }
-	        CHIMP chimp = builder.build();
-	        FluentNetworkSolver fluentSolver = chimp.getFluentSolver();
-	        // get S0 state
-	        ConstraintSolver problem = fluentSolver.getConstraintSolvers()[0];
-	        
-	        State S0_ = new State();
-	        ConstraintNetwork dd = problem.getConstraintNetwork();
-	        
-	        Variable[] sa =problem.getVariables();
-	        Object task = problem.getComponents().values().toArray()[0];
-	        
-	        for( Variable i : sa) {
-		        if(!task.toString().contains(i.toString()))
-	        	S0_.add(new Proposition (i.toString()));
-	        }
-	        //----------
+		} catch (DomainParsingException e) {
+			e.printStackTrace();
+			return;
+		}
+		CHIMP chimp = builder.build();
+		FluentNetworkSolver fluentSolver = chimp.getFluentSolver();
+		// get S0 state
+		ConstraintSolver problem = fluentSolver.getConstraintSolvers()[0];
 
-	        ConstraintNetwork graph = fluentSolver.getConstraintNetwork();
-	        
-	       
-	        HTNTaskNetwork tasknetwork = new HTNTaskNetwork(fluentSolver);
-	        HTNChimpDomain HTNd =  HTNChimpDomain.parseHTNChimpDomain(builder) ;
-	        
-	        HTNExpander expander = new HTNExpander();
-			TaskNetwork fullyExpanded = expander.createFullyExpandedHTN(
-					S0_, tasknetwork, HTNd);
+		State S0_ = new State();
+		ConstraintNetwork dd = problem.getConstraintNetwork();
 
+		Variable[] sa = problem.getVariables();
+		Object task = problem.getComponents().values().toArray()[0];
 
-	        System.out.println("Found plan? " + chimp.generatePlan());
+		for (Variable i : sa) {
+			if (!task.toString().contains(i.toString()))
+				S0_.add(new Proposition(i.toString()));
+		}
+		// ----------
+
+		ConstraintNetwork graph = fluentSolver.getConstraintNetwork();
+
+		HTNTaskNetwork tasknetwork = new HTNTaskNetwork(fluentSolver);
+		HTNChimpDomain HTNd = HTNChimpDomain.parseHTNChimpDomain(builder);
+
+		HTNExpander expander = new HTNExpander();
+		TaskNetwork fullyExpanded = expander.createFullyExpandedHTN(S0_, tasknetwork, HTNd);
+
+		System.out.println("Found plan? " + chimp.generatePlan());
 
 //	        chimp.printStats(System.out);
 
-	        if (PRINT_PLAN) {
-	            Variable[] planVector = chimp.extractActions();
-	            int c = 0;
-	            for (Variable act : planVector) {
-	                if (act.getComponent() != null)
-	                    System.out.println(c++ + ".\t" + act);
-	            }
-	            chimp.printFullPlan();
-	        }
+		if (PRINT_PLAN) {
+			Variable[] planVector = chimp.extractActions();
+			int c = 0;
+			for (Variable act : planVector) {
+				if (act.getComponent() != null)
+					System.out.println(c++ + ".\t" + act);
+			}
+			chimp.printFullPlan();
+		}
 
 	}
-	
 
 	/**
 	 * Returns all applicable operators for {@link Task} <code>t</code>
+	 * 
 	 * @param t
 	 * @param network
 	 * @param domain
@@ -186,17 +182,17 @@ public class HTNExpander {
 	 * @return
 	 */
 	private final List<Operator> findOperatorsFor(Task t, TaskNetwork network, HTNDomain domain, Unifier u) {
-		assert(t.isPrimitive());
+		assert (t.isPrimitive());
 		List<Operator> options = new ArrayList<Operator>();
-		MultiState ms = mStateBefore(t,network);
-		
-		for(State s:ms) {
+		MultiState ms = mStateBefore(t, network);
+
+		for (State s : ms) {
 			options.addAll(domain.findOperatorsFor(s, t, u));
 		}
-		
+
 		return options;
 	}
-	
+
 	/**
 	 * 
 	 * @param t
@@ -205,146 +201,161 @@ public class HTNExpander {
 	 * @param u
 	 * @return
 	 */
-	private final Collection<MethodOption> findMethodsFor(Task t, TaskNetwork network, HTNChimpDomain domain, Unifier u) {
+	private final Collection<MethodOption> findMethodsFor(Task t, TaskNetwork network, HTNChimpDomain domain,
+			Unifier u) {
 		List<MethodOption> options = new ArrayList<MethodOption>();
-		MultiState ms = mStateBefore(t,network);
-		for(State s:ms) {
-			for(MethodOption o:  domain.findMethodsFor1(t, s, u)) {
-				//We need to check that the same option has not been generated from a previous state
-				if(!options.contains(o)) {
+		MultiState ms = mStateBefore(t, network);
+		for (State s : ms) {
+			for (MethodOption o : domain.findMethodsFor1(t, s, u)) {
+				// We need to check that the same option has not been generated from a previous
+				// state
+				if (!options.contains(o)) {
 					options.add(o);
 				}
 			}
-			//options.addAll(opt);
+			// options.addAll(opt);
 		}
-		//---
+		// ---
 //		List<MethodOption> options = domain.findMethodsFor(t, u);
 		return options;
 	}
-	
+
 	/**
 	 * Expands the HTN using all possible applicable methods
+	 * 
 	 * @param problem
 	 * @param task
 	 * @param methods
-	 * @param domain 
+	 * @param domain
 	 */
-	protected void expandWithAllMethodsInPlace(TaskNetwork problem, Task task, List<MethodOption> methods, HTNDomain domain) {
-		deltaStar((HTNTaskNetwork) problem,task,methods,true, domain);
+	protected void expandWithAllMethodsInPlace(TaskNetwork problem, Task task, List<MethodOption> methods,
+			HTNDomain domain) {
+		deltaStar((HTNTaskNetwork) problem, task, methods, true, domain);
 	}
-	
+
 	/**
 	 * 
 	 * @param network
 	 * @param task
 	 * @param options
-	 * @param domain 
+	 * @param domain
 	 * @return
 	 */
-	protected HTNTaskNetwork expandWithAllMethods(HTNTaskNetwork network, Task task, List<MethodOption> options, HTNDomain domain) {
+	protected HTNTaskNetwork expandWithAllMethods(HTNTaskNetwork network, Task task, List<MethodOption> options,
+			HTNDomain domain) {
 		return deltaStar(network, task, options, false, domain);
 	}
-	
+
 	/**
 	 * 
 	 * @param network
 	 * @param task
 	 * @param options
 	 * @param inPlace
-	 * @param domain 
+	 * @param domain
 	 * @return
 	 */
-	private final HTNTaskNetwork deltaStar(HTNTaskNetwork network, Task task, Collection<MethodOption> options, boolean inPlace, HTNDomain domain) {
-		assert(network.hasTask(task));
-		
-		if(!inPlace) {
+	private final HTNTaskNetwork deltaStar(HTNTaskNetwork network, Task task, Collection<MethodOption> options,
+			boolean inPlace, HTNDomain domain) {
+		assert (network.hasTask(task));
+
+		if (!inPlace) {
 			network = new HTNTaskNetwork(network);
 		}
-		System.out.println("inside , before remove" + network.getConstraints().size());
+		//System.out.println("inside , before remove" + network.getConstraints().size());
 
 		List<Constraint> constraintsAfter = network.findConstraintsWithTaskAfter(task);
 		List<Constraint> constraintsBefore = network.findConstraintsWithTaskBefore(task);
 		network.removeTask(task);
-		System.out.println("inside , after remove" + network.getConstraints().size());
+		//System.out.println("inside , after remove" + network.getConstraints().size());
 
-		//--- Added with mStateBefore
+		// --- Added with mStateBefore
 		mStateBefore.remove(task);
-		//---
-		
-		for(MethodOption mo:options) {
-			assert(mo.m.getTask().equals(task));
-			//logger.info("Expanding task '"+task+"' with method '"+mo.m+"'");
-			HTNTaskNetwork substChimp =mo.getMethod().getInstantiatedTaskNetwork((HTNChimpDomain) domain, mo.un);
-			
-			//HTNTaskNetwork substChimp = new HTNTaskNetwork(subst); 
-			for(Task t:substChimp.getTasks1()) {
+		// ---
+
+		for (MethodOption mo : options) {
+			assert (mo.m.getTask().equals(task));
+			// logger.info("Expanding task '"+task+"' with method '"+mo.m+"'");
+			HTNTaskNetwork substChimp = mo.getMethod().getInstantiatedTaskNetwork((HTNChimpDomain) domain, mo.un);
+
+			// HTNTaskNetwork substChimp = new HTNTaskNetwork(subst);
+			for (Task t : substChimp.getTasks1()) {
 				network.addTask(t);
 			}
-			
-			for(Constraint c:constraintsBefore) {
+
+			for (Constraint c : constraintsBefore) {
 				network.addBeforeConstraint(substChimp.getLastTask(), c.getTask2());
 			}
-			
-			for(Constraint c:constraintsAfter) {
-				//We only add a precedence constraint to tasks whose possible states (pState(s0, c.task1, network)) support this method
-				if(mState((Task) c.getTask1(),network).supports(mo.getMethod().getPreconds(), mo.getUnifier())) {
+
+			for (Constraint c : constraintsAfter) {
+				// We only add a precedence constraint to tasks whose possible states
+				// (pState(s0, c.task1, network)) support this method
+				if (mState((Task) c.getTask1(), network).supports(mo.getMethod().getPreconds(), mo.getUnifier())) {
 					network.addBeforeConstraint(c.getTask1(), substChimp.getFirstTask());
 				}
 			}
 			network.addConstraints1(substChimp.getConstraints());
 		}
-		
+
 		return network;
 	}
-	
+
 	/**
 	 * Returns the possible states at the specified task in the fully expanded HTN.
+	 * 
 	 * @param task
 	 * @return
 	 */
-	public HashMap<Task,MultiState> getMStates() {
+	public HashMap<Task, MultiState> getMStates() {
 		return resolvedTasks;
 	}
-	
+
 	/**
-	 * Returns whether or not <code>task</code> is Resolved, a resolved state has had its mState calculated.
+	 * Returns whether or not <code>task</code> is Resolved, a resolved state has
+	 * had its mState calculated.
+	 * 
 	 * @param t
 	 * @return
 	 */
 	private boolean isResolved(Task task) {
-		return resolvedTasks.containsKey(task);
+		return resolvedTasks.containsKey(new Task(task));
 	}
-	
+
 	/**
-	 * Returns the next unresolved task in the network, an unresolved task has no possible state attached to it.
+	 * Returns the next unresolved task in the network, an unresolved task has no
+	 * possible state attached to it.
+	 * 
 	 * @param network
 	 * @return
 	 */
 	private final Task getUnresolvedTask(HTNTaskNetwork network) {
 		LinkedList<Task> tasks = network.getOrderedTasks1();
-		for(Task t:tasks) {
-			if(!isResolved(t)) {
+		for (Task t : tasks) {
+			if (!isResolved(t)) {
 				return t;
 			}
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Returns the possible state at task
+	 * 
 	 * @param task
 	 * @return
 	 */
 	private final MultiState possibleState(Task task) {
-		assert(task.isPrimitive());
-		assert(isResolved(task));
+		assert (task.isPrimitive());
+		assert (isResolved(task));
 		return resolvedTasks.get(task);
 	}
-	
+
 	/**
-	 * Returns all possible states at {@link Task} <code>t</code>, these possible states are the states
-	 * <b>after</b> <code>t</code> has been fully executed, and thus should not be used in calculating
-	 * the applicability of <code>t</code> in terms of its method preconditions.
+	 * Returns all possible states at {@link Task} <code>t</code>, these possible
+	 * states are the states <b>after</b> <code>t</code> has been fully executed,
+	 * and thus should not be used in calculating the applicability of
+	 * <code>t</code> in terms of its method preconditions.
+	 * 
 	 * @param s0
 	 * @param t
 	 * @param h
@@ -353,19 +364,21 @@ public class HTNExpander {
 	private final MultiState mState(Task t, TaskNetwork h) {
 		MultiState msRes = null;
 //		assert(t.isPrimitive());
-		//If we have already calculated the preceding state, no need to do it again
-		if(isResolved(t)) {
+		// If we have already calculated the preceding state, no need to do it again
+		if (isResolved(t)) {
 			msRes = possibleState(t);
 		} else {
-			//If this is one of the first possible tasks in the network, the preceding state can only be the initial state
-			if(h.isUnpreceded(t)) {
+			// If this is one of the first possible tasks in the network, the preceding
+			// state can only be the initial state
+			if (h.isUnpreceded(t)) {
 				msRes = initialState.applyOperator(t.getOp(), t.getUn());
 			} else {
 				List<Constraint> prec = h.findConstraintsWithTaskAfter(t);
-				assert(!prec.isEmpty()); // This list should be empty given the previous condition
+				assert (!prec.isEmpty()); // This list should be empty given the previous condition
 				msRes = new MultiState();
-				for(Constraint c: prec) {
-					//It seems in some situations just querying the possibleState directly won't work
+				for (Constraint c : prec) {
+					// It seems in some situations just querying the possibleState directly won't
+					// work
 //					MultiState prev = possibleState(c.task1);
 					MultiState prev = mState((Task) c.getTask1(), h);
 					msRes.addAll(prev.applyOperator(t.getOp(), t.getUn()));
@@ -376,35 +389,39 @@ public class HTNExpander {
 //		logger.info("mState for "+t+" is "+msRes);
 		return msRes;
 	}
-	
+
 	/**
 	 * A helper method for the converter to create an initial state.
+	 * 
 	 * @return
 	 */
 	MultiState getInitialState() {
 		return initialState;
 	}
-	
+
 	/**
-	 * Returns the possible state immediately <b>before</b> {@link Task} <code>t</code>, this method relies on the
-	 * correct left to right decomposition of tasks.
+	 * Returns the possible state immediately <b>before</b> {@link Task}
+	 * <code>t</code>, this method relies on the correct left to right decomposition
+	 * of tasks.
+	 * 
 	 * @param t
 	 * @param h
 	 * @return
 	 */
 	private final MultiState mStateBefore(Task t, TaskNetwork h) {
 		MultiState msRes = null;
-		if(mStateBefore.containsKey(t)) {
+		if (mStateBefore.containsKey(t)) {
 			msRes = mStateBefore.get(msRes);
 		} else {
-			//If this is one of the first possible tasks in the network, the preceding state can only be the initial state
-			if(h.isUnpreceded(t)) {
+			// If this is one of the first possible tasks in the network, the preceding
+			// state can only be the initial state
+			if (h.isUnpreceded(t)) {
 				msRes = initialState;
 			} else {
 				List<Constraint> prec = h.findConstraintsWithTaskAfter(t);
-				assert(!prec.isEmpty()); // This list should be empty given the previous condition
+				assert (!prec.isEmpty()); // This list should be empty given the previous condition
 				msRes = new MultiState();
-				for(Constraint c: prec) {
+				for (Constraint c : prec) {
 					MultiState prev = mState((Task) c.getTask1(), h);
 					msRes.addAll(prev);
 				}
@@ -414,6 +431,5 @@ public class HTNExpander {
 //		logger.info("mState before "+t+" is "+msRes);
 		return msRes;
 	}
-	
-	
+
 }
