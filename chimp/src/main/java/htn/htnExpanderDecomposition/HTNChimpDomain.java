@@ -61,7 +61,7 @@ public class HTNChimpDomain extends HTNDomain {
 			for (HTNPrecondition pr : i.getPreconditions()) {
 				Proposition p;
 				String fluent = convertLISPAtom(pr.getFluenttype(), Arrays.asList(pr.getArguments()));
-				p = new Proposition(fluent);// log_expr();
+				p =  HTNFactory.createProposition(fluent);// log_expr();
 				
 				pre = (pre == null) ? p
 						: new LogicExpressionImpl(pre, LogicalOp.and, p);
@@ -76,8 +76,9 @@ public class HTNChimpDomain extends HTNDomain {
 			State add = new State();
 			for (EffectTemplate eff : i.getEffects()) {
 				String fluent = convertLISPAtom(eff.getName(), Arrays.asList(eff.getInputArgs()));
-				Proposition p = new Proposition(fluent);
-				add.add(p);
+				Proposition p1=HTNFactory.createProposition(fluent);
+				System.out.println(p1.toString() +"   "+ p1.isGround());
+				add.add(p1);
 			}
 
 			// cost TODO to update
@@ -128,6 +129,9 @@ public class HTNChimpDomain extends HTNDomain {
 
 				// TODO createPrimitiveTask not all normal tasks
 				Task sub = HTNFactory.createTask(head1);
+
+				System.out.println(sub.toString() +"   "+ sub.isGround());
+				
 
 				tl.add(sub);
 			}
@@ -252,6 +256,33 @@ public class HTNChimpDomain extends HTNDomain {
 		return options;
 	}
 	
+//	public List<Operator> findOperatorsFor(Task task, Unifier un) {
+//		List<Operator> opers = new ArrayList<Operator>();
+//		for(Task tPrimitive:actions) {
+//			if(un.unifies(task, tPrimitive)) {
+//				assert(tPrimitive.op != null);
+//				Operator op = new Operator(tPrimitive.op);
+//				System.out.println(op.toString()+ op.isGround());
+//				op.apply(un);
+//				System.out.println(op.toString()+ op.isGround());
+//				opers.add(op);
+//			}
+//		}
+//		return opers;
+//	}
+	
+//	public final boolean apply1(Operator op, Unifier u) {
+//		if(op.apply(u)) {
+//			boolean applied = false;
+//			applied = op.preconds.apply(u);
+//			//if(!effects.isGround()) {
+//				applied |= effects.apply(u);
+//			//}
+//			return applied;
+//		} else {
+//			return false;
+//		}
+//	}
 	public void postProcessPrimitiveTasks() throws Exception {
 		for(Method m:htnMethods) {
 			for(Task task:m.getTaskNetwork().getTasks1()) {

@@ -28,8 +28,13 @@ public class Task extends edu.cmu.ita.htn.Task {
 	
 	public Task(edu.cmu.ita.htn.Task a) {
 		super(a);
-		this.apply(un);
 		}
+
+	public Task(Task a, boolean instance) {
+		super(a);
+		setInstance(instance);	
+		}
+
 
 	public Unifier getUn() {
 		return un;
@@ -51,7 +56,7 @@ public class Task extends edu.cmu.ita.htn.Task {
 	public static Task instantiateTask(Task t, Unifier un, HashMap<Task,Task> instances  ) {
 		Task tInstance = new Task(t);
 		t.instanceCount++;
-		tInstance.isInstance = true;
+		tInstance.setInstance(true);
 		tInstance.apply(un);
 		if(instances.containsKey(tInstance)) {
 			Task tEx = instances.get(tInstance);
@@ -60,6 +65,13 @@ public class Task extends edu.cmu.ita.htn.Task {
 		} else {
 			instances.put(tInstance, tInstance);
 		}
+		return tInstance;
+//		return t.instantiateTask(un);
+	}
+	
+	public static Task instantiateTask(Task t) {
+		Task tInstance = new Task(t);
+		tInstance.setInstance(true);
 		return tInstance;
 //		return t.instantiateTask(un);
 	}

@@ -40,14 +40,20 @@ import htn.htnExpanderDecomposition.Task;
 			this.constraints = new HashSet<Constraint>(super.getConstraints());
 			this.orderedTasks = new LinkedList<Task>();
 			if (network instanceof HTNTaskNetwork) {
-				//if(((HTNTaskNetwork) network).getOrderedTasks().size()>0)
 				for (Task a : ((HTNTaskNetwork) network).getOrderedTasks1()) {
-					Task t = new Task(a);
+					//System.out.println(a.toString());
+					Task t = new Task(a,a.isInstance());
+					
+					//System.out.print(t.toString());
+
+					//Task.instantiateTask(t);
 					orderedTasks.add(t);
 				}
 				this.tasks = new ArrayList<Task>();
 				for (Task a : ((HTNTaskNetwork) network).getTasks1()) {
-					tasks.add(new Task(a));
+					Task t = new Task(a,a.isInstance());
+
+					tasks.add(t);
 				}
 			} else {
 				for (edu.cmu.ita.htn.Task a : network.getOrderedTasks()) {
@@ -116,16 +122,15 @@ import htn.htnExpanderDecomposition.Task;
 			this.remaining.addAll(tasks);
 			
 			this.backupC.clear();
-			for(Constraint i : constraints) {
-			System.out.print(	this.backupC.add(i));
-			}
+
 			backupC.addAll(constraints);
-			
+			System.out.println( backupC.size());
+
 			while(!remaining.isEmpty()) {
 				Task t = findZeroDegreeTask(remaining);
 				assert(t!=null);
 				if(t == null) {
-					//throw new RuntimeException("Trying to sort a cyclic graph "+backupC+" \n "+HTNDotConverter.printHTNDot(backupC));
+					throw new RuntimeException("Trying to sort a cyclic graph "+backupC+" \n " );//+HTNDotConverter.printHTNDot(backupC));
 				}
 				orderedTasks.offerFirst(t);
 				remaining.remove(t);

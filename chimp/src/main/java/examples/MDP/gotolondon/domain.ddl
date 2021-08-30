@@ -48,21 +48,21 @@
 
 
 (:method 
-(Head moveTo(?l))
+(Head moveTo(london))
 (Pre p1 has(plane))
 (Sub s1 !moveTo(airport nyc plane))
 (Sub s2 !moveTo(nyc london plane))
 )
 
 (:method
-(Head moveTo(?l))
+(Head moveTo(london))
 (Pre p1 has(ship))
 (Sub s1 !moveTo(harbor soton ship))
 (Sub s2 !moveTo(soton london ship))
 )
 
 (:method 
-(Head moveTo(?l))
+(Head moveTo(london))
 (Pre p1 has(ship))
 (Sub s1 !moveTo(harbor lpool ship))
 (Sub s2 !moveTo(lpool london ship))

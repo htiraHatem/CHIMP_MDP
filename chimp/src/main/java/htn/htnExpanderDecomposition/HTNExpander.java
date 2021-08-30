@@ -63,6 +63,8 @@ public class HTNExpander {
 			return ChimpProblem;
 		}
 		Task t = getUnresolvedTask(ChimpProblem);
+		System.out.println(t.toString());
+
 		//Remove this print just for debugging purposes
 		//debugPrintHTN(t, problem);
 		if(t.isPrimitive()) {
@@ -100,8 +102,10 @@ public class HTNExpander {
 				logger.warning("No options found for task "+t+" in network "+ChimpProblem);
 				//return null;
 			}
+			System.out.println("before delta star" + problem.getConstraints().size());
 			HTNTaskNetwork network = deltaStar( ChimpProblem, t, active, false, domain);
-			
+
+			System.out.println("after delta star" + problem.getConstraints().size());
 			return fullDecomposition(network, domain);
 		}
 	}
@@ -256,10 +260,13 @@ public class HTNExpander {
 		if(!inPlace) {
 			network = new HTNTaskNetwork(network);
 		}
-		
+		System.out.println("inside , before remove" + network.getConstraints().size());
+
 		List<Constraint> constraintsAfter = network.findConstraintsWithTaskAfter(task);
 		List<Constraint> constraintsBefore = network.findConstraintsWithTaskBefore(task);
 		network.removeTask(task);
+		System.out.println("inside , after remove" + network.getConstraints().size());
+
 		//--- Added with mStateBefore
 		mStateBefore.remove(task);
 		//---
