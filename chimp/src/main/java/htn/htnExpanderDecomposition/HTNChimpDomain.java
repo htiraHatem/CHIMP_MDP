@@ -77,7 +77,6 @@ public class HTNChimpDomain extends HTNDomain {
 			for (EffectTemplate eff : i.getEffects()) {
 				String fluent = convertLISPAtom(eff.getName(), Arrays.asList(eff.getInputArgs()));
 				Proposition p1=HTNFactory.createProposition(fluent);
-				System.out.println(p1.toString() +"   "+ p1.isGround());
 				add.add(p1);
 			}
 
@@ -126,12 +125,7 @@ public class HTNChimpDomain extends HTNDomain {
 
 				List<String> effArg = Arrays.asList(eff.getInputArgs());
 				String head1 = convertLISPAtom(eff.getName(), effArg);
-
-				// TODO createPrimitiveTask not all normal tasks
-				Task sub = HTNFactory.createTask(head1);
-
-				System.out.println(sub.toString() +"   "+ sub.isGround());
-				
+				Task sub = HTNFactory.createTask(head1);				
 
 				tl.add(sub);
 			}

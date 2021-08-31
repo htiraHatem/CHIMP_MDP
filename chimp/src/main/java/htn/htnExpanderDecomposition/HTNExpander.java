@@ -181,11 +181,12 @@ public class HTNExpander {
 	 * @param u
 	 * @return
 	 */
-	private final List<Operator> findOperatorsFor(Task t, TaskNetwork network, HTNDomain domain, Unifier u) {
+	private final List<Operator> findOperatorsFor(Task t, HTNTaskNetwork network, HTNDomain domain, Unifier u) {
 		assert (t.isPrimitive());
 		List<Operator> options = new ArrayList<Operator>();
 		MultiState ms = mStateBefore(t, network);
 
+		
 		for (State s : ms) {
 			options.addAll(domain.findOperatorsFor(s, t, u));
 		}
@@ -201,10 +202,10 @@ public class HTNExpander {
 	 * @param u
 	 * @return
 	 */
-	private final Collection<MethodOption> findMethodsFor(Task t, TaskNetwork network, HTNChimpDomain domain,
+	private final Collection<MethodOption> findMethodsFor(Task t, HTNTaskNetwork network, HTNChimpDomain domain,
 			Unifier u) {
 		List<MethodOption> options = new ArrayList<MethodOption>();
-		MultiState ms = mStateBefore(t, network);
+		MultiState ms = mStateBefore(t, (HTNTaskNetwork) network);
 		for (State s : ms) {
 			for (MethodOption o : domain.findMethodsFor1(t, s, u)) {
 				// We need to check that the same option has not been generated from a previous
@@ -262,12 +263,12 @@ public class HTNExpander {
 		if (!inPlace) {
 			network = new HTNTaskNetwork(network);
 		}
-		//System.out.println("inside , before remove" + network.getConstraints().size());
+		System.out.println("inside , before remove" + network.getConstraints().size());
 
 		List<Constraint> constraintsAfter = network.findConstraintsWithTaskAfter(task);
 		List<Constraint> constraintsBefore = network.findConstraintsWithTaskBefore(task);
 		network.removeTask(task);
-		//System.out.println("inside , after remove" + network.getConstraints().size());
+		System.out.println("inside , after remove " + network.getConstraints().size());
 
 		// --- Added with mStateBefore
 		mStateBefore.remove(task);
@@ -405,24 +406,24 @@ public class HTNExpander {
 	 * of tasks.
 	 * 
 	 * @param t
-	 * @param h
+	 * @param network
 	 * @return
 	 */
-	private final MultiState mStateBefore(Task t, TaskNetwork h) {
+	private final MultiState mStateBefore(Task t, HTNTaskNetwork network) {
 		MultiState msRes = null;
 		if (mStateBefore.containsKey(t)) {
 			msRes = mStateBefore.get(msRes);
 		} else {
 			// If this is one of the first possible tasks in the network, the preceding
 			// state can only be the initial state
-			if (h.isUnpreceded(t)) {
+			if (network.isUnpreceded(t)) {
 				msRes = initialState;
 			} else {
-				List<Constraint> prec = h.findConstraintsWithTaskAfter(t);
+				List<Constraint> prec = network.findConstraintsWithTaskAfter(t);
 				assert (!prec.isEmpty()); // This list should be empty given the previous condition
 				msRes = new MultiState();
 				for (Constraint c : prec) {
-					MultiState prev = mState((Task) c.getTask1(), h);
+					MultiState prev = mState((Task) c.getTask1(), network);
 					msRes.addAll(prev);
 				}
 				mStateBefore.put(t, msRes);

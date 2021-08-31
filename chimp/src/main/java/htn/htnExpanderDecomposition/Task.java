@@ -76,7 +76,22 @@ public class Task extends edu.cmu.ita.htn.Task {
 //		return t.instantiateTask(un);
 	}
 
-
-
+	public boolean equals(Object obj) {
+		if(this==obj) {
+			return true;
+		} else if(obj == null) {
+			return false;
+		} if(obj instanceof Task) {
+			Task t1 = (Task) obj;
+			if(this.isInstance() && t1.isInstance()) {
+				//XXX Hack to make multiple instances work
+				//return super.equals(t1) && this.instanceCount == t1.instanceCount;				
+				return this.toString().equals(t1.toString());
+			}
+			return super.equals(t1);
+		} else {
+			return false;
+		}
+	}
 	
 }

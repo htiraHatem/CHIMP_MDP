@@ -173,8 +173,12 @@ import htn.htnExpanderDecomposition.Task;
 		 */
 		
 		public boolean removeTask(Task task) {
-			if(tasks.remove(task)) {
-				removeConstraintsAbout(task);
+			Task t = new Task(task);
+
+			System.out.println("contains " + tasks.contains(t));
+			if(tasks.remove(t)) {
+				t=Task.instantiateTask(t);
+				removeConstraintsAbout(t);
 				return true;
 			} else {
 				return false;
@@ -184,11 +188,12 @@ import htn.htnExpanderDecomposition.Task;
 		private final void removeConstraintsAbout(Task task) {
 			for(Iterator<Constraint> i = this.getConstraints().iterator(); i.hasNext(); ) {
 				Constraint c = i.next();
-				if(c.getTask1() == task || c.getTask2() == task) {
+				if(c.getTask1().equals(task) || c.getTask2().equals(task)) {
 					i.remove();
 				}
 			}
 		}
+		
 		
 		public boolean removeConstraint(Constraint c) {
 			return getConstraints().remove(c);
@@ -247,4 +252,24 @@ import htn.htnExpanderDecomposition.Task;
 		public Task getLastTask() {
 			return getOrderedTasks1().getLast();
 		}
+		
+		public boolean isUnpreceded(Task t) {
+			return !hasPreceding(t);
+		}
+		
+		/**
+		 * Returns whether or not the task has any preceding tasks. 
+		 * A task that has no preceding tasks is one of the first in the network.
+		 * @param t
+		 * @return
+		 */
+		private final boolean hasPreceding(Task t) {
+			for(Constraint c:getConstraints()) {
+				if(c.getTask2().equals(t)) {
+					return true;
+				}
+			}
+			return false;
+		}
+		
 	}
