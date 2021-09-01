@@ -41,12 +41,7 @@ import htn.htnExpanderDecomposition.Task;
 			this.orderedTasks = new LinkedList<Task>();
 			if (network instanceof HTNTaskNetwork) {
 				for (Task a : ((HTNTaskNetwork) network).getOrderedTasks1()) {
-					//System.out.println(a.toString());
 					Task t = new Task(a,a.isInstance());
-					
-					//System.out.print(t.toString());
-
-					//Task.instantiateTask(t);
 					orderedTasks.add(t);
 				}
 				this.tasks = new ArrayList<Task>();
@@ -124,7 +119,6 @@ import htn.htnExpanderDecomposition.Task;
 			this.backupC.clear();
 
 			backupC.addAll(constraints);
-			System.out.println( backupC.size());
 
 			while(!remaining.isEmpty()) {
 				Task t = findZeroDegreeTask(remaining);
@@ -174,8 +168,6 @@ import htn.htnExpanderDecomposition.Task;
 		
 		public boolean removeTask(Task task) {
 			Task t = new Task(task);
-
-			System.out.println("contains " + tasks.contains(t));
 			if(tasks.remove(t)) {
 				t=Task.instantiateTask(t);
 				removeConstraintsAbout(t);

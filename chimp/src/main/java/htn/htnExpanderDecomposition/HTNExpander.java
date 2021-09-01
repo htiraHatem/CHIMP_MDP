@@ -16,6 +16,7 @@ import com.google.errorprone.annotations.Var;
 
 import edu.cmu.ita.htn.Constraint;
 import edu.cmu.ita.htn.HTNDomain;
+import edu.cmu.ita.htn.HTNFactory;
 import edu.cmu.ita.htn.MultiState;
 import edu.cmu.ita.htn.Operator;
 import edu.cmu.ita.htn.Proposition;
@@ -64,12 +65,14 @@ public class HTNExpander {
 			return ChimpProblem;
 		}
 		Task t = getUnresolvedTask(ChimpProblem);
-		System.out.println(t.toString());
 
 		// Remove this print just for debugging purposes
 		// debugPrintHTN(t, problem);
 		if (t.isPrimitive()) {
 			System.out.print("*");
+			System.out.println(t.toString());
+
+
 			List<Operator> ops = findOperatorsFor(t, ChimpProblem, domain, t.getUn());
 			if (ops.isEmpty()) {
 				throw new RuntimeException("No operators found for task " + t);
@@ -95,19 +98,19 @@ public class HTNExpander {
 
 		} else {
 			System.out.print("|");
+			System.out.println(t.toString());
+
 			Unifier un = new Unifier();
 
 			Collection<MethodOption> active = findMethodsFor(t, ChimpProblem, domain, un);
+
 			if (active.isEmpty()) {
-				// throw new RuntimeException("No options found for task "+t+" in network
-				// "+problem);
-				logger.warning("No options found for task " + t + " in network " + ChimpProblem);
+				 throw new RuntimeException("No options found for task "+t+" in network  "+problem);
+				//logger.warning("No options found for task " + t + " in network " + ChimpProblem);
 				// return null;
 			}
-			// System.out.println("before delta star" + problem.getConstraints().size());
 			HTNTaskNetwork network = deltaStar(ChimpProblem, t, active, false, domain);
 
-			// System.out.println("after delta star" + problem.getConstraints().size());
 			return fullDecomposition(network, domain);
 		}
 	}
@@ -137,18 +140,15 @@ public class HTNExpander {
 		ConstraintSolver problem = fluentSolver.getConstraintSolvers()[0];
 
 		State S0_ = new State();
-		ConstraintNetwork dd = problem.getConstraintNetwork();
-
 		Variable[] sa = problem.getVariables();
 		Object task = problem.getComponents().values().toArray()[0];
 
 		for (Variable i : sa) {
 			if (!task.toString().contains(i.toString()))
-				S0_.add(new Proposition(i.toString()));
+				S0_.add(HTNFactory.createProposition(i.toString()));
 		}
 		// ----------
 
-		ConstraintNetwork graph = fluentSolver.getConstraintNetwork();
 
 		HTNTaskNetwork tasknetwork = new HTNTaskNetwork(fluentSolver);
 		HTNChimpDomain HTNd = HTNChimpDomain.parseHTNChimpDomain(builder);
@@ -181,13 +181,12 @@ public class HTNExpander {
 	 * @param u
 	 * @return
 	 */
-	private final List<Operator> findOperatorsFor(Task t, HTNTaskNetwork network, HTNDomain domain, Unifier u) {
+	private final List<Operator> findOperatorsFor(Task t, HTNTaskNetwork network, HTNChimpDomain domain, Unifier u) {
 		assert (t.isPrimitive());
 		List<Operator> options = new ArrayList<Operator>();
 		MultiState ms = mStateBefore(t, network);
-
-		
 		for (State s : ms) {
+			
 			options.addAll(domain.findOperatorsFor(s, t, u));
 		}
 
@@ -263,13 +262,10 @@ public class HTNExpander {
 		if (!inPlace) {
 			network = new HTNTaskNetwork(network);
 		}
-		System.out.println("inside , before remove" + network.getConstraints().size());
-
 		List<Constraint> constraintsAfter = network.findConstraintsWithTaskAfter(task);
 		List<Constraint> constraintsBefore = network.findConstraintsWithTaskBefore(task);
 		network.removeTask(task);
-		System.out.println("inside , after remove " + network.getConstraints().size());
-
+		
 		// --- Added with mStateBefore
 		mStateBefore.remove(task);
 		// ---
@@ -423,7 +419,8 @@ public class HTNExpander {
 				assert (!prec.isEmpty()); // This list should be empty given the previous condition
 				msRes = new MultiState();
 				for (Constraint c : prec) {
-					MultiState prev = mState((Task) c.getTask1(), network);
+					Task t1 =(Task) c.getTask1();
+					MultiState prev = mState(t1, network);
 					msRes.addAll(prev);
 				}
 				mStateBefore.put(t, msRes);
