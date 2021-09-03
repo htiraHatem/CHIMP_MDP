@@ -36,6 +36,8 @@ import ui.Dot2Graph;
  * @author meneguzzi , 
  * @updated by Hatem
  */
+
+// to test the updated AIMA solver
 public class HTNNetworkToMDP {
 
 	private static final Logger logger = Logger.getLogger(HTNNetworkToMDP.class.getName());

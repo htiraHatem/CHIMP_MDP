@@ -264,4 +264,20 @@ import htn.htnExpanderDecomposition.Task;
 			return false;
 		}
 		
+		/**
+		 * Returns a list with all tasks that have no preceding tasks. 
+		 * We should use this to determine when to use the initial state.
+		 * This and the previous method would be better off if placed in an iterator (to avoid repetition of code) 
+		 * A preliminary implementation is in {@link UnprecededTasksIterator}, test that iterator before replacing this method.
+		 * @return
+		 */
+		public Collection<Task> getUnpreceededTasks1() {
+			Collection<Task> res = new LinkedList<Task>();
+			for(Task t:tasks) {
+				if(!hasPreceding(t)) {
+					res.add(t);
+				}
+			}
+			return res;
+		}
 	}

@@ -1,35 +1,36 @@
 package htn.htnExpanderDecomposition;
 
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.logging.Logger;
 
-import org.metacsp.framework.ConstraintNetwork;
 import org.metacsp.framework.ConstraintSolver;
 import org.metacsp.framework.ValueOrderingH;
 import org.metacsp.framework.Variable;
 
-import com.google.errorprone.annotations.Var;
-
+import aima.core.probability.mdp.search.ValueIteration;
 import edu.cmu.ita.htn.Constraint;
 import edu.cmu.ita.htn.HTNDomain;
 import edu.cmu.ita.htn.HTNFactory;
 import edu.cmu.ita.htn.MultiState;
 import edu.cmu.ita.htn.Operator;
-import edu.cmu.ita.htn.Proposition;
 import edu.cmu.ita.htn.State;
-import edu.cmu.ita.htn.TaskNetwork;
-import edu.cmu.ita.htn.parser.ParseException;
 import fluentSolver.FluentNetworkSolver;
 import htn.valOrderingHeuristics.UnifyDeepestWeightNewestbindingsValOH;
 import hybridDomainParsing.DomainParsingException;
 import jason.asSemantics.Unifier;
+import mdpSolver.HTNAction;
+import mdpSolver.HTNState;
 import mdpSolver.HTNTaskNetwork;
+import mdpSolver.HtnMdpFactory;
 import planner.CHIMP;
-import planner.CHIMP.CHIMPBuilder;
+import ui.Dot2Graph;
 
 public class HTNExpander {
 
@@ -47,18 +48,32 @@ public class HTNExpander {
 	 */
 	private final HashMap<Task, MultiState> mStateBefore;
 	private MultiState initialState;
+	private static State S0;
+
+	public State getS0() {
+		return S0;
+	}
 
 	public HTNExpander() {
 		resolvedTasks = new HashMap<Task, MultiState>();
 		mStateBefore = new HashMap<Task, MultiState>();
 	}
 
-	public TaskNetwork createFullyExpandedHTN(State s0, HTNTaskNetwork problem, HTNChimpDomain domain) {
-		initialState = new MultiState(s0);
+	public HTNTaskNetwork createFullyExpandedHTN(ConstraintSolver constraintSolver, HTNTaskNetwork problem,
+			HTNChimpDomain domain) {
+		S0 = new State();
+		Variable[] sa = constraintSolver.getVariables();
+		Object task = constraintSolver.getComponents().values().toArray()[0];
+
+		for (Variable i : sa) {
+			if (!task.toString().contains(i.toString()))
+				S0.add(HTNFactory.createProposition(i.toString()));
+		}
+		initialState = new MultiState(S0);
 		return fullDecomposition(problem, domain);
 	}
 
-	private final TaskNetwork fullDecomposition(TaskNetwork problem, HTNChimpDomain domain) {
+	private final HTNTaskNetwork fullDecomposition(HTNTaskNetwork problem, HTNChimpDomain domain) {
 		HTNTaskNetwork ChimpProblem = new HTNTaskNetwork(problem);
 		// At this point we have finished expanding the HTN
 		if (ChimpProblem.allTasksArePrimitive() && getUnresolvedTask(ChimpProblem) == null) {
@@ -71,7 +86,6 @@ public class HTNExpander {
 		if (t.isPrimitive()) {
 			System.out.print("*");
 			System.out.println(t.toString());
-
 
 			List<Operator> ops = findOperatorsFor(t, ChimpProblem, domain, t.getUn());
 			if (ops.isEmpty()) {
@@ -87,7 +101,7 @@ public class HTNExpander {
 			@SuppressWarnings("unused")
 			MultiState possibleState = mState(t, ChimpProblem);
 
-			TaskNetwork nTn = fullDecomposition(ChimpProblem, domain);
+			HTNTaskNetwork nTn = fullDecomposition(ChimpProblem, domain);
 			if (nTn == null) {
 				throw new RuntimeException("Could not continue to decompose network " + ChimpProblem);
 //				logger.warning("Could not continue to decompose network "+problem);
@@ -105,71 +119,15 @@ public class HTNExpander {
 			Collection<MethodOption> active = findMethodsFor(t, ChimpProblem, domain, un);
 
 			if (active.isEmpty()) {
-				 throw new RuntimeException("No options found for task "+t+" in network  "+problem);
-				//logger.warning("No options found for task " + t + " in network " + ChimpProblem);
+				throw new RuntimeException("No options found for task " + t + " in network  " + problem);
+				// logger.warning("No options found for task " + t + " in network " +
+				// ChimpProblem);
 				// return null;
 			}
 			HTNTaskNetwork network = deltaStar(ChimpProblem, t, active, false, domain);
 
 			return fullDecomposition(network, domain);
 		}
-	}
-
-	public static void main(String[] args) throws Exception {
-
-		String problemFile = "src/main/java/examples/MDP/gotolondon/problem.pdl";
-		String domainFile = "src/main/java/examples/MDP/gotolondon/domain.ddl";
-
-//	        String problemFile = "problems/test_m_serve_coffee_problem_1.pdl";
-//	        String domainFile = "domains/ordered_domain.ddl";
-
-		ValueOrderingH valOH = new UnifyDeepestWeightNewestbindingsValOH();
-
-		CHIMP.CHIMPBuilder builder;
-
-		try {
-			builder = new CHIMP.CHIMPBuilder(domainFile, problemFile).valHeuristic(valOH).htnUnification(true);
-
-		} catch (DomainParsingException e) {
-			e.printStackTrace();
-			return;
-		}
-		CHIMP chimp = builder.build();
-		FluentNetworkSolver fluentSolver = chimp.getFluentSolver();
-		// get S0 state
-		ConstraintSolver problem = fluentSolver.getConstraintSolvers()[0];
-
-		State S0_ = new State();
-		Variable[] sa = problem.getVariables();
-		Object task = problem.getComponents().values().toArray()[0];
-
-		for (Variable i : sa) {
-			if (!task.toString().contains(i.toString()))
-				S0_.add(HTNFactory.createProposition(i.toString()));
-		}
-		// ----------
-
-
-		HTNTaskNetwork tasknetwork = new HTNTaskNetwork(fluentSolver);
-		HTNChimpDomain HTNd = HTNChimpDomain.parseHTNChimpDomain(builder);
-
-		HTNExpander expander = new HTNExpander();
-		TaskNetwork fullyExpanded = expander.createFullyExpandedHTN(S0_, tasknetwork, HTNd);
-
-		System.out.println("Found plan? " + chimp.generatePlan());
-
-//	        chimp.printStats(System.out);
-
-		if (PRINT_PLAN) {
-			Variable[] planVector = chimp.extractActions();
-			int c = 0;
-			for (Variable act : planVector) {
-				if (act.getComponent() != null)
-					System.out.println(c++ + ".\t" + act);
-			}
-			chimp.printFullPlan();
-		}
-
 	}
 
 	/**
@@ -186,7 +144,7 @@ public class HTNExpander {
 		List<Operator> options = new ArrayList<Operator>();
 		MultiState ms = mStateBefore(t, network);
 		for (State s : ms) {
-			
+
 			options.addAll(domain.findOperatorsFor(s, t, u));
 		}
 
@@ -228,9 +186,9 @@ public class HTNExpander {
 	 * @param methods
 	 * @param domain
 	 */
-	protected void expandWithAllMethodsInPlace(TaskNetwork problem, Task task, List<MethodOption> methods,
+	protected void expandWithAllMethodsInPlace(HTNTaskNetwork problem, Task task, List<MethodOption> methods,
 			HTNDomain domain) {
-		deltaStar((HTNTaskNetwork) problem, task, methods, true, domain);
+		deltaStar(problem, task, methods, true, domain);
 	}
 
 	/**
@@ -265,7 +223,7 @@ public class HTNExpander {
 		List<Constraint> constraintsAfter = network.findConstraintsWithTaskAfter(task);
 		List<Constraint> constraintsBefore = network.findConstraintsWithTaskBefore(task);
 		network.removeTask(task);
-		
+
 		// --- Added with mStateBefore
 		mStateBefore.remove(task);
 		// ---
@@ -358,7 +316,7 @@ public class HTNExpander {
 	 * @param h
 	 * @return
 	 */
-	private final MultiState mState(Task t, TaskNetwork h) {
+	private final MultiState mState(Task t, HTNTaskNetwork h) {
 		MultiState msRes = null;
 //		assert(t.isPrimitive());
 		// If we have already calculated the preceding state, no need to do it again
@@ -419,7 +377,7 @@ public class HTNExpander {
 				assert (!prec.isEmpty()); // This list should be empty given the previous condition
 				msRes = new MultiState();
 				for (Constraint c : prec) {
-					Task t1 =(Task) c.getTask1();
+					Task t1 = (Task) c.getTask1();
 					MultiState prev = mState(t1, network);
 					msRes.addAll(prev);
 				}
@@ -430,4 +388,53 @@ public class HTNExpander {
 		return msRes;
 	}
 
+	public static void main(String[] args) throws Exception {
+
+		String problemFile = "src/main/java/examples/MDP/gotolondon/problem.pdl";
+		String domainFile = "src/main/java/examples/MDP/gotolondon/domain.ddl";
+
+//	        String problemFile = "problems/test_m_serve_coffee_problem_1.pdl";
+//	        String domainFile = "domains/ordered_domain.ddl";
+
+		ValueOrderingH valOH = new UnifyDeepestWeightNewestbindingsValOH();
+		CHIMP.CHIMPBuilder builder;
+
+		try {
+			builder = new CHIMP.CHIMPBuilder(domainFile, problemFile).valHeuristic(valOH).htnUnification(true);
+		} catch (DomainParsingException e) {
+			e.printStackTrace();
+			return;
+		}
+		CHIMP chimp = builder.build();
+		FluentNetworkSolver fluentSolver = chimp.getFluentSolver();
+
+		// expanding the HTN
+		HTNTaskNetwork tasknetwork = new HTNTaskNetwork(fluentSolver);
+		HTNChimpDomain HTNd = HTNChimpDomain.parseHTNChimpDomain(builder);
+		HTNExpander expander = new HTNExpander();
+		HTNTaskNetwork fullyExpanded = expander.createFullyExpandedHTN(fluentSolver.getConstraintSolvers()[0],
+				tasknetwork, HTNd);
+
+		HtnMdpFactory<HTNState, HTNAction> mdp = HTNChimpToMDP.MDP(expander, fullyExpanded);
+
+		// value iteration
+		ValueIteration<HTNState, HTNAction> pi = new ValueIteration<HTNState, HTNAction>(1.0);
+		Map<HTNState, Double> policy = pi.valueIteration(mdp, 0.0001);
+
+		for (Entry<HTNState, Double> s : policy.entrySet()) {
+			System.out.println(s.getKey() + "  :  " + s.getValue());
+		}
+
+		// convert to dot language
+		String mdpGraph = "src/main/java/examples/MDP/gotolondon/gotolondonGraphVICHIMP.dot";
+
+		if (mdpGraph != null) {
+			FileWriter writer = new FileWriter(mdpGraph);
+			logger.info("Writing MDP Graph into " + mdpGraph);
+			Dot2Graph.printMDPDot(writer, mdp, true, null);
+			writer.close();
+
+		}
+
+	}
 }

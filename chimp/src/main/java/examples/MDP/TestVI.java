@@ -71,7 +71,6 @@ public class TestVI {
 
 			List<Task> tasks = new ArrayList<Task>(fullyExpanded.getOrderedTasks());
 
-			Set<HTNAction> a = actions.actions();
 			// create states
 			Set<HTNState> states = HTNNetworkToMDP.createMDPStates(mStates, tasks);
 
