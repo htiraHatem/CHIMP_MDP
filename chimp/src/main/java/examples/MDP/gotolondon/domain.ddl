@@ -3,7 +3,8 @@
 (MaxArgs 3)
 
 (PredicateSymbols
-  has agent_at !getVehicle !moveTo obtainVehicle goTo moveTo)
+  has agent_at !getVehicle !moveTo obtainVehicle goTo moveTo
+  connected)
 
 
 

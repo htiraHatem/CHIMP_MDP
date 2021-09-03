@@ -2,8 +2,8 @@
 
 (ArgumentSymbols
 london
-home airport harbor ship
-car plan
+home airport harbor ship p1 pp Ship
+car plan placingAreaEastLeftTable1 manipulationAreaSouthTable1 
 )
 
 
@@ -13,6 +13,7 @@ car plan
 #(Fluent f2 has(car))
 #(Constraint Release[0,0](f2))
 
+(Fluent c2 connected(p1 Ship))
 
 #(Task t1 !getVehicle(car))
 #(Task t1 !moveTo(home airport car))

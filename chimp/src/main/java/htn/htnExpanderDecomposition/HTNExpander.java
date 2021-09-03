@@ -2,6 +2,7 @@ package htn.htnExpanderDecomposition;
 
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -13,6 +14,9 @@ import java.util.logging.Logger;
 import org.metacsp.framework.ConstraintSolver;
 import org.metacsp.framework.ValueOrderingH;
 import org.metacsp.framework.Variable;
+import org.metacsp.framework.multi.MultiVariable;
+
+import com.google.common.base.Predicates;
 
 import aima.core.probability.mdp.search.ValueIteration;
 import edu.cmu.ita.htn.Constraint;
@@ -31,6 +35,7 @@ import mdpSolver.HTNTaskNetwork;
 import mdpSolver.HtnMdpFactory;
 import planner.CHIMP;
 import ui.Dot2Graph;
+import unify.CompoundSymbolicVariable;
 
 public class HTNExpander {
 
@@ -66,8 +71,22 @@ public class HTNExpander {
 		Object task = constraintSolver.getComponents().values().toArray()[0];
 
 		for (Variable i : sa) {
-			if (!task.toString().contains(i.toString()))
-				S0.add(HTNFactory.createProposition(i.toString()));
+			if (!task.toString().contains(i.toString())) {
+				Variable[] terms = ((CompoundSymbolicVariable) i).getInternalVariables();
+				if (terms[2].toString() == "n") {
+					S0.add(HTNFactory.createProposition(i.toString()));
+				} else {
+					ArrayList<String> args = new ArrayList();
+					args.add(terms[1].toString());
+					args.add(terms[2].toString());
+					if(terms[3].toString() != "n") args.add(terms[3].toString());
+					String predicat =((CompoundSymbolicVariable) i).getPredicateName().toString();
+					String fluent = HTNChimpDomain.convertLISPAtom(predicat,
+							args);
+					S0.add(HTNFactory.createProposition(fluent));
+
+				}
+			}
 		}
 		initialState = new MultiState(S0);
 		return fullDecomposition(problem, domain);

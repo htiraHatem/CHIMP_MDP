@@ -43,8 +43,8 @@ public class TestRACEDomain {
 //		String problemFile = "problems/test_m_arms_assume_driving_pose0.pdl"; //#19
 //		String problemFile = "problems/test_m_arms_assume_driving_pose1.pdl"; //#20
 //		String problemFile = "problems/test_m_drive_robot_0.pdl"; //#21
-//		String problemFile = "problems/test_m_drive_robot_1.pdl"); //#22
-//		String problemFile = "problems/test_m_drive_robot_2.pdl"; //#23
+//		String problemFile = "problems/test_m_drive_robot_1.pdl"; //#22
+		String problemFile = "problems/test_m_drive_robot_2.pdl"; //#23
 //		String problemFile = "problems/test_m_move_both_arms_to_side_1.pdl"; //#24
 //		String problemFile = "problems/test_m_move_both_arms_to_side_2.pdl"; //#25
 //		String problemFile = "problems/test_m_move_both_arms_to_side_3.pdl"; //#26
@@ -61,7 +61,7 @@ public class TestRACEDomain {
 //		String problemFile = "problems/test_m_put_object_1a.pdl"; //#37
 //		String problemFile = "problems/test_m_put_object_2.pdl"; //#38
 //		String problemFile = "problems/test_m_put_object_3.pdl"; //#39
-		String problemFile = "problems/test_m_move_object_1.pdl"; //#40
+//		String problemFile = "problems/test_m_move_object_1.pdl"; //#40
 //		String problemFile = "problems/test_m_move_object_2.pdl"; //#41
 //		String problemFile = "problems/test_m_move_object_3.pdl"; //#42
 //		String problemFile = "problems/test_scenario_3_2_3.pdl"; //#43

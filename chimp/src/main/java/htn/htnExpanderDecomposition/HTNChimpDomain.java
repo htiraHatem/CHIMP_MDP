@@ -179,7 +179,7 @@ public class HTNChimpDomain extends HTNDomain {
 	        }
 	  }
 	  
-	private final String convertLISPTerms(List<String> terms) {
+	private final static String convertLISPTerms(List<String> terms) {
 		if (terms == null || terms.isEmpty()) {
 			return "";
 		}
@@ -194,7 +194,7 @@ public class HTNChimpDomain extends HTNDomain {
 		return sb.toString();
 	}
 
-	private final String convertLISPTerm(String term) {
+	private final static String convertLISPTerm(String term) {
 		if (term.startsWith("?")) {
 			return "V" + term.substring(1);
 		} else if (term.startsWith("!")) {
@@ -206,7 +206,7 @@ public class HTNChimpDomain extends HTNDomain {
 	
 	
 
-	private final String convertLISPAtom(String head, List<String> terms) {
+	final static String convertLISPAtom(String head, List<String> terms) {
 		return convertLISPTerm(head) + convertLISPTerms(terms);
 	}
 
