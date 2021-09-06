@@ -37,26 +37,13 @@
 (Constraint Release[0,0](c0))
 (Fluent c1 connected(placingAreaWestLeftTable1 manipulationAreaNorthTable1 preManipulationAreaNorthTable1))
 (Constraint Release[0,0](c1))
-(Fluent c2 connected(placingAreaEastLeftTable1 manipulationAreaSouthTable1 preManipulationAreaSouthTable1))
-(Constraint Release[0,0](c2))
-(Fluent c3 connected(placingAreaWestRightTable1 manipulationAreaSouthTable1 preManipulationAreaSouthTable1))
-(Constraint Release[0,0](c3))
-(Fluent c4 connected(placingAreaEastRightTable1 manipulationAreaNorthTable1 preManipulationAreaNorthTable1))
-(Constraint Release[0,0](c4))
-(Fluent c5 connected(placingAreaNorthLeftTable2 manipulationAreaEastTable2  preManipulationAreaEastTable2))
-(Constraint Release[0,0](c5))
-(Fluent c6 connected(placingAreaNorthRightTable2 manipulationAreaWestTable2 preManipulationAreaWestTable2))
-(Constraint Release[0,0](c6))
-(Fluent c7 connected(placingAreaSouthLeftTable2 manipulationAreaWestTable2 preManipulationAreaWestTable2))
-(Constraint Release[0,0](c7))
-(Fluent c8 connected(placingAreaSouthRightTable2 manipulationAreaEastTable2 preManipulationAreaEastTable2))
-(Constraint Release[0,0](c8))
+
 
 
 (Fluent f1 robotAt(preManipulationAreaEastCounter1))
 (Constraint Release[0,0](f1))
 
-
+#(Task t0 drive_robot(preManipulationAreaNorthTable1))
 (Task t0 drive_robot(preManipulationAreaEastCounter1))
 (Constraint Release[1,1](t0))
 

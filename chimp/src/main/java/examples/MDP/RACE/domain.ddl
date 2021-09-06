@@ -63,99 +63,8 @@
     (Usage navigationCapacity 1))
 )
 
-# TUCK_ARMS
-(:operator
- (Head !tuck_arms(?leftGoal ?rightGoal))
- (Pre p1 hasArmPosture(?leftArm ?oldLeft))
- (Pre p2 hasArmPosture(?rightArm ?oldRight))
- (Del p1)
- (Del p2)
- (Add e1 hasArmPosture(?leftArm ?leftGoal))
- (Add e2 hasArmPosture(?rightArm ?rightGoal))
- (Values ?leftArm leftArm1)
- (Values ?rightArm rightArm1)
- (Values ?leftGoal ArmTuckedPosture ArmUnTuckedPosture)
- (Values ?rightGoal ArmTuckedPosture ArmUnTuckedPosture)
- (ResourceUsage 
-    (Usage armManCapacity 1))
- (Constraint Duration[4000,INF](task))
-)
 
 
-# MOVE_ARMS_TO_CARRYPOSTURE
-(:operator
- (Head !move_arms_to_carryposture())
- (Pre p1 hasArmPosture(?leftArm ?oldLeft))
- (Pre p2 hasArmPosture(?rightArm ?oldRight))
- (Pre p3 hasTorsoPosture(?torsoPosture))
- (Del p1)
- (Del p2)
- (Add e1 hasArmPosture(?leftArm ?newPosture))
- (Add e2 hasArmPosture(?rightArm ?newPosture))
- (Values ?leftArm leftArm1)
- (Values ?rightArm rightArm1)
- (Values ?newPosture ArmCarryPosture)
- (Values ?torsoPosture TorsoUpPosture TorsoMiddlePosture)
- (ResourceUsage 
-    (Usage armManCapacity 1))    
- (Constraint Duration[4000,INF](task))
- (Constraint OverlappedBy(task,p1))
- (Constraint OverlappedBy(task,p2))
- (Constraint Overlaps(task,e1))
- (Constraint Overlaps(task,e2))
- )
-
-
-# MOVE_TORSO
-(:operator
- (Head !move_torso(?newPosture))
- (Pre p1 hasTorsoPosture(?oldPosture))
- (Constraint OverlappedBy(task,p1))
- (Del p1)
- (Add e1 hasTorsoPosture(?newPosture))
- (Constraint Duration[4000,INF](task))
-)
-
-
-(:method   # holding nothing
- (Head torso_assume_driving_pose())
-  (Pre p1 holding(?leftArm ?nothing))
-  (Pre p2 holding(?rightArm ?nothing))
-  (Values ?nothing nothing)
-  (Values ?leftArm leftArm1)
-  (Values ?rightArm rightArm1)
-  (Sub s1 adapt_torso(?newPose))
-  (Values ?newPose TorsoDownPosture)
-  (Constraint Equals(s1,task))
-)
-
-(:method # holding something
- (Head torso_assume_driving_pose())
-  (Pre p1 holding(?arm ?obj))
-  (NotValues ?obj nothing)
-  (Sub s1 adapt_torso(?newPose))
-  (Values ?newPose TorsoMiddlePosture)
-  (Constraint Equals(s1,task))
-)
-
-###
-
-#################################
-
-(:method
- (Head adapt_torso(?newPose))
- (Pre p1 hasTorsoPosture(?oldPose))
- (VarDifferent ?newPose ?oldPose) 
- (Sub s1 !move_torso(?newPose))
- (Constraint Equals(s1,task))
- )
-
-(:method
- (Head adapt_torso(?posture))
- (Pre p1 hasTorsoPosture(?posture))
- (Constraint Duration[10,INF](task))
- (Constraint During(task,p1))
- )
 
 ###
 ### DRIVE_ROBOT
@@ -173,67 +82,9 @@
  (Pre p1 robotAt(?fromArea))
  (VarDifferent ?toArea ?fromArea)
  (NotType ?fromArea ManipulationArea)
- (Sub s1 torso_assume_driving_pose())
- (Constraint Starts(s1,task))
- (Sub s2 arms_assume_driving_pose())
+
  (Sub s3 !move_base(?toArea))
- (Ordering s1 s2)
- (Ordering s2 s3)
- (Constraint Before(s1,s3))
- (Constraint Before(s2,s3))
-)
 
-
-###
-
-(:method  # Arms already there. Nothing to do.
- (Head adapt_arms(?posture))
- (Pre p1 hasArmPosture(?leftArm ?posture))
- (Pre p2 hasArmPosture(?rightArm ?posture))
- (Values ?leftArm leftArm1)
- (Values ?rightArm rightArm1)
- (Constraint Duration[3,INF](task))
- (Constraint During(task,p1))
- (Constraint During(task,p2))
- )
-
-(:method  # tuck arms
- (Head adapt_arms(?posture))
- (Pre p1 hasArmPosture(?arm ?currentposture))
- (Values ?posture ArmTuckedPosture)
- (NotValues ?currentposture ArmTuckedPosture)
- (Sub s1 !tuck_arms(?posture ?posture))
- (Constraint Equals(s1,task))
-)
-
-(:method  # to carryposture
- (Head adapt_arms(?posture))
- (Pre p1 hasArmPosture(?arm ?currentposture))
- (Values ?posture ArmCarryPosture)
- (NotValues ?currentposture ArmCarryPosture)
- (Sub s1 !move_arms_to_carryposture())
- (Constraint Equals(s1,task))
- )
-
-(:method    # holding nothing
- (Head arms_assume_driving_pose())
-  (Pre p1 holding(?leftArm ?nothing))
-  (Pre p2 holding(?rightArm ?nothing))
-  (Values ?nothing nothing)
-  (Values ?leftArm leftArm1)
-  (Values ?rightArm rightArm1)
-  (Sub s1 adapt_arms(?newPose)) 
-  (Values ?newPose ArmTuckedPosture)
-  (Constraint Equals(s1,task))
-)
-
-(:method    # holding something
- (Head arms_assume_driving_pose())
-  (Pre p1 holding(?arm ?obj))
-  (NotValues ?obj nothing)
-  (Sub s1 adapt_arms(?newPose))
-  (Values ?newPose ArmCarryPosture)
-  (Constraint Equals(s1,task))
 )
 
 
@@ -245,17 +96,9 @@
  (Pre p2 connected(?plArea ?fromArea ?preArea))
  (Sub s0 !move_base_blind(?preArea))
  (Constraint Starts(s0,task))
- (Sub s1 torso_assume_driving_pose())
- (Sub s2 arms_assume_driving_pose())
  (Sub s3 !move_base(?toArea))
  (Constraint Finishes(s3,task))
- (Ordering s0 s1)
- (Ordering s1 s2)
- (Ordering s2 s3)
- (Constraint Before(s0,s1))
- (Constraint Before(s0,s2))
- (Constraint Before(s1,s3))
- (Constraint Before(s2,s3))
+
 )
 
 

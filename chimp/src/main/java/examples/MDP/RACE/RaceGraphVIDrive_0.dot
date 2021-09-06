@@ -1,0 +1,6 @@
+digraph {
+ size="18,11";
+"1" [label="{[connected(placingAreaEastRightCounter1,manipulationAreaEastCounter1,preManipulationAreaEastCounter1), connected(placingAreaWestLeftTable1,manipulationAreaNorthTable1,preManipulationAreaNorthTable1), ~robotAt(preManipulationAreaEastCounter1), robotAt(preManipulationAreaEastCounter1)]} (r:1.0 ) "];
+"0" [label="{[connected(placingAreaEastRightCounter1,manipulationAreaEastCounter1,preManipulationAreaEastCounter1), connected(placingAreaWestLeftTable1,manipulationAreaNorthTable1,preManipulationAreaNorthTable1), robotAt(preManipulationAreaEastCounter1)]} (reward:-0.04 ) "];
+"0" -> "1" [ label="move_base(preManipulationAreaEastCounter1) (ProbTrans : 1,00)" ];
+}

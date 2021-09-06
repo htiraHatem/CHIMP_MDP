@@ -73,13 +73,13 @@ public class HTNExpander {
 		for (Variable i : sa) {
 			if (!task.toString().contains(i.toString())) {
 				Variable[] terms = ((CompoundSymbolicVariable) i).getInternalVariables();
-				if (terms[2].toString() == "n") {
+				if (terms[2].toString().equalsIgnoreCase("n")) {
 					S0.add(HTNFactory.createProposition(i.toString()));
 				} else {
 					ArrayList<String> args = new ArrayList();
 					args.add(terms[1].toString());
 					args.add(terms[2].toString());
-					if(terms[3].toString() != "n") args.add(terms[3].toString());
+					if(!terms[3].toString().equalsIgnoreCase("n")) args.add(terms[3].toString());
 					String predicat =((CompoundSymbolicVariable) i).getPredicateName().toString();
 					String fluent = HTNChimpDomain.convertLISPAtom(predicat,
 							args);
@@ -258,6 +258,7 @@ public class HTNExpander {
 			}
 
 			for (Constraint c : constraintsBefore) {
+				System.out.print(substChimp.getLastTask());
 				network.addBeforeConstraint(substChimp.getLastTask(), c.getTask2());
 			}
 

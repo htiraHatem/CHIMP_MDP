@@ -127,15 +127,15 @@ public class HTNChimpToMDP {
 						transitionModel.setTransitionProbability(si, action, sj, prob);
 						
 						// update transition to test
-						HTNState s1 = lstate.get(1);//getCare
-						HTNState s2 = lstate.get(2);//at airport
-						HTNState s3 = lstate.get(6);//at Harbor
-						
-						if(si.equals(s1) && sj.equals(s2))
-							transitionModel.setTransitionProbability(si, action, sj, 0.1);
-
-						if(si.equals(s1) && sj.equals(s3))
-							transitionModel.setTransitionProbability(si, action, sj, 0.9);
+//						HTNState s1 = lstate.get(1);//getCare
+//						HTNState s2 = lstate.get(2);//at airport
+//						HTNState s3 = lstate.get(6);//at Harbor
+//						
+//						if(si.equals(s1) && sj.equals(s2))
+//							transitionModel.setTransitionProbability(si, action, sj, 0.1);
+//
+//						if(si.equals(s1) && sj.equals(s3))
+//							transitionModel.setTransitionProbability(si, action, sj, 0.9);
 						
 					}
 				}
