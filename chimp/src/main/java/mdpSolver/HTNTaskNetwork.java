@@ -15,7 +15,9 @@ import edu.cmu.ita.htn.Constraint;
 import edu.cmu.ita.htn.HTNFactory;
 import edu.cmu.ita.htn.TaskNetwork;
 import fluentSolver.FluentNetworkSolver;
+import htn.htnExpanderDecomposition.HTNChimpDomain;
 import htn.htnExpanderDecomposition.Task;
+import unify.CompoundSymbolicVariable;
 
 
 	/**
@@ -78,8 +80,25 @@ import htn.htnExpanderDecomposition.Task;
 
 			while( it.hasNext()) {
 	        	Variable v= it.next();
-				this.orderedTasks.add(new Task(v.toString()));
-				this.tasks.add( new Task(v.toString()));
+				Variable[] terms = ((CompoundSymbolicVariable) v).getInternalVariables();
+
+				edu.cmu.ita.htn.Task t;
+				if (terms[2].toString().equalsIgnoreCase("n")) {
+					t = HTNFactory.createTask(v.toString());
+				} else {
+					ArrayList<String> args = new ArrayList();
+					args.add(terms[1].toString());
+					args.add(terms[2].toString());
+					if(!terms[3].toString().equalsIgnoreCase("n")) args.add(terms[3].toString());
+					String predicat =((CompoundSymbolicVariable) v).getPredicateName().toString();
+					String fluent = HTNChimpDomain.convertLISPAtom(predicat,
+							args);
+					t = HTNFactory.createTask(fluent);
+
+				}
+
+				this.orderedTasks.add(new Task( t));
+				this.tasks.add( new Task(t));
 
 			}
 			

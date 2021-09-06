@@ -138,9 +138,9 @@ public class HTNExpander {
 			Collection<MethodOption> active = findMethodsFor(t, ChimpProblem, domain, un);
 
 			if (active.isEmpty()) {
-				throw new RuntimeException("No options found for task " + t + " in network  " + problem);
-				// logger.warning("No options found for task " + t + " in network " +
-				// ChimpProblem);
+				//throw new RuntimeException("No options found for task " + t + " in network  " + problem);
+				 logger.warning("No options found for task " + t + " in network " +
+				 ChimpProblem);
 				// return null;
 			}
 			HTNTaskNetwork network = deltaStar(ChimpProblem, t, active, false, domain);
@@ -258,7 +258,6 @@ public class HTNExpander {
 			}
 
 			for (Constraint c : constraintsBefore) {
-				System.out.print(substChimp.getLastTask());
 				network.addBeforeConstraint(substChimp.getLastTask(), c.getTask2());
 			}
 
@@ -410,8 +409,8 @@ public class HTNExpander {
 
 	public static void main(String[] args) throws Exception {
 
-		String problemFile = "src/main/java/examples/MDP/gotolondon/problem.pdl";
-		String domainFile = "src/main/java/examples/MDP/gotolondon/domain.ddl";
+		String problemFile = "src/main/java/examples/MDP/gotolondon/problemChimp.pdl";
+		String domainFile = "src/main/java/examples/MDP/gotolondon/domainChimp.ddl";
 
 //	        String problemFile = "problems/test_m_serve_coffee_problem_1.pdl";
 //	        String domainFile = "domains/ordered_domain.ddl";

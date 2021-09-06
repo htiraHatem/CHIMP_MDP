@@ -206,7 +206,7 @@ public class HTNChimpDomain extends HTNDomain {
 	
 	
 
-	final static String convertLISPAtom(String head, List<String> terms) {
+	public final static String convertLISPAtom(String head, List<String> terms) {
 		return convertLISPTerm(head) + convertLISPTerms(terms);
 	}
 

@@ -3,10 +3,10 @@
 (MaxArgs 5)
 
 (PredicateSymbols On robotAt holding hasArmPosture hasTorsoPosture
-  connected Type
+  connected Type crossLinked !changeTable navigate
   !move_base !move_base_blind !place_object !pick_up_object
   !move_arm_to_side !move_arms_to_carryposture !tuck_arms !move_torso
-  !observe_objects_on_area !moveto
+  !observe_objects_on_area !moveto 
   adapt_torso torso_assume_driving_pose adapt_arms arms_assume_driving_pose
   drive_robot move_both_arms_to_side assume_manipulation_pose
   leave_manipulation_pose grasp_object get_object put_object
@@ -35,38 +35,34 @@
 )
 
 
-# MOVE_BASE_BLIND   PreArea to ManArea
-(:operator
- (Head !move_base_blind(?mArea))
- (Pre p1 robotAt(?preArea))
- (Del p1)
- (Pre p2 connected(?plArea ?mArea ?preArea))
- (Constraint Duration[4000,INF](task))
- (Add e1 robotAt(?mArea))
- (Constraint Meets(task,e1))
- (Constraint Meets(p1,task))
- (ResourceUsage 
-    (Usage navigationCapacity 1))
-)
-
-# MOVE_BASE_BLIND   ManArea to PreArea
-(:operator
- (Head !move_base_blind(?preArea))
- (Pre p1 robotAt(?mArea))       # TODO use type restriction
- (Pre p2 connected(?plArea ?mArea ?preArea))
- (Constraint Duration[4000,INF](task))
- (Add e1 robotAt(?preArea))
- (Constraint Meets(task,e1))
- (Constraint Meets(p1,task))
- (Del p1)
- (ResourceUsage 
-    (Usage navigationCapacity 1))
-)
-
-
-
 
 ###
+
+
+# move from table to other
+(:operator
+ (Head !changeTable(?wp1 ?wp2))
+ (Pre p0 crossLinked(?wp1 ?wp2))
+ (Pre p1 robotAt(?wp1))
+ (Del p1)
+ (Add e1 robotAt(?wp2))
+)
+
+# ?robot navigates between two tables
+(:method 10
+ (Head navigate(?wp1 ?wp2))
+ (Pre p0 crossLinked(?wp1 ?wp2))
+ (Sub s1 !changeTable(?wp1 ?wp2))
+)
+
+(:method 0
+ (Head navigate(?wp1 ?wp2))
+ (Pre p0 crossLinked(?wp1 ?wp3))
+ (VarDifferent ?wp2 ?wp3)
+ (Sub s1 !changeTable(?wp1 ?wp3))
+ (Sub s2 navigate(?wp3 ?wp2))
+)
+
 ### DRIVE_ROBOT
 
 (:method    # already there
@@ -77,29 +73,22 @@
 )
 
 
-(:method    # not at manipulationarea
- (Head drive_robot(?toArea))
- (Pre p1 robotAt(?fromArea))
- (VarDifferent ?toArea ?fromArea)
- (NotType ?fromArea ManipulationArea)
-
- (Sub s3 !move_base(?toArea))
-
-)
+(:method    # not at manipulationarea wrong..
+ (Head drive_robot(?TopreArea))
+ (Pre p1 robotAt(manipulationAreaEastCounter1))
+# (VarDifferent ?toArea ?fromArea)
+ #(NotType ?fromArea ManipulationArea)
 
 
-(:method    # at manipulationarea
- (Head drive_robot(?toArea))
- (Pre p1 robotAt(?fromArea))
- (VarDifferent ?toArea ?fromArea)
- (Type ?fromArea ManipulationArea)
- (Pre p2 connected(?plArea ?fromArea ?preArea))
- (Sub s0 !move_base_blind(?preArea))
+ (Sub s0 !move_base(preManipulationAreaEastCounter1))
+ (Sub s1 navigate(?fromArea ?TopreArea))
+ 
+ (Ordering s0 s1)
  (Constraint Starts(s0,task))
- (Sub s3 !move_base(?toArea))
- (Constraint Finishes(s3,task))
+ (Constraint Finishes(s1,task))
 
 )
+
 
 
 

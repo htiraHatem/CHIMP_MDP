@@ -10,6 +10,9 @@ car plan placingAreaEastLeftTable1 manipulationAreaSouthTable1
 (Fluent f1 agent_at(home))
 (Constraint Release[0,0](f1))
 
+(Fluent f2 connected(harbor ship))
+(Fluent f3 connected(airport plan))
+
 #(Fluent f2 has(car))
 #(Constraint Release[0,0](f2))
 
