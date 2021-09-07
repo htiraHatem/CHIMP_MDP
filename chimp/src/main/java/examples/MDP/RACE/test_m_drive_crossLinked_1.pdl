@@ -2,16 +2,19 @@
 
 (ArgumentSymbols
 table2
-counter northTable harbor ship p1 pp appetizer corner1 corner2
+counter northTable harbor ship p1 pp appetizer corner1 corner2 leftArm rightArm nothing
 tray cup placingAreaEastLeftTable1 manipulationAreaSouthTable1 
 )
 
+(Fluent f00 holding(leftArm nothing))
+(Fluent f01 holding(rightArm nothing))
 
 (Fluent f1 robotAt(counter))
 (Constraint Release[0,0](f1))
 
-(Fluent f2 connected(southTable appetizer))
-(Fluent f3 connected(northTable cup))
+(Fluent f21 on(tray counter))
+(Fluent f22 on(appetizer southTable))
+(Fluent f23 on(cup northTable))
 
 (Fluent f4 crossLinked(northTable table2))
 (Fluent f5 crossLinked(northTable corner1))

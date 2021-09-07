@@ -5,9 +5,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import edu.cmu.ita.htn.MultiState;
+import edu.cmu.ita.htn.Proposition;
+import edu.cmu.ita.htn.State;
 import mdpSolver.HTNAction;
 import mdpSolver.HTNState;
 import mdpSolver.HtnMdpFactory;
@@ -25,17 +29,30 @@ public class Dot2Graph {
 		DecimalFormat df = new DecimalFormat("0.00");
 		
 		out.println("digraph {");
-		out.println(" size=\"18,11\";");
+		out.println(" size=\"60,17\";");
 
 		if(printState) {
 			for(HTNState s:source.getFinalstates()) {
-				out.print("\""+s.getId()+"\" [label=\""+s.getLabel()+" (r:"+source.reward(s) + " )");
+				ArrayList<String> OhneStatic = new ArrayList<String>() ;
+				Object[] a =s.getHtnState().iterator().next().toArray();
+				for(Object i:a) {
+					if((!i.toString().contains("crossLinked")) )//&& (!i.toString().contains("on") ))
+					OhneStatic.add(i.toString());
+				}
+
+				out.print("\""+s.getId()+"\" [label=\""+OhneStatic+" (r:"+source.reward(s) + " )");
 				if(policy != null)
 					out.print( ", Utility : "+policy.get(s));
 				out.println(" \"];");
 			}
 			for(HTNState s:source.getNonFinalStates()) {
-				out.print("\""+s.getId()+"\" [label=\""+s.getLabel()+" (reward:"+source.reward(s)+ " )");
+				ArrayList<String> OhneStatic = new ArrayList<String>() ;
+				Object[] a =s.getHtnState().iterator().next().toArray();
+				for(Object i:a) {
+					if((!i.toString().contains("crossLinked"))) //&& (!i.toString().contains("on") ))
+					OhneStatic.add(i.toString());
+				}
+				out.print("\""+s.getId()+"\" [label=\""+OhneStatic+" (reward:"+source.reward(s)+ " )");
 				if(policy != null)
 					out.print( ", Utility : "+policy.get(s));
 				out.println(" \"];");

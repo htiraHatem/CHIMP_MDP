@@ -28,9 +28,15 @@ public class TestRaceMDP {
 	static final boolean PRINT_PLAN = true;
 
 	public static void main(String[] args) throws Exception {
-		//String problemFile = "src/main/java/examples/MDP/RACE/test_m_drive_crossLinked_0.pdl";
-		String problemFile = "src/main/java/examples/MDP/RACE/test_m_drive_crossLinked_1.pdl";
+		
 		String domainFile = "src/main/java/examples/MDP/RACE/domainRace.ddl";
+
+//		String problemFile = "src/main/java/examples/MDP/RACE/test_m_drive_crossLinked_0.pdl";
+//		String mdpGraph = "src/main/java/examples/MDP/RACE/RaceGraphVIDrive_0.dot";
+
+		String problemFile = "src/main/java/examples/MDP/RACE/test_m_drive_crossLinked_1.pdl";
+		String mdpGraph = "src/main/java/examples/MDP/RACE/RaceGraphVIDrive_1.dot";
+		
 
 
 		ValueOrderingH valOH = new UnifyDeepestWeightNewestbindingsValOH();
@@ -52,27 +58,29 @@ public class TestRaceMDP {
 		HTNTaskNetwork fullyExpanded = expander.createFullyExpandedHTN(fluentSolver.getConstraintSolvers()[0],
 				tasknetwork, HTNd);
 
-//		HtnMdpFactory<HTNState, HTNAction> mdp = HTNChimpToMDP.MDP(expander, fullyExpanded);
-//
-//		// value iteration
-//		ValueIteration<HTNState, HTNAction> pi = new ValueIteration<HTNState, HTNAction>(1.0);
-//		Map<HTNState, Double> policy = pi.valueIteration(mdp, 0.0001);
-//
-//		for (Entry<HTNState, Double> s : policy.entrySet()) {
-//			System.out.println(s.getKey() + "  :  " + s.getValue());
-//		}
-//
-//		// convert to dot language
-//		String mdpGraph = "src/main/java/examples/MDP/RACE/RaceGraphVIDrive_0.dot";
-//
-//		if (mdpGraph != null) {
-//			FileWriter writer = new FileWriter(mdpGraph);
-//			logger.info("Writing MDP Graph into " + mdpGraph);
-//			Dot2Graph.printMDPDot(writer, mdp, true, null);
-//			writer.close();
-//
-//		}
-		// generate a solution based on chimp Backtrack algorithm
+		HtnMdpFactory<HTNState, HTNAction> mdp = HTNChimpToMDP.MDP(expander, fullyExpanded);
+
+		// value iteration
+		ValueIteration<HTNState, HTNAction> pi = new ValueIteration<HTNState, HTNAction>(1.0);
+		Map<HTNState, Double> policy = pi.valueIteration(mdp, 0.0001);
+
+		for (Entry<HTNState, Double> s : policy.entrySet()) {
+			System.out.println(s.getKey() + "  :  " + s.getValue());
+		}
+
+		// convert to dot language
+
+
+		if (mdpGraph != null) {
+			FileWriter writer = new FileWriter(mdpGraph);
+			logger.info("Writing MDP Graph into " + mdpGraph);
+			Dot2Graph.printMDPDot(writer, mdp, true, null);
+			writer.close();
+
+		}
+		
+		
+//		// generate a solution based on chimp Backtrack algorithm
 		System.out.println("Found plan? " + chimp.generatePlan());
 
 		if (PRINT_PLAN) {

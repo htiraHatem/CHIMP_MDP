@@ -1,6 +1,6 @@
 digraph {
- size="18,11";
-"1" [label="{[connected(placingAreaEastRightCounter1,manipulationAreaEastCounter1,preManipulationAreaEastCounter1), crossLinked(preManipulationAreaNorthTable1,preManipulationAreaEastCounter1), crossLinked(preManipulationAreaNorthTable1,preManipulationAreaWestTable2), connected(placingAreaWestLeftTable1,manipulationAreaNorthTable1,preManipulationAreaNorthTable1), ~robotAt(preManipulationAreaEastCounter1), connected(placingAreaSouthLeftTable2,manipulationAreaWestTable2,preManipulationAreaWestTable2), crossLinked(preManipulationAreaWestTable2,preManipulationAreaNorthTable1), crossLinked(preManipulationAreaEastCounter1,preManipulationAreaNorthTable1), robotAt(preManipulationAreaWestTable2)]} (r:1.0 ) "];
-"0" [label="{[connected(placingAreaEastRightCounter1,manipulationAreaEastCounter1,preManipulationAreaEastCounter1), crossLinked(preManipulationAreaNorthTable1,preManipulationAreaEastCounter1), crossLinked(preManipulationAreaNorthTable1,preManipulationAreaWestTable2), connected(placingAreaWestLeftTable1,manipulationAreaNorthTable1,preManipulationAreaNorthTable1), connected(placingAreaSouthLeftTable2,manipulationAreaWestTable2,preManipulationAreaWestTable2), robotAt(preManipulationAreaEastCounter1), crossLinked(preManipulationAreaWestTable2,preManipulationAreaNorthTable1), crossLinked(preManipulationAreaEastCounter1,preManipulationAreaNorthTable1)]} (reward:-0.04 ) "];
-"0" -> "1" [ label="move_base(preManipulationAreaWestTable2) (ProbTrans : 1,00)" ];
+ size="60,17";
+"1" [label="[holding(leftArm,tray), on(cup,northTable), on(appetizer,southTable), ~holding(leftArm,nothing), holding(rightArm,nothing), ~on(tray,counter), robotAt(counter)] (r:1.0 ) "];
+"0" [label="[on(tray,counter), holding(leftArm,nothing), holding(rightArm,nothing), on(cup,northTable), on(appetizer,southTable), robotAt(counter)] (reward:-0.04 ) "];
+"0" -> "1" [ label="grasp_object(tray) (ProbTrans : 1,00)" ];
 }
