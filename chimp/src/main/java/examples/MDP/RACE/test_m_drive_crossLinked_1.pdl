@@ -22,7 +22,6 @@ tray cup placingAreaEastLeftTable1 manipulationAreaSouthTable1
 (Fluent f9 crossLinked(corner2 table2))
 
 
-
-(Task t1 get_object(tray))
+(Task t1 drive_robot(table2))
 
 )

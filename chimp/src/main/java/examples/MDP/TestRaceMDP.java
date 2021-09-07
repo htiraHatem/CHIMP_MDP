@@ -28,10 +28,10 @@ public class TestRaceMDP {
 	static final boolean PRINT_PLAN = true;
 
 	public static void main(String[] args) throws Exception {
-		//String problemFile = "src/main/java/examples/MDP/RACE/test_m_drive_0.pdl";
-		String problemFile = "src/main/java/examples/MDP/RACE/test_m_drive_crossLinked_0.pdl";
+		//String problemFile = "src/main/java/examples/MDP/RACE/test_m_drive_crossLinked_0.pdl";
+		String problemFile = "src/main/java/examples/MDP/RACE/test_m_drive_crossLinked_1.pdl";
+		String domainFile = "src/main/java/examples/MDP/RACE/domainRace.ddl";
 
-		String domainFile = "src/main/java/examples/MDP/RACE/domain.ddl";
 
 		ValueOrderingH valOH = new UnifyDeepestWeightNewestbindingsValOH();
 		CHIMP.CHIMPBuilder builder;
@@ -49,9 +49,9 @@ public class TestRaceMDP {
 		HTNTaskNetwork tasknetwork = new HTNTaskNetwork(fluentSolver);
 		HTNChimpDomain HTNd = HTNChimpDomain.parseHTNChimpDomain(builder);
 		HTNExpander expander = new HTNExpander();
-//		HTNTaskNetwork fullyExpanded = expander.createFullyExpandedHTN(fluentSolver.getConstraintSolvers()[0],
-//				tasknetwork, HTNd);
-//
+		HTNTaskNetwork fullyExpanded = expander.createFullyExpandedHTN(fluentSolver.getConstraintSolvers()[0],
+				tasknetwork, HTNd);
+
 //		HtnMdpFactory<HTNState, HTNAction> mdp = HTNChimpToMDP.MDP(expander, fullyExpanded);
 //
 //		// value iteration
