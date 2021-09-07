@@ -74,7 +74,7 @@ public class TestRaceMDP {
 		if (mdpGraph != null) {
 			FileWriter writer = new FileWriter(mdpGraph);
 			logger.info("Writing MDP Graph into " + mdpGraph);
-			Dot2Graph.printMDPDot(writer, mdp, true, null);
+			Dot2Graph.printMDPDot(writer, mdp, true, policy);
 			writer.close();
 
 		}
