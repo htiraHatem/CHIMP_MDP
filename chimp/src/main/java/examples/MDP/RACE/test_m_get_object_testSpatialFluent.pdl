@@ -1,0 +1,59 @@
+(Problem
+
+(ArgumentSymbols
+table2
+counter northTable appetizer corner1 corner2 leftArm rightArm nothing
+tray cup tray2 placingAreaEastLeftTable1 manipulationAreaSouthTable1 
+placingAreaEastRightCounter1 manipulationAreaEastCounter1 preManipulationAreaEastCounter1
+placingAreaSouthTable manipulationAreaSouthTable preManipulationSouthTable
+placingAreaNorthTable manipulationNorthTable preManipulationNorthTable
+true false undef
+)
+
+
+(Fluent f00 holding(leftArm nothing))
+(Fluent f01 holding(rightArm nothing))
+
+(Fluent f1 robotAt(manipulationAreaEastCounter1))
+(Constraint Release[0,0](f1))
+(Fluent c0 connected(placingAreaEastRightCounter1 manipulationAreaEastCounter1 preManipulationAreaEastCounter1))
+(Fluent c1 connected(placingAreaSouthTable manipulationAreaSouthTable preManipulationSouthTable))
+(Fluent c2 connected(placingAreaNorthTable manipulationNorthTable preManipulationNorthTable))
+
+(Fluent f21 on(tray placingAreaEastRightCounter1))
+(Fluent f22 on(appetizer placingAreaSouthTable))
+(Fluent f23 on(cup placingAreaNorthTable))
+(Fluent f24 on(tray2 placingAreaEastRightCounter1))
+
+(Fluent f4 crossLinked(preManipulationNorthTable table2))
+(Fluent f5 crossLinked(preManipulationNorthTable corner1))
+(Fluent f6 crossLinked(corner1 table2))
+
+(Fluent f7 crossLinked(preManipulationSouthTable table2))
+(Fluent f8 crossLinked(preManipulationSouthTable corner2))
+(Fluent f9 crossLinked(corner2 table2))
+
+# spatial fluents
+
+#counter objects
+(UnarySpatialFluent sp9 At(tray [49,49] [55,55] [49,49] [69,69]))
+(UnarySpatialFluent sp03 Size(placingAreaEastRightCounter1 [100,100] [30,30]))
+#(UnarySpatialFluent sp1 Size(tray [4,4] [18,18]))
+(UnarySpatialFluent sp2 Size(tray2 [4,4] [18,18]))
+#Counter1 Constraints
+(RectangularSpatialFluent sp1_x During(tray placingAreaEastRightCounter1))
+(RectangularSpatialFluent sp1_y During(tray placingAreaEastRightCounter1))
+
+(RectangularSpatialFluent sp2_x During(tray2 placingAreaEastRightCounter1))
+(RectangularSpatialFluent sp2_y During(tray2 placingAreaEastRightCounter1))
+
+
+
+(Fluent f10 isCollision(tray tray2 undef)) 
+(Constraint Release[0,0](f8))
+
+
+
+(Task t1 get_object(tray))
+
+)

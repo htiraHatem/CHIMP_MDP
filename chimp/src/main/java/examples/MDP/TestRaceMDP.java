@@ -39,8 +39,13 @@ public class TestRaceMDP {
 //		String problemFile = "src/main/java/examples/MDP/RACE/test_m_get_object_1.pdl";
 //		String mdpGraph = "src/main/java/examples/MDP/RACE/test_m_get_object_1.dot";
 
+		//drive to table2 holding tray + A or B
 		String problemFile = "src/main/java/examples/MDP/RACE/test_m_drive_robot_1.pdl";
 		String mdpGraph = "src/main/java/examples/MDP/RACE/test_m_drive_robot_1.dot";
+		
+		//test spatial Solver and spatial fluents : works !
+//		String problemFile = "src/main/java/examples/MDP/RACE/test_m_get_object_testSpatialFluent.pdl";
+//		String mdpGraph = "src/main/java/examples/MDP/RACE/test_spatialFluent.dot";
 		
 
 

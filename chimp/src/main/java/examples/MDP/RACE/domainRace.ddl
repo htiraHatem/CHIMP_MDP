@@ -4,20 +4,33 @@
 
 (PredicateSymbols
   holding robotAt get_object !moveTo obtainObject drive_robot moveTo crossLinked !grasp_object
-  on connected !move_base_blind)
+  on connected !move_base_blind isCollision)
 
 
 
 ################################
 ####  OPERATORS ################
 
-# getObject
+# getObject default
 (:operator 
   (Head !grasp_object(?obj))
   (Pre p1 holding(?arm nothing))
   (Pre p2 connected(?plArea ?manArea ?preArea))
   (Pre p3 robotAt(?manArea))
   (Pre p4 on(?object ?plArea))
+  (Del p1)
+  (Del p4)
+  (Add e1 holding(?arm ?obj))
+)
+
+# getObject when no collision exist
+(:operator 
+  (Head !grasp_object(?obj))
+  (Pre p1 holding(?arm nothing))
+  (Pre p2 connected(?plArea ?manArea ?preArea))
+  (Pre p3 robotAt(?manArea))
+  (Pre p4 on(?object ?plArea))
+  (Pre p5 isCollision(?object ?object1 false))
   (Del p1)
   (Del p4)
   (Add e1 holding(?arm ?obj))
@@ -100,6 +113,7 @@
   (Sub s1 !grasp_object(?object))
   (Sub s2 !move_base_blind(?manArea ?preArea))
 )
+
 
 # pickup object : robot at manArea
 (:method

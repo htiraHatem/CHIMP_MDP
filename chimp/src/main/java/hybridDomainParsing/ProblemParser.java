@@ -178,10 +178,10 @@ public class ProblemParser implements CHIMPProblem {
 						verifColli = true;
 					symbolicPart = symbolicPart.replace("undef", Boolean.toString(verifColli));
 				}
-//				else {
-//					symbolicPart = symbolicPart.replace("undef", "false");
-//
-//				}
+				else {
+					symbolicPart = symbolicPart.replace("undef", "false");
+
+				}
 
 			}
 
