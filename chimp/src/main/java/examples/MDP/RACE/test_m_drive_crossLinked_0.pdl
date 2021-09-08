@@ -4,25 +4,31 @@
 table2
 counter northTable appetizer corner1 corner2 leftArm rightArm nothing
 tray cup placingAreaEastLeftTable1 manipulationAreaSouthTable1 
+placingAreaEastRightCounter1 manipulationAreaEastCounter1 preManipulationAreaEastCounter1
+placingAreaSouthTable manipulationAreaSouthTable preManipulationSouthTable
+placingAreaNorthTable manipulationNorthTable preManipulationNorthTable
 )
 
 
 (Fluent f00 holding(leftArm nothing))
 (Fluent f01 holding(rightArm nothing))
 
-(Fluent f1 robotAt(counter))
+(Fluent f1 robotAt(manipulationAreaEastCounter1))
 (Constraint Release[0,0](f1))
+(Fluent c0 connected(placingAreaEastRightCounter1 manipulationAreaEastCounter1 preManipulationAreaEastCounter1))
+(Fluent c1 connected(placingAreaSouthTable manipulationAreaSouthTable preManipulationSouthTable))
+(Fluent c2 connected(placingAreaNorthTable manipulationNorthTable preManipulationNorthTable))
 
-(Fluent f21 on(tray counter))
-(Fluent f22 on(appetizer southTable))
-(Fluent f23 on(cup northTable))
+(Fluent f21 on(tray placingAreaEastRightCounter1))
+(Fluent f22 on(appetizer placingAreaSouthTable))
+(Fluent f23 on(cup placingAreaNorthTable))
 
-(Fluent f4 crossLinked(northTable table2))
-(Fluent f5 crossLinked(northTable corner1))
+(Fluent f4 crossLinked(preManipulationNorthTable table2))
+(Fluent f5 crossLinked(preManipulationNorthTable corner1))
 (Fluent f6 crossLinked(corner1 table2))
 
-(Fluent f7 crossLinked(southTable table2))
-(Fluent f8 crossLinked(southTable corner2))
+(Fluent f7 crossLinked(preManipulationSouthTable table2))
+(Fluent f8 crossLinked(preManipulationSouthTable corner2))
 (Fluent f9 crossLinked(corner2 table2))
 
 

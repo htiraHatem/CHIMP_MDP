@@ -31,11 +31,11 @@ public class TestRaceMDP {
 		
 		String domainFile = "src/main/java/examples/MDP/RACE/domainRace.ddl";
 
-//		String problemFile = "src/main/java/examples/MDP/RACE/test_m_drive_crossLinked_0.pdl";
-//		String mdpGraph = "src/main/java/examples/MDP/RACE/RaceGraphVIDrive_0.dot";
+		String problemFile = "src/main/java/examples/MDP/RACE/test_m_drive_crossLinked_0.pdl";
+		String mdpGraph = "src/main/java/examples/MDP/RACE/RaceGraphVIDrive_0.dot";
 
-		String problemFile = "src/main/java/examples/MDP/RACE/test_m_drive_crossLinked_1.pdl";
-		String mdpGraph = "src/main/java/examples/MDP/RACE/RaceGraphVIDrive_1.dot";
+//		String problemFile = "src/main/java/examples/MDP/RACE/test_m_drive_crossLinked_1.pdl";
+//		String mdpGraph = "src/main/java/examples/MDP/RACE/RaceGraphVIDrive_1.dot";
 		
 
 

@@ -36,7 +36,7 @@ public class Dot2Graph {
 				ArrayList<String> OhneStatic = new ArrayList<String>() ;
 				Object[] a =s.getHtnState().iterator().next().toArray();
 				for(Object i:a) {
-					if((!i.toString().contains("crossLinked")) )//&& (!i.toString().contains("on") ))
+					if((!i.toString().contains("crossLinked")) && (!i.toString().contains("connected") ))
 					OhneStatic.add(i.toString());
 				}
 
@@ -49,7 +49,7 @@ public class Dot2Graph {
 				ArrayList<String> OhneStatic = new ArrayList<String>() ;
 				Object[] a =s.getHtnState().iterator().next().toArray();
 				for(Object i:a) {
-					if((!i.toString().contains("crossLinked"))) //&& (!i.toString().contains("on") ))
+					if((!i.toString().contains("crossLinked")) && (!i.toString().contains("connected") ))
 					OhneStatic.add(i.toString());
 				}
 				out.print("\""+s.getId()+"\" [label=\""+OhneStatic+" (reward:"+source.reward(s)+ " )");
