@@ -1,10 +1,10 @@
 digraph {
   node [color="#40b9e5" ]
  size="60,17";
-"7" [label="[holding(rightArm,cup), ~on(tray,placingAreaEastRightCounter1), on(appetizer,placingAreaSouthTable), ~robotAt(preManipulationAreaEastCounter1), ~on(cup,placingAreaNorthTable), holding(leftArm,tray), ~robotAt(preManipulationNorthTable), ~holding(leftArm,nothing), ~robotAt(manipulationNorthTable), robotAt(table2), ~robotAt(manipulationAreaEastCounter1), ~holding(rightArm,nothing)] (r:1.0 ), Utility : 1.0 " shape=doubleoctagon];
-"9" [label="[holding(rightArm,cup), ~robotAt(corner1), ~on(tray,placingAreaEastRightCounter1), on(appetizer,placingAreaSouthTable), ~robotAt(preManipulationAreaEastCounter1), ~on(cup,placingAreaNorthTable), holding(leftArm,tray), ~robotAt(preManipulationNorthTable), ~holding(leftArm,nothing), ~robotAt(manipulationNorthTable), robotAt(table2), ~robotAt(manipulationAreaEastCounter1), ~holding(rightArm,nothing)] (r:1.0 ), Utility : 1.0 " shape=doubleoctagon];
-"14" [label="[~on(tray,placingAreaEastRightCounter1), ~robotAt(preManipulationAreaEastCounter1), holding(rightArm,appetizer), holding(leftArm,tray), ~on(appetizer,placingAreaSouthTable), on(cup,placingAreaNorthTable), ~holding(leftArm,nothing), ~robotAt(manipulationAreaSouthTable), robotAt(table2), ~robotAt(manipulationAreaEastCounter1), ~robotAt(preManipulationSouthTable), ~holding(rightArm,nothing)] (r:1.0 ), Utility : 1.0 " shape=doubleoctagon];
-"16" [label="[~robotAt(corner2), ~on(tray,placingAreaEastRightCounter1), ~robotAt(preManipulationAreaEastCounter1), holding(rightArm,appetizer), holding(leftArm,tray), ~on(appetizer,placingAreaSouthTable), on(cup,placingAreaNorthTable), ~holding(leftArm,nothing), ~robotAt(manipulationAreaSouthTable), robotAt(table2), ~robotAt(manipulationAreaEastCounter1), ~robotAt(preManipulationSouthTable), ~holding(rightArm,nothing)] (r:1.0 ), Utility : 1.0 " shape=doubleoctagon];
+"7" [label=" S7   : (r:1.0 ), Utility : 1.0 " shape=doubleoctagon];
+"9" [label=" S9   : (r:1.0 ), Utility : 1.0 " shape=doubleoctagon];
+"14" [label=" S14   : (r:1.0 ), Utility : 1.0 " shape=doubleoctagon];
+"16" [label=" S16   : (r:1.0 ), Utility : 1.0 " shape=doubleoctagon];
 "0" [label=" S0   : (reward:-0.04 ), Utility : 0.7199999999999998 "];
 "1" [label=" S1   : (reward:-0.04 ), Utility : 0.7599999999999998 "];
 "2" [label=" S2   : (reward:-0.04 ), Utility : 0.7999999999999998 "];

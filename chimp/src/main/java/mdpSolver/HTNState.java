@@ -18,6 +18,10 @@ public class HTNState implements Comparable<State> {
 	
 	protected String label;
 	
+	protected HTNState previousState;
+	protected HTNState nextState;
+	
+	
 	/**
 	 * The fully expanded HTN {@link MultiState} that corresponds to this {@link HTNState}
 	 */
@@ -40,6 +44,22 @@ public class HTNState implements Comparable<State> {
 		this.htnState = htnState;
 		this.task = task;
 		this.overlapping = new LinkedList<HTNState>();
+	}
+
+	public HTNState getPreviousState() {
+		return previousState;
+	}
+
+	public void setPreviousState(HTNState previousState) {
+		this.previousState = previousState;
+	}
+
+	public HTNState getNextState() {
+		return nextState;
+	}
+
+	public void setNextState(HTNState nextState) {
+		this.nextState = nextState;
 	}
 
 	/**
@@ -122,5 +142,9 @@ public class HTNState implements Comparable<State> {
 		return 0;
 	}
 
+	public void displayID() {
+		
+		System.out.println( "S" + this.id);
+	}
 
 }

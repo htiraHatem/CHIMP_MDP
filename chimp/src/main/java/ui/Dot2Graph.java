@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.io.Writer;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -41,7 +42,8 @@ public class Dot2Graph {
 					OhneStatic.add(i.toString());
 				}
 
-				out.print("\""+s.getId()+"\" [label=\""+OhneStatic+" (r:"+source.reward(s) + " )");
+				//out.print("\""+s.getId()+"\" [label=\""+OhneStatic+" (r:"+source.reward(s) + " )");
+				out.print("\""+s.getId()+"\" [label=\" S"+s.getId()+"   : (r:"+source.reward(s) + " )");
 				if(policy != null)
 					out.print( ", Utility : "+policy.get(s));
 				out.println(" \" shape=doubleoctagon];");
@@ -69,6 +71,8 @@ public class Dot2Graph {
 				List<HtnMdpTransition> transition = source.gethTNTransitionProbabilityFunction().getTransitionsWithStartingStateAndAction(is, a);
 				for(HtnMdpTransition<HTNState, HTNAction> tr:transition) {
 					HTNState ds = tr.getDestinationState();
+					is.setNextState(ds);
+					ds.setPreviousState(is);
 					out.print("\""+is.getId()+"\"");
 					out.print(" -> ");
 					out.print("\""+ds.getId()+"\"");
@@ -95,6 +99,9 @@ public class Dot2Graph {
 		
 		out.flush();
 		
+		List<HTNState> possibleTrajectory = printOptimalTrajectoryDot(source);
+		for(HTNState s : possibleTrajectory)
+			s.displayID()	;	
 	}
 	
 	public static HTNState getOptState(HtnMdpFactory<HTNState, HTNAction> source, Map<HTNState, Double> policy,
@@ -118,8 +125,19 @@ public class Dot2Graph {
 	}
 
 	//TODO to generate the optimal trajectory : only sequence of actions
-	public static void printOptimalTrajectoryDot(Writer writer, HtnMdpFactory<HTNState, HTNAction> source, boolean printState, Map<HTNState, Double> policy) throws IOException {
-		
-		
+	public static List<HTNState> printOptimalTrajectoryDot( HtnMdpFactory<HTNState, HTNAction> source) {
+        List<HTNState> optTraj = new LinkedList<>();
+		for(HTNState is:source.getNonFinalStates()) {
+			if(is== source.getInitialState())
+				optTraj.add(is);
+			else if( is.getPreviousState() == optTraj.get(optTraj.size()-1))
+				optTraj.add(is);
+//			else if(optTraj.get(optTraj.size()-1).getNextState().isFinal())
+//				optTraj.add(is.getNextState());
+
+				
+
+		}
+		return optTraj;
 	}
 }
