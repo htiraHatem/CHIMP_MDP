@@ -1,36 +1,37 @@
 digraph {
+  node [color="#40b9e5" ]
  size="60,17";
-"7" [label="[holding(rightArm,cup), ~on(tray,placingAreaEastRightCounter1), on(appetizer,placingAreaSouthTable), ~robotAt(preManipulationAreaEastCounter1), ~on(cup,placingAreaNorthTable), holding(leftArm,tray), ~robotAt(preManipulationNorthTable), ~holding(leftArm,nothing), ~robotAt(manipulationNorthTable), robotAt(table2), ~robotAt(manipulationAreaEastCounter1), ~holding(rightArm,nothing)] (r:1.0 ), Utility : 1.0 "];
-"9" [label="[holding(rightArm,cup), ~robotAt(corner1), ~on(tray,placingAreaEastRightCounter1), on(appetizer,placingAreaSouthTable), ~robotAt(preManipulationAreaEastCounter1), ~on(cup,placingAreaNorthTable), holding(leftArm,tray), ~robotAt(preManipulationNorthTable), ~holding(leftArm,nothing), ~robotAt(manipulationNorthTable), robotAt(table2), ~robotAt(manipulationAreaEastCounter1), ~holding(rightArm,nothing)] (r:1.0 ), Utility : 1.0 "];
-"14" [label="[~on(tray,placingAreaEastRightCounter1), ~robotAt(preManipulationAreaEastCounter1), holding(rightArm,appetizer), holding(leftArm,tray), ~on(appetizer,placingAreaSouthTable), on(cup,placingAreaNorthTable), ~holding(leftArm,nothing), ~robotAt(manipulationAreaSouthTable), robotAt(table2), ~robotAt(manipulationAreaEastCounter1), ~robotAt(preManipulationSouthTable), ~holding(rightArm,nothing)] (r:1.0 ), Utility : 1.0 "];
-"16" [label="[~robotAt(corner2), ~on(tray,placingAreaEastRightCounter1), ~robotAt(preManipulationAreaEastCounter1), holding(rightArm,appetizer), holding(leftArm,tray), ~on(appetizer,placingAreaSouthTable), on(cup,placingAreaNorthTable), ~holding(leftArm,nothing), ~robotAt(manipulationAreaSouthTable), robotAt(table2), ~robotAt(manipulationAreaEastCounter1), ~robotAt(preManipulationSouthTable), ~holding(rightArm,nothing)] (r:1.0 ), Utility : 1.0 "];
-"0" [label="[on(appetizer,placingAreaSouthTable), on(cup,placingAreaNorthTable), robotAt(manipulationAreaEastCounter1), holding(leftArm,nothing), holding(rightArm,nothing), on(tray,placingAreaEastRightCounter1)] (reward:-0.04 ), Utility : 0.7199999999999998 "];
-"1" [label="[~on(tray,placingAreaEastRightCounter1), on(appetizer,placingAreaSouthTable), holding(leftArm,tray), on(cup,placingAreaNorthTable), robotAt(manipulationAreaEastCounter1), ~holding(leftArm,nothing), holding(rightArm,nothing)] (reward:-0.04 ), Utility : 0.7599999999999998 "];
-"2" [label="[~on(tray,placingAreaEastRightCounter1), on(appetizer,placingAreaSouthTable), holding(leftArm,tray), on(cup,placingAreaNorthTable), ~holding(leftArm,nothing), ~robotAt(manipulationAreaEastCounter1), holding(rightArm,nothing), robotAt(preManipulationAreaEastCounter1)] (reward:-0.04 ), Utility : 0.7999999999999998 "];
-"3" [label="[~on(tray,placingAreaEastRightCounter1), robotAt(preManipulationNorthTable), on(appetizer,placingAreaSouthTable), ~robotAt(preManipulationAreaEastCounter1), holding(leftArm,tray), on(cup,placingAreaNorthTable), ~holding(leftArm,nothing), ~robotAt(manipulationAreaEastCounter1), holding(rightArm,nothing)] (reward:-0.04 ), Utility : 0.8399999999999999 "];
-"4" [label="[~on(tray,placingAreaEastRightCounter1), on(appetizer,placingAreaSouthTable), ~robotAt(preManipulationAreaEastCounter1), holding(leftArm,tray), ~robotAt(preManipulationNorthTable), on(cup,placingAreaNorthTable), ~holding(leftArm,nothing), ~robotAt(manipulationAreaEastCounter1), robotAt(manipulationNorthTable), holding(rightArm,nothing)] (reward:-0.04 ), Utility : 0.8799999999999999 "];
-"5" [label="[holding(rightArm,cup), ~on(tray,placingAreaEastRightCounter1), on(appetizer,placingAreaSouthTable), ~robotAt(preManipulationAreaEastCounter1), ~on(cup,placingAreaNorthTable), holding(leftArm,tray), ~robotAt(preManipulationNorthTable), ~holding(leftArm,nothing), ~robotAt(manipulationAreaEastCounter1), robotAt(manipulationNorthTable), ~holding(rightArm,nothing)] (reward:-0.04 ), Utility : 0.9199999999999999 "];
-"6" [label="[holding(rightArm,cup), ~on(tray,placingAreaEastRightCounter1), robotAt(preManipulationNorthTable), on(appetizer,placingAreaSouthTable), ~robotAt(preManipulationAreaEastCounter1), ~on(cup,placingAreaNorthTable), holding(leftArm,tray), ~robotAt(preManipulationNorthTable), ~holding(leftArm,nothing), ~robotAt(manipulationNorthTable), ~robotAt(manipulationAreaEastCounter1), ~holding(rightArm,nothing)] (reward:-0.04 ), Utility : 0.96 "];
-"8" [label="[holding(rightArm,cup), ~on(tray,placingAreaEastRightCounter1), on(appetizer,placingAreaSouthTable), ~robotAt(preManipulationAreaEastCounter1), robotAt(corner1), ~on(cup,placingAreaNorthTable), holding(leftArm,tray), ~robotAt(preManipulationNorthTable), ~holding(leftArm,nothing), ~robotAt(manipulationNorthTable), ~robotAt(manipulationAreaEastCounter1), ~holding(rightArm,nothing)] (reward:-0.04 ), Utility : 0.96 "];
-"10" [label="[~on(tray,placingAreaEastRightCounter1), robotAt(preManipulationSouthTable), on(appetizer,placingAreaSouthTable), ~robotAt(preManipulationAreaEastCounter1), holding(leftArm,tray), on(cup,placingAreaNorthTable), ~holding(leftArm,nothing), ~robotAt(manipulationAreaEastCounter1), holding(rightArm,nothing)] (reward:-0.04 ), Utility : 0.8399999999999999 "];
-"11" [label="[~on(tray,placingAreaEastRightCounter1), on(appetizer,placingAreaSouthTable), ~robotAt(preManipulationAreaEastCounter1), holding(leftArm,tray), on(cup,placingAreaNorthTable), ~holding(leftArm,nothing), ~robotAt(manipulationAreaEastCounter1), robotAt(manipulationAreaSouthTable), ~robotAt(preManipulationSouthTable), holding(rightArm,nothing)] (reward:-0.04 ), Utility : 0.8799999999999999 "];
-"12" [label="[~on(tray,placingAreaEastRightCounter1), ~robotAt(preManipulationAreaEastCounter1), holding(rightArm,appetizer), holding(leftArm,tray), ~on(appetizer,placingAreaSouthTable), on(cup,placingAreaNorthTable), ~holding(leftArm,nothing), ~robotAt(manipulationAreaEastCounter1), robotAt(manipulationAreaSouthTable), ~robotAt(preManipulationSouthTable), ~holding(rightArm,nothing)] (reward:-0.04 ), Utility : 0.9199999999999999 "];
-"13" [label="[~on(tray,placingAreaEastRightCounter1), robotAt(preManipulationSouthTable), ~robotAt(preManipulationAreaEastCounter1), holding(rightArm,appetizer), holding(leftArm,tray), ~on(appetizer,placingAreaSouthTable), on(cup,placingAreaNorthTable), ~holding(leftArm,nothing), ~robotAt(manipulationAreaSouthTable), ~robotAt(manipulationAreaEastCounter1), ~robotAt(preManipulationSouthTable), ~holding(rightArm,nothing)] (reward:-0.04 ), Utility : 0.96 "];
-"15" [label="[~on(tray,placingAreaEastRightCounter1), ~robotAt(preManipulationAreaEastCounter1), robotAt(corner2), holding(rightArm,appetizer), holding(leftArm,tray), ~on(appetizer,placingAreaSouthTable), on(cup,placingAreaNorthTable), ~holding(leftArm,nothing), ~robotAt(manipulationAreaSouthTable), ~robotAt(manipulationAreaEastCounter1), ~robotAt(preManipulationSouthTable), ~holding(rightArm,nothing)] (reward:-0.04 ), Utility : 0.96 "];
-"0" -> "1" [ label="grasp_object(tray) (ProbTrans : 1,00)" ];
-"1" -> "2" [ label="move_base_blind(manipulationAreaEastCounter1,preManipulationAreaEastCounter1) (ProbTrans : 1,00)" ];
-"2" -> "3" [ label="moveTo(preManipulationAreaEastCounter1,preManipulationNorthTable) (ProbTrans : 1,00)" ];
-"2" -> "10" [ label="moveTo(preManipulationAreaEastCounter1,preManipulationSouthTable) (ProbTrans : 1,00)" ];
-"3" -> "4" [ label="move_base_blind(preManipulationNorthTable,manipulationNorthTable) (ProbTrans : 1,00)" ];
-"4" -> "5" [ label="grasp_object(cup) (ProbTrans : 1,00)" ];
-"5" -> "6" [ label="move_base_blind(manipulationNorthTable,preManipulationNorthTable) (ProbTrans : 1,00)" ];
-"6" -> "7" [ label="moveTo(preManipulationNorthTable,table2) (ProbTrans : 1,00)" ];
-"6" -> "8" [ label="moveTo(preManipulationNorthTable,corner1) (ProbTrans : 1,00)" ];
-"8" -> "9" [ label="moveTo(corner1,table2) (ProbTrans : 1,00)" ];
-"10" -> "11" [ label="move_base_blind(preManipulationSouthTable,manipulationAreaSouthTable) (ProbTrans : 1,00)" ];
-"11" -> "12" [ label="grasp_object(appetizer) (ProbTrans : 1,00)" ];
-"12" -> "13" [ label="move_base_blind(manipulationAreaSouthTable,preManipulationSouthTable) (ProbTrans : 1,00)" ];
-"13" -> "14" [ label="moveTo(preManipulationSouthTable,table2) (ProbTrans : 1,00)" ];
-"13" -> "15" [ label="moveTo(preManipulationSouthTable,corner2) (ProbTrans : 1,00)" ];
-"15" -> "16" [ label="moveTo(corner2,table2) (ProbTrans : 1,00)" ];
-}
+"7" [label="[holding(rightArm,cup), ~on(tray,placingAreaEastRightCounter1), on(appetizer,placingAreaSouthTable), ~robotAt(preManipulationAreaEastCounter1), ~on(cup,placingAreaNorthTable), holding(leftArm,tray), ~robotAt(preManipulationNorthTable), ~holding(leftArm,nothing), ~robotAt(manipulationNorthTable), robotAt(table2), ~robotAt(manipulationAreaEastCounter1), ~holding(rightArm,nothing)] (r:1.0 ), Utility : 1.0 " shape=doubleoctagon];
+"9" [label="[holding(rightArm,cup), ~robotAt(corner1), ~on(tray,placingAreaEastRightCounter1), on(appetizer,placingAreaSouthTable), ~robotAt(preManipulationAreaEastCounter1), ~on(cup,placingAreaNorthTable), holding(leftArm,tray), ~robotAt(preManipulationNorthTable), ~holding(leftArm,nothing), ~robotAt(manipulationNorthTable), robotAt(table2), ~robotAt(manipulationAreaEastCounter1), ~holding(rightArm,nothing)] (r:1.0 ), Utility : 1.0 " shape=doubleoctagon];
+"14" [label="[~on(tray,placingAreaEastRightCounter1), ~robotAt(preManipulationAreaEastCounter1), holding(rightArm,appetizer), holding(leftArm,tray), ~on(appetizer,placingAreaSouthTable), on(cup,placingAreaNorthTable), ~holding(leftArm,nothing), ~robotAt(manipulationAreaSouthTable), robotAt(table2), ~robotAt(manipulationAreaEastCounter1), ~robotAt(preManipulationSouthTable), ~holding(rightArm,nothing)] (r:1.0 ), Utility : 1.0 " shape=doubleoctagon];
+"16" [label="[~robotAt(corner2), ~on(tray,placingAreaEastRightCounter1), ~robotAt(preManipulationAreaEastCounter1), holding(rightArm,appetizer), holding(leftArm,tray), ~on(appetizer,placingAreaSouthTable), on(cup,placingAreaNorthTable), ~holding(leftArm,nothing), ~robotAt(manipulationAreaSouthTable), robotAt(table2), ~robotAt(manipulationAreaEastCounter1), ~robotAt(preManipulationSouthTable), ~holding(rightArm,nothing)] (r:1.0 ), Utility : 1.0 " shape=doubleoctagon];
+"0" [label=" S0   : (reward:-0.04 ), Utility : 0.7199999999999998 "];
+"1" [label=" S1   : (reward:-0.04 ), Utility : 0.7599999999999998 "];
+"2" [label=" S2   : (reward:-0.04 ), Utility : 0.7999999999999998 "];
+"3" [label=" S3   : (reward:-0.04 ), Utility : 0.8399999999999999 "];
+"4" [label=" S4   : (reward:-0.04 ), Utility : 0.8799999999999999 "];
+"5" [label=" S5   : (reward:-0.04 ), Utility : 0.9199999999999999 "];
+"6" [label=" S6   : (reward:-0.04 ), Utility : 0.96 "];
+"8" [label=" S8   : (reward:-0.04 ), Utility : 0.96 "];
+"10" [label=" S10   : (reward:-0.04 ), Utility : 0.8399999999999999 "];
+"11" [label=" S11   : (reward:-0.04 ), Utility : 0.8799999999999999 "];
+"12" [label=" S12   : (reward:-0.04 ), Utility : 0.9199999999999999 "];
+"13" [label=" S13   : (reward:-0.04 ), Utility : 0.96 "];
+"15" [label=" S15   : (reward:-0.04 ), Utility : 0.96 "];
+"0" -> "1" [ label="grasp_object(tray) (ProbTrans : 1,00)"
+, arrowhead = diamond , color=green];"1" -> "2" [ label="move_base_blind(manipulationAreaEastCounter1,preManipulationAreaEastCounter1) (ProbTrans : 1,00)"
+, arrowhead = diamond , color=green];"2" -> "3" [ label="moveTo(preManipulationAreaEastCounter1,preManipulationNorthTable) (ProbTrans : 1,00)"
+, arrowhead = diamond , color=green];"2" -> "10" [ label="moveTo(preManipulationAreaEastCounter1,preManipulationSouthTable) (ProbTrans : 1,00)"
+,style=dotted, arrowhead=tee];"3" -> "4" [ label="move_base_blind(preManipulationNorthTable,manipulationNorthTable) (ProbTrans : 1,00)"
+, arrowhead = diamond , color=green];"4" -> "5" [ label="grasp_object(cup) (ProbTrans : 1,00)"
+, arrowhead = diamond , color=green];"5" -> "6" [ label="move_base_blind(manipulationNorthTable,preManipulationNorthTable) (ProbTrans : 1,00)"
+, arrowhead = diamond , color=green];"6" -> "7" [ label="moveTo(preManipulationNorthTable,table2) (ProbTrans : 1,00)"
+, arrowhead = diamond , color=green];"6" -> "8" [ label="moveTo(preManipulationNorthTable,corner1) (ProbTrans : 1,00)"
+,style=dotted, arrowhead=tee];"8" -> "9" [ label="moveTo(corner1,table2) (ProbTrans : 1,00)"
+, arrowhead = diamond , color=green];"10" -> "11" [ label="move_base_blind(preManipulationSouthTable,manipulationAreaSouthTable) (ProbTrans : 1,00)"
+, arrowhead = diamond , color=green];"11" -> "12" [ label="grasp_object(appetizer) (ProbTrans : 1,00)"
+, arrowhead = diamond , color=green];"12" -> "13" [ label="move_base_blind(manipulationAreaSouthTable,preManipulationSouthTable) (ProbTrans : 1,00)"
+, arrowhead = diamond , color=green];"13" -> "14" [ label="moveTo(preManipulationSouthTable,table2) (ProbTrans : 1,00)"
+, arrowhead = diamond , color=green];"13" -> "15" [ label="moveTo(preManipulationSouthTable,corner2) (ProbTrans : 1,00)"
+,style=dotted, arrowhead=tee];"15" -> "16" [ label="moveTo(corner2,table2) (ProbTrans : 1,00)"
+, arrowhead = diamond , color=green];}

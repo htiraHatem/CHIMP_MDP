@@ -3,6 +3,6 @@ digraph {
 "2" [label="[~on(tray,placingAreaEastRightCounter1), isCollision(tray,tray2,false), on(appetizer,placingAreaSouthTable), on(tray2,placingAreaEastRightCounter1), holding(leftArm,tray), on(cup,placingAreaNorthTable), ~holding(leftArm,nothing), ~robotAt(manipulationAreaEastCounter1), holding(rightArm,nothing), robotAt(preManipulationAreaEastCounter1)] (r:1.0 ), Utility : 1.0 "];
 "0" [label="[isCollision(tray,tray2,false), on(appetizer,placingAreaSouthTable), on(tray2,placingAreaEastRightCounter1), on(cup,placingAreaNorthTable), robotAt(manipulationAreaEastCounter1), holding(leftArm,nothing), holding(rightArm,nothing), on(tray,placingAreaEastRightCounter1)] (reward:-0.04 ), Utility : 0.9199999999999999 "];
 "1" [label="[~on(tray,placingAreaEastRightCounter1), isCollision(tray,tray2,false), on(appetizer,placingAreaSouthTable), on(tray2,placingAreaEastRightCounter1), holding(leftArm,tray), on(cup,placingAreaNorthTable), robotAt(manipulationAreaEastCounter1), ~holding(leftArm,nothing), holding(rightArm,nothing)] (reward:-0.04 ), Utility : 0.96 "];
-"0" -> "1" [ label="grasp_object(tray) (ProbTrans : 1,00)" ];
-"1" -> "2" [ label="move_base_blind(manipulationAreaEastCounter1,preManipulationAreaEastCounter1) (ProbTrans : 1,00)" ];
-}
+"0" -> "1" [ label="grasp_object(tray) (ProbTrans : 1,00)"
+, arrowhead = diamond , color=green];"1" -> "2" [ label="move_base_blind(manipulationAreaEastCounter1,preManipulationAreaEastCounter1) (ProbTrans : 1,00)"
+, arrowhead = diamond , color=green];}

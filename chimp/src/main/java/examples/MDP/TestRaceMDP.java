@@ -75,12 +75,16 @@ public class TestRaceMDP {
 		Map<HTNState, Double> policy = pi.valueIteration(mdp, 0.0001);
 
 		for (Entry<HTNState, Double> s : policy.entrySet()) {
-			System.out.println(s.getKey() + "  :  " + s.getValue());
+			System.out.println("**" + s.getKey() + "  :  " + s.getValue());
 		}
 
+		//get the optimal trajectory based on Utility
+//		FileWriter writer = new FileWriter(mdpGraph);
+//		logger.info("Writing MDP Graph into " + mdpGraph);
+//		Dot2Graph.printOptimalTrajectoryDot(writer, mdp, true, policy);
+//		writer.close();
+		
 		// convert to dot language
-
-
 		if (mdpGraph != null) {
 			FileWriter writer = new FileWriter(mdpGraph);
 			logger.info("Writing MDP Graph into " + mdpGraph);

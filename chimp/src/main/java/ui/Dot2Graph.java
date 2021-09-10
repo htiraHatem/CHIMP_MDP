@@ -29,7 +29,8 @@ public class Dot2Graph {
 		DecimalFormat df = new DecimalFormat("0.00");
 		
 		out.println("digraph {");
-		out.println(" size=\"60,17\";");
+		out.println("  node [color=\"#40b9e5\" ]\r\n"
+				+ " size=\"60,17\";");
 
 		if(printState) {
 			for(HTNState s:source.getFinalstates()) {
@@ -43,7 +44,7 @@ public class Dot2Graph {
 				out.print("\""+s.getId()+"\" [label=\""+OhneStatic+" (r:"+source.reward(s) + " )");
 				if(policy != null)
 					out.print( ", Utility : "+policy.get(s));
-				out.println(" \"];");
+				out.println(" \" shape=doubleoctagon];");
 			}
 			for(HTNState s:source.getNonFinalStates()) {
 				ArrayList<String> OhneStatic = new ArrayList<String>() ;
@@ -52,9 +53,13 @@ public class Dot2Graph {
 					if((!i.toString().contains("crossLinked")) && (!i.toString().contains("connected") ))
 					OhneStatic.add(i.toString());
 				}
-				out.print("\""+s.getId()+"\" [label=\""+OhneStatic+" (reward:"+source.reward(s)+ " )");
+				//easy to understand
+				out.print("\""+s.getId()+"\" [label=\" S"+s.getId()+"   : (reward:"+source.reward(s)+ " )");
+				//more details !!
+				//out.print("\""+s.getId()+"\" [label=\""+s.getLabel()()+" (reward:"+source.reward(s)+ " )");
 				if(policy != null)
 					out.print( ", Utility : "+policy.get(s));
+				
 				out.println(" \"];");
 			}
 		}
@@ -73,7 +78,15 @@ public class Dot2Graph {
 						//if(prob != 1) {
 						out.print(" (ProbTrans : "+df.format(prob) + ")");
 						//}
-						out.println("\" ];");
+
+						out.println("\"");
+						if(ds == getOptState(source, policy, is)) {
+							out.print(", arrowhead = diamond , color=green");
+							out.print("];");
+						}else {
+							out.print(",style=dotted, arrowhead=tee");
+							out.print("];");
+						}
 					}
 				}
 			}
@@ -83,5 +96,30 @@ public class Dot2Graph {
 		out.flush();
 		
 	}
+	
+	public static HTNState getOptState(HtnMdpFactory<HTNState, HTNAction> source, Map<HTNState, Double> policy,
+			HTNState state) {
+		Double U = (double) -10;
+		HTNState optS = null;
+		for (HTNAction act : source.actions(state)) {
+			List<HtnMdpTransition> transition = source.gethTNTransitionProbabilityFunction()
+					.getTransitionsWithStartingStateAndAction(state, act);
 
+			for (HtnMdpTransition<HTNState, HTNAction> tr : transition) {
+				HTNState ds = tr.getDestinationState();
+				if (policy.get(ds) > U) {
+					U = policy.get(ds);
+					optS = ds;
+				} 
+
+			}
+		}
+		return optS;
+	}
+
+	//TODO to generate the optimal trajectory : only sequence of actions
+	public static void printOptimalTrajectoryDot(Writer writer, HtnMdpFactory<HTNState, HTNAction> source, boolean printState, Map<HTNState, Double> policy) throws IOException {
+		
+		
+	}
 }
