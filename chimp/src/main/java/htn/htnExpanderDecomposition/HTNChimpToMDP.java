@@ -124,7 +124,23 @@ public class HTNChimpToMDP {
 					if (prob != 0) {
 						HTNState si = lstate.get(i);
 						HTNState sj = lstate.get(j);
-						transitionModel.setTransitionProbability(si, action, sj, prob);
+						transitionModel.setTransitionProbability(si, action, sj, 1);
+						
+						if(si.getId()==2) 
+							transitionModel.setTransitionProbability(si, action, sj, 0.5);
+						
+						if((si.getId()==6) && (sj.getId() == 7) )
+							transitionModel.setTransitionProbability(si, action, sj, 0.3);
+						
+						if((si.getId()==6) && (sj.getId() == 8) )
+							transitionModel.setTransitionProbability(si, action, sj, 0.7);
+						
+						if((si.getId()==13) && (sj.getId() == 14) )
+							transitionModel.setTransitionProbability(si, action, sj, 0.3);
+						
+						if((si.getId()==13) && (sj.getId() == 15) )
+							transitionModel.setTransitionProbability(si, action, sj, 0.7);
+
 						
 						// update transition to test
 //						HTNState s1 = lstate.get(1);//getCare
@@ -251,7 +267,6 @@ public class HTNChimpToMDP {
 	
 	public final static HtnMdpFactory<HTNState, HTNAction> MDP(HTNExpander expander, HTNTaskNetwork fullyExpanded) throws Exception {
 		//
-		
 		// get methodes
 		HashMap<Task, MultiState> mStates = expander.getMStates();
 		
@@ -285,7 +300,7 @@ public class HTNChimpToMDP {
 		
 		// get or create reward function
 		//HTNReward rewardFunction = createProportionalRewardFunction(states, fullyExpanded);
-		//HTNReward rewardFunction = HTNChimpToMDP.createConstantRewardFunction(states, fullyExpanded);
+		HTNReward rewardFunction = HTNChimpToMDP.createConstantRewardFunction(states, fullyExpanded);
 		
 		// a reward	is favorise the shortest path via northTable
 		//HTNReward rewardFunction = HTNChimpToMDP.createScenario1RewardFunction(states, fullyExpanded);
@@ -294,7 +309,7 @@ public class HTNChimpToMDP {
 		//HTNReward rewardFunction = HTNChimpToMDP.createScenario2RewardFunction(states, fullyExpanded);
 
 		// a reward	is favorise the longest/safer path via northTable
-		HTNReward rewardFunction = HTNChimpToMDP.createScenario3RewardFunction(states, fullyExpanded);
+		//HTNReward rewardFunction = HTNChimpToMDP.createScenario3RewardFunction(states, fullyExpanded);
 		
 
 		return new HtnMdpFactory<HTNState, HTNAction>(states,

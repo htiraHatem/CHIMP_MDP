@@ -115,15 +115,15 @@ public class TestPI {
 			
 
 			//convert to dot language
-			String mdpGraph = "src/main/java/examples/MDP/gotolondon/gotolondonGraphPI.dot";
-
-			if (mdpGraph != null ) {
-				FileWriter writer = new FileWriter(mdpGraph);
-				logger.info("Writing MDP Graph into " + mdpGraph);
-				Dot2Graph.printMDPDot(writer, mdp, true ,null );
-				writer.close();
-				
-			}
+//			String mdpGraph = "src/main/java/examples/MDP/gotolondon/gotolondonGraphPI.dot";
+//
+//			if (mdpGraph != null ) {
+//				FileWriter writer = new FileWriter(mdpGraph);
+//				logger.info("Writing MDP Graph into " + mdpGraph);
+//				Dot2Graph.printMDPDot(writer, mdp, true ,null );
+//				writer.close();
+//				
+//			}
 
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

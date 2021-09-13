@@ -106,6 +106,7 @@ public class Dot2Graph {
 		List<HTNState> possibleTrajectory = printOptimalTrajectoryDot(source, policy);
 		for (HTNState s : possibleTrajectory)
 			s.displayID();
+			//System.out.println(s.getTask());
 	}
 
 	public static HTNState getOptState(HtnMdpFactory<HTNState, HTNAction> source, Map<HTNState, Double> policy,

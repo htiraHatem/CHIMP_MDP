@@ -1,11 +1,14 @@
 package mdpSolver;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
 import aima.core.agent.Action;
 import aima.core.probability.mdp.MarkovDecisionProcess;
+import edu.cmu.ita.htn.MultiState;
+import htn.htnExpanderDecomposition.Task;
 
 /**
  * @author Hatem
@@ -23,7 +26,8 @@ public class HtnMdpFactory<HTNState, HTNAction extends Action> implements Markov
 	private HTNReward rewardFunction = null;
 	public List<HTNState> finalstates = new ArrayList<HTNState>();
 	public List<HTNState> nonFinalStates = new ArrayList<HTNState>();
-
+	public HashMap<Task, MultiState> mStates ;
+	
 	public HtnMdpFactory(Set<HTNState> states2, HTNState initialState, HTNAction actions,
 			HTNTransitionProbabilityFunction hTNTransitionProbabilityFunction, HTNReward rewardFunction) {
 		this.states = states2;
@@ -32,6 +36,10 @@ public class HtnMdpFactory<HTNState, HTNAction extends Action> implements Markov
 		this.hTNTransitionProbabilityFunction = hTNTransitionProbabilityFunction;
 		this.rewardFunction = rewardFunction;
 		setFinalstates();
+	}
+
+	public HtnMdpFactory() {
+		// TODO Auto-generated constructor stub
 	}
 
 	@Override

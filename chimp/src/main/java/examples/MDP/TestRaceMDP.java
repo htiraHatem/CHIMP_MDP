@@ -1,18 +1,25 @@
 package examples.MDP;
 
 import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Map.Entry;
 import java.util.logging.Logger;
 
 import org.metacsp.framework.ValueOrderingH;
 import org.metacsp.framework.Variable;
 
+import aima.core.probability.mdp.Policy;
+import aima.core.probability.mdp.impl.ModifiedPolicyEvaluation;
+import aima.core.probability.mdp.search.PolicyIteration;
 import aima.core.probability.mdp.search.ValueIteration;
 import fluentSolver.FluentNetworkSolver;
 import htn.htnExpanderDecomposition.HTNChimpDomain;
 import htn.htnExpanderDecomposition.HTNChimpToMDP;
 import htn.htnExpanderDecomposition.HTNExpander;
+import htn.htnExpanderDecomposition.Task;
 import htn.valOrderingHeuristics.UnifyDeepestWeightNewestbindingsValOH;
 import hybridDomainParsing.DomainParsingException;
 import mdpSolver.HTNAction;
@@ -71,14 +78,25 @@ public class TestRaceMDP {
 		HtnMdpFactory<HTNState, HTNAction> mdp = HTNChimpToMDP.MDP(expander, fullyExpanded);
 
 		// value iteration
-		ValueIteration<HTNState, HTNAction> pi = new ValueIteration<HTNState, HTNAction>(1.0);
+		//TODO update gamme value and test it
+		ValueIteration<HTNState, HTNAction> pi = new ValueIteration<HTNState, HTNAction>(1);
 		Map<HTNState, Double> policy = pi.valueIteration(mdp, 0.0001);
 
 		for (Entry<HTNState, Double> s : policy.entrySet()) {
 			System.out.println("**" + s.getKey() + "  :  " + s.getValue());
 		}
 
-		
+		//test PI
+
+//		PolicyIteration<HTNState, HTNAction> pi = new PolicyIteration<HTNState, HTNAction>(
+//				new ModifiedPolicyEvaluation<HTNState, HTNAction>(50, 1.0));
+//
+//		Policy<HTNState, HTNAction> policy = pi.policyIteration(mdp);
+//		
+//		for (HTNState s : mdp.states()) {
+//			System.out.println("S"+s.getId() + "  policy  :  " + policy.action(s));
+//		}
+
 		// convert to dot language
 		if (mdpGraph != null) {
 			FileWriter writer = new FileWriter(mdpGraph);
@@ -90,6 +108,7 @@ public class TestRaceMDP {
 		
 		
 //		// generate a solution based on chimp Backtrack algorithm
+		
 //		System.out.println("Found plan? " + chimp.generatePlan());
 //
 //		if (PRINT_PLAN) {
