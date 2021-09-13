@@ -141,7 +141,7 @@ public class Dot2Graph {
 			if (is == source.getInitialState())
 				optTraj.add(is);
 			else if (is.getPreviousState() == optTraj.get(optTraj.size() - 1)
-					&& (is.getNextState() == getOptState(source, policy, is))) {
+					&& (is == getOptState(source, policy, is.getPreviousState()))) {
 				optTraj.add(is);
 				if (is.getNextState().isFinal())
 					optTraj.add(is.getNextState());
