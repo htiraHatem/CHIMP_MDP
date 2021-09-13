@@ -159,6 +159,23 @@ public class HTNChimpToMDP {
 		return rewardFunction;
 	}
 	
+	// a reward	is proportional to distance to the goal
+	//length to the goal task
+	public final static HTNReward createProportionalRewardFunction(Set<HTNState> states, HTNTaskNetwork fullyExpanded) {
+		HTNReward rewardFunction = new HTNReward() {
+		};
+		for (HTNState sp : states) {
+			double reward = getBaseReward(sp.htnState);
+			Task t0 = fullyExpanded.getFirstTask();
+			double kappa = fullyExpanded.maxpath(t0, sp.getTask());
+			// Here, the paper states that the reward is for (t0.getActionName(), sp.s)
+			reward = kappa * reward;
+			rewardFunction.setReward(sp, reward);
+			;
+		}
+		return rewardFunction;
+	}
+	
 	private final static int getBaseReward(MultiState state) {
 		return 1;
 	}

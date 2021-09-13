@@ -78,11 +78,6 @@ public class TestRaceMDP {
 			System.out.println("**" + s.getKey() + "  :  " + s.getValue());
 		}
 
-		//get the optimal trajectory based on Utility
-//		FileWriter writer = new FileWriter(mdpGraph);
-//		logger.info("Writing MDP Graph into " + mdpGraph);
-//		Dot2Graph.printOptimalTrajectoryDot(writer, mdp, true, policy);
-//		writer.close();
 		
 		// convert to dot language
 		if (mdpGraph != null) {
@@ -95,17 +90,17 @@ public class TestRaceMDP {
 		
 		
 //		// generate a solution based on chimp Backtrack algorithm
-		System.out.println("Found plan? " + chimp.generatePlan());
-
-		if (PRINT_PLAN) {
-			Variable[] planVector = chimp.extractActions();
-			int c = 0;
-			for (Variable act : planVector) {
-				if (act.getComponent() != null)
-					System.out.println(c++ + ".\t" + act);
-			}
-			chimp.printFullPlan();
-		}
+//		System.out.println("Found plan? " + chimp.generatePlan());
+//
+//		if (PRINT_PLAN) {
+//			Variable[] planVector = chimp.extractActions();
+//			int c = 0;
+//			for (Variable act : planVector) {
+//				if (act.getComponent() != null)
+//					System.out.println(c++ + ".\t" + act);
+//			}
+//			chimp.printFullPlan();
+//		}
 
 	}
 }
