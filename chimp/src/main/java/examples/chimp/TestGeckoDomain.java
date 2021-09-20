@@ -1,5 +1,8 @@
 package examples.chimp;
 
+import org.metacsp.framework.Variable;
+
+import externalPathPlanning.LookUpTableDurationEstimator;
 import htn.valOrderingHeuristics.UnifyFewestsubsEarliesttasksNewestbindingsValOH;
 import hybridDomainParsing.DomainParsingException;
 import planner.CHIMP;
@@ -9,22 +12,33 @@ public class TestGeckoDomain {
 
 	public static void main(String[] args) {
 		
-		String problem = "problems/gecko/gecko1.pdl";
-		String domain = "domains/gecko.ddl";
+		String problemFile = "problems/gecko/gecko1.pdl";
+		String domainFile = "domains/gecko.ddl";
 		
 		CHIMP chimp;
-		try {
-			chimp = new CHIMP.CHIMPBuilder(domain, problem)
-					.valHeuristic(new UnifyFewestsubsEarliesttasksNewestbindingsValOH())
-					.build();
-		} catch (DomainParsingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return;
-		}
+        CHIMP.CHIMPBuilder builder;
+
+        try {
+            builder = new CHIMP.CHIMPBuilder(domainFile, problemFile)
+                    .mbEstimator(new LookUpTableDurationEstimator())
+                    .htnUnification(true);
+
+
+        } catch (DomainParsingException e) {
+            e.printStackTrace();
+            return;
+        }
+        chimp = builder.build();
 		
 		System.out.println("Found plan? " + chimp.generatePlan());
 		chimp.printStats(System.out);
+		
+        Variable[] planVector = chimp.extractActions();
+        int c = 0;
+        for (Variable act : planVector) {
+            if (act.getComponent() != null)
+                System.out.println(c++ + ".\t" + act);
+        }
 		
 	}
 	

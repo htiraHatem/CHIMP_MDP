@@ -107,14 +107,18 @@ public class TestMDPSolver {
 		// CellWorld<Double> cw = new CellWorld<Double>(4, 3, -0.02);
 
 		// the shortest route to the +1, high risk , travel cost = -0.04
-		// CellWorld<Double> cw = CellWorldFactory.createCellWorldForFig17_1();
+		//CellWorld<Double> cw = CellWorldFactory.createCellWorldForFig17_1();
 		// CellWorld<Double> cw = new CellWorld<Double>(4, 3, -0.04);
 
 		// R = 1 : agent will avoid the both exists : (never terminate.. not always)
 		CellWorld<Double> cw = new CellWorld<Double>(4, 3, 5.0);
 
+		
+		// the shortest route to the +1, high risk , travel cost = -0.04
+		//CellWorld<Double> cw = CellWorldFactory.createCellWorldForFig17_1();
+		
 		// the agent heads straight for the nearest exit
-		// CellWorld<Double> cw = new CellWorld<Double>(4, 3, -1.6484);
+		 //CellWorld<Double> cw = new CellWorld<Double>(4, 3, -1.6484);
 
 		// wall
 		cw.removeCell(2, 2);
@@ -124,7 +128,7 @@ public class TestMDPSolver {
 		cw.getCellAt(4, 3).setContent(5.0);
 		cw.getCellAt(4, 2).setContent(-1.0);
 
-		// valueIterationDemo(cw);
+		//valueIterationDemo(cw);
 		policyIterationDemo(cw);
 	}
 

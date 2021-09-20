@@ -34,11 +34,11 @@
 #(Task t1 !move_up(cross1))
 
 (Task t0 channelRL(cross1))
-(Task t1 channelRL(cross2))
-(Task t2 channelRL(cross3))
+#(Task t1 channelRL(cross2))
+#(Task t2 channelRL(cross3))
 (Constraint Release[0,1](t0))
-(Constraint Release[0,1](t1))
-(Constraint Release[0,1](t2))
+#(Constraint Release[0,1](t1))
+#(Constraint Release[0,1](t2))
 
 #(Constraint Deadline[0,200000](t0))
 #(Constraint Deadline[0,600000](t0))

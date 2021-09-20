@@ -43,7 +43,7 @@ public class Dot2Graph {
 				}
 
 				// out.print("\""+s.getId()+"\" [label=\""+OhneStatic+" (r:"+source.reward(s) +
-				// " )");
+				 //" )");
 				out.print("\"" + s.getId() + "\" [label=\" S" + s.getId() + "   : (r:" + source.reward(s) + " )");
 				if (policy != null)
 					out.print(", Utility : " + policy.get(s));
