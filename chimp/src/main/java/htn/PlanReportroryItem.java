@@ -94,6 +94,10 @@ public abstract class PlanReportroryItem {
 		resourceUsageIndicators.add(rt);
 	}
 	
+	public List<ResourceUsageTemplate> getResourceUsageTemplate() {
+		return resourceUsageIndicators;
+	}
+	
 	public void addResourceUsageTemplates(List<ResourceUsageTemplate> rtList) {
 		resourceUsageIndicators.addAll(rtList);
 	}

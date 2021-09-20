@@ -12,10 +12,8 @@ import edu.cmu.ita.htn.HTNDomain;
 import edu.cmu.ita.htn.HTNFactory;
 import edu.cmu.ita.htn.LogicExpression;
 import edu.cmu.ita.htn.LogicExpressionImpl;
-import edu.cmu.ita.htn.Operator;
 import edu.cmu.ita.htn.Proposition;
 import edu.cmu.ita.htn.State;
-import edu.cmu.ita.htn.Task;
 import edu.cmu.ita.htn.TaskNetwork;
 import edu.cmu.ita.htn.LogicExpressionImpl.LogicalOp;
 import edu.cmu.ita.htn.parser.ParseException;
@@ -31,12 +29,13 @@ import planner.CHIMP.CHIMPBuilder;
 
 public class HTNChimpDomain extends HTNDomain {
 	ArrayList<Method> htnMethods = new ArrayList<Method>();
+	ArrayList<Task> htnActions = new ArrayList<htn.htnExpanderDecomposition.Task>();
 	HashMap<htn.htnExpanderDecomposition.Task, htn.htnExpanderDecomposition.Task> htnInstances = new HashMap<htn.htnExpanderDecomposition.Task, htn.htnExpanderDecomposition.Task>();
 
 	public HTNChimpDomain(List<Method> methods, List<Task> tasks) {
 		super();
 		this.htnMethods = new ArrayList<Method>(methods);
-		this.actions = new ArrayList<Task>(tasks);
+		this.htnActions = new ArrayList<Task>(tasks);
 		this.htnInstances = new HashMap<htn.htnExpanderDecomposition.Task, htn.htnExpanderDecomposition.Task>();
 	}
 
@@ -82,15 +81,14 @@ public class HTNChimpDomain extends HTNDomain {
 
 			// cost TODO to update
 			Operator op = null;
-			String sCost = null;
 			double cost = 0;
 
 			String head;
 			List<String> pars = Arrays.asList(i.getStringArgumentNames());
 			head = convertLISPAtom(i.getName(), pars);
 			add.addAll(del.negateAll());
-			op = HTNFactory.createOperator(head, pre, add, cost);
-			this.addAction(HTNFactory.createPrimitiveTask(op));
+			op = new Operator(HTNFactory.createOperator(head, pre, add, cost));
+			this.addHtnAction(new Task( HTNFactory.createPrimitiveTask(op), i.getResourceUsageTemplate()));
 		}
 
 		// HTNùethods
@@ -101,7 +99,7 @@ public class HTNChimpDomain extends HTNDomain {
 
 			List<String> pars = Arrays.asList(i.getStringArgumentNames());
 			head = convertLISPAtom(i.getName(), pars);
-			Task t = HTNFactory.createTask(head);
+			Task t = new Task(HTNFactory.createTask(head));
 
 			if(i.getPreconditions().length<1)
 				pre = Proposition.TRUE;
@@ -126,7 +124,7 @@ public class HTNChimpDomain extends HTNDomain {
 
 				List<String> effArg = Arrays.asList(eff.getInputArgs());
 				String head1 = convertLISPAtom(eff.getName(), effArg);
-				Task sub = HTNFactory.createTask(head1);				
+				Task sub = new Task (HTNFactory.createTask(head1));				
 
 				tl.add(sub);
 			}
@@ -136,7 +134,7 @@ public class HTNChimpDomain extends HTNDomain {
 			this.addMethod(m);
 		}
 
-		this.instances = new HashMap<Task, Task>();
+		this.htnInstances = new HashMap<Task, Task>();
 	}
 
 	public void addMethod(Method m) {
@@ -251,9 +249,36 @@ public class HTNChimpDomain extends HTNDomain {
 		return options;
 	}
 	
+	/**
+	 * Finds operators that match the supplied task
+	 * @param task
+	 * @param un
+	 * @return
+	 */
+	public List<Operator> findOperatorsFor1(State s, Task task, Unifier un) {
+		List<Operator> opers = new ArrayList<Operator>();
+		for(Task tPrimitive:htnActions) {
+			Iterator<Unifier> iu;
+			
+			if(un.unifies(task, tPrimitive) 
+				&& 
+				(iu = tPrimitive.op.getPreconditions().consequence(s, un)) !=null) {
+				
+				while(iu.hasNext()) {
+					Unifier u=iu.next();
+					assert(tPrimitive.op != null);
+					Operator op = new Operator(tPrimitive.op);
+					u.compose(un);
+					op.apply(u);
+					opers.add(op);
+				}
+			}
+		}
+		return opers;
+	}
 	public List<Operator> findOperatorsFor(Task task, Unifier un) {
 		List<Operator> opers = new ArrayList<Operator>();
-		for(Task tPrimitive:actions) {
+		for(Task tPrimitive:htnActions) {
 			if(un.unifies(task, tPrimitive)) {
 				assert(tPrimitive.op != null);
 				Operator op = new Operator(tPrimitive.op);
@@ -288,7 +313,11 @@ public class HTNChimpDomain extends HTNDomain {
 	}
 
 	public List<Task> getActions() {
-		return actions;
+		return htnActions;
+	}
+	
+	public void addHtnAction(Task t) {
+		this.htnActions.add(t);
 	}
 
 }

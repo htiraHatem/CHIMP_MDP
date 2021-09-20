@@ -6,6 +6,9 @@
   holding robotAt get_object !moveTo obtainObject drive_robot moveTo crossLinked !grasp_object
   on connected !move_base_blind isCollision)
 
+####################
+#######RESOURCES##############
+(Resource BatteryStorageCapacity 100)
 
 
 ################################
@@ -41,6 +44,9 @@
   (Pre p1 robotAt(?l1))
   (Del p1)
   (Add e1 robotAt(?l2))
+  
+  (ResourceUsage 
+    (Usage BatteryStorageCapacity 1))
 )
 
 (:method

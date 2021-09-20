@@ -164,7 +164,7 @@ public class HTNExpander {
 		MultiState ms = mStateBefore(t, network);
 		for (State s : ms) {
 
-			options.addAll(domain.findOperatorsFor(s, t, u));
+			options.addAll(domain.findOperatorsFor1(s, t, u));
 		}
 
 		return options;
