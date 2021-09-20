@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Vector;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -26,12 +27,16 @@ import hybridDomainParsing.ClassicHybridDomain;
 import jason.asSemantics.Unifier;
 import mdpSolver.HTNTaskNetwork;
 import planner.CHIMP.CHIMPBuilder;
+import resourceFluent.FluentResourceUsageScheduler;
+import resourceFluent.FluentScheduler;
 
 public class HTNChimpDomain extends HTNDomain {
 	ArrayList<Method> htnMethods = new ArrayList<Method>();
 	ArrayList<Task> htnActions = new ArrayList<htn.htnExpanderDecomposition.Task>();
 	HashMap<htn.htnExpanderDecomposition.Task, htn.htnExpanderDecomposition.Task> htnInstances = new HashMap<htn.htnExpanderDecomposition.Task, htn.htnExpanderDecomposition.Task>();
-
+	private final Vector<FluentResourceUsageScheduler> resourceSchedulers = 
+			new Vector<FluentResourceUsageScheduler>();
+	
 	public HTNChimpDomain(List<Method> methods, List<Task> tasks) {
 		super();
 		this.htnMethods = new ArrayList<Method>(methods);
@@ -48,6 +53,15 @@ public class HTNChimpDomain extends HTNDomain {
 		ClassicHybridDomain a = builder.getDomain();
 		List<PlanReportroryItem> M = a.getMethods();
 		List<PlanReportroryItem> O = a.getOperators();
+		
+		// get resources
+		
+		List<FluentResourceUsageScheduler> fluentSchedulers = a.getResourceSchedulers();
+		resourceSchedulers.clear();
+		for(FluentResourceUsageScheduler f : fluentSchedulers){
+			resourceSchedulers.add(f);
+
+		}
 
 		// operators
 		for (PlanReportroryItem i : O) {
