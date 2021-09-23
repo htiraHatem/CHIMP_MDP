@@ -62,7 +62,8 @@ public class TestResourceUsageScheduler {
 		
 		fluentSolver.addConstraints(con1,con2,con3);
 		
-		ResourceUsageTemplate rt = new ResourceUsageTemplate("resourceName", new int[] {1}, new String[] {"mug1"}, 1);
+		ResourceUsageTemplate rt = new ResourceUsageTemplate("resourceName", new int[] {1}, new String[] {"mug1"}, 0);
+		ResourceUsageTemplate rt1 = new ResourceUsageTemplate("resourceName", new int[] {0}, new String[] {"mug1"}, 1);
 		FluentConstraint rcon1 = new FluentConstraint(FluentConstraint.Type.RESOURCEUSAGE, rt);
 		rcon1.setFrom(fluents[0]);
 		rcon1.setTo(fluents[0]);
@@ -71,13 +72,18 @@ public class TestResourceUsageScheduler {
 		rcon2.setFrom(fluents[1]);
 		rcon2.setTo(fluents[1]);
 		
-		fluentSolver.addConstraints(rcon1,rcon2);
+		FluentConstraint rcon3 = new FluentConstraint(FluentConstraint.Type.RESOURCEUSAGE, rt1);
+		rcon3.setFrom(fluents[0]);
+		rcon3.setTo(fluents[1]);
+		
+		Boolean verif= fluentSolver.addConstraints(rcon1,rcon2,rcon3);
 		
 		FluentResourceUsageScheduler frs = new FluentResourceUsageScheduler(null, null, "resourceName", 1);
-//		FluentScheduler fs = new FluentScheduler(null, null, "get_mug", 1, "mug1");
-//		fs.setUsage(fluents);		
-		planner.addMetaConstraint(frs);
+		FluentScheduler fs = new FluentScheduler(null, null, "get_mug", 1, "mug1");
+		fs.setUsage(fluents);		
+		planner.addMetaConstraint(fs);
 		MetaCSPLogging.setLevel(Level.FINEST);
+		
 
 	}
 
