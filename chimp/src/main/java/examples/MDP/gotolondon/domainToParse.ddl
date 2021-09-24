@@ -6,7 +6,7 @@
   has agent_at !getVehicle !moveTo obtainVehicle goTo moveTo
   connected)
 
-
+(Resource CashFunds 200)
 
 ################################
 ####  OPERATORS ################
@@ -15,7 +15,17 @@
 (:operator 
   (Head !getVehicle(?v))
   (Add e1 has(?v))
-  (Reward 0.04)
+  
+  (if ?v values car) 
+     (ResourceUsage CashFunds 5)
+
+  (if ?v values plan) 
+    (ResourceUsage CashFunds 100)
+  
+  (if ?v values ship) 
+   (ResourceUsage CashFunds 90)
+  
+
 )
 
 (:operator 
@@ -24,8 +34,6 @@
   (Pre p2 agent_at(?l1))
   (Del p2)
   (Add e1 agent_at(?l2))
-  #(Reward -0.04)
-  #TODO to specify the reward for the final states
 )
 
 (:method
@@ -34,6 +42,8 @@
   (Sub s1 !moveTo(home airport car))
   (Sub s2 !getVehicle(plane))
   (Constraint Equals(s1,task))
+
+
 )
 
 (:method

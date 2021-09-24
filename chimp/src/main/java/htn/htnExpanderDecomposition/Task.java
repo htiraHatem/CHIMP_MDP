@@ -23,6 +23,7 @@ public class Task extends edu.cmu.ita.htn.Task {
 	private static final long serialVersionUID = 1L;
 
 	protected List<ResourceUsageTemplate> resourceUsageIndicators = new ArrayList<ResourceUsageTemplate>();
+	protected Double reward;
 
 	public Task(String sTask) throws Exception {
 		super(sTask);
@@ -37,9 +38,10 @@ public class Task extends edu.cmu.ita.htn.Task {
 		setInstance(instance);
 	}
 
-	public Task(edu.cmu.ita.htn.Task createPrimitiveTask, List<ResourceUsageTemplate> resourceUsageTemplate) {
+	public Task(edu.cmu.ita.htn.Task createPrimitiveTask, List<ResourceUsageTemplate> resourceUsageTemplate, Double reward) {
 		super(createPrimitiveTask);
 		this.resourceUsageIndicators = resourceUsageTemplate;
+		this.reward = reward;
 	}
 
 	public Unifier getUn() {

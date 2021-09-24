@@ -17,6 +17,8 @@ import hybridDomainParsing.HybridDomain;
 import hybridDomainParsing.SubDifferentDefinition;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Delete_spatial_constraint1_defContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Delete_spatial_constraint_defContext;
+import hybridDomainParsing.classic.antlr.ChimpClassicParser.Mdp_reward_defContext;
+import hybridDomainParsing.classic.antlr.ChimpClassicParser.Mdp_reward_op_elementContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Spatial_constraint_op_elementContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Unary_spatial_constraint_typeContext;
 import integers.IntegerConstraint;
@@ -412,6 +414,7 @@ public class ChimpClassicReader implements ChimpClassicVisitor {
         List<IntegerConstraintTemplate> integerConstraintTemplates = new ArrayList<>();
         List<ResourceUsageTemplate> resourceUsageTemplates = new ArrayList<>();
         List<SpatialConstraintTemplate> rectangularConstraintTemplates = new ArrayList<>();
+        List<Double> reward = new ArrayList<>();
         for (ChimpClassicParser.Op_elementContext d : ctx.op_element()) {
             if (d instanceof ChimpClassicParser.Precondition_op_elementContext) {
                 parsedPreconditions.add(visitPrecondition_op_element(
@@ -452,6 +455,9 @@ public class ChimpClassicReader implements ChimpClassicVisitor {
             } else if (d instanceof ChimpClassicParser.Delete_spatial_constraint_op_elementContext) {
             	rectangularConstraintTemplates.add((SpatialConstraintTemplate) visitDeleteSpatial_constraint_op_element(
                         (ChimpClassicParser.Delete_spatial_constraint_op_elementContext) d));
+            }else if (d instanceof ChimpClassicParser.Mdp_reward_op_elementContext) {
+            	reward.add(visitMDP_reward_op_element(
+                        (ChimpClassicParser.Mdp_reward_op_elementContext) d));
             }
         }
 
@@ -477,14 +483,16 @@ public class ChimpClassicReader implements ChimpClassicVisitor {
         op.setIntegerConstraintTemplates(
                 integerConstraintTemplates.toArray(new IntegerConstraintTemplate[integerConstraintTemplates.size()]));
 
-       op.addSpatialConstraint(rectangularConstraintTemplates);
+        op.addSpatialConstraint(rectangularConstraintTemplates);
+        op.addMdpTemplate(reward);
 
         op.addResourceUsageTemplates(resourceUsageTemplates);
 
         return op;
     }
 
-    /**
+
+	/**
      * Filter temporal constraints that are from head to head or that do not involve head
      */
     private AdditionalConstraintTemplate[] filterAdditionalConstraints(
@@ -1248,4 +1256,12 @@ public class ChimpClassicReader implements ChimpClassicVisitor {
     private static Long numberToLong(TerminalNode number) {
         return Long.valueOf(number.getText());
     }
+    
+	@Override
+	public Double visitMDP_reward_op_element(Mdp_reward_op_elementContext d) {
+
+		return Double.valueOf(d.mdp_reward_def().DOUBLE().getText());
+	}
+
+
 }

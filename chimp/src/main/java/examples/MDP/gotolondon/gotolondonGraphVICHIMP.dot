@@ -1,26 +1,27 @@
 digraph {
- size="18,11";
-"4" [label="{[crossLinked(corner1,table2), has(appetizer), ~agent_at(southTable), crossLinked(corner2,table2), crossLinked(northTable,table2), connected(southTable,appetizer), ~agent_at(counter), has(tray), agent_at(table2), crossLinked(southTable,corner2), connected(northTable,cup), crossLinked(southTable,table2), crossLinked(northTable,corner1)]} (r:1.0 ) "];
-"6" [label="{[crossLinked(corner1,table2), has(appetizer), ~agent_at(southTable), crossLinked(corner2,table2), crossLinked(northTable,table2), connected(southTable,appetizer), ~agent_at(counter), has(tray), agent_at(table2), crossLinked(southTable,corner2), connected(northTable,cup), ~agent_at(corner2), crossLinked(southTable,table2), crossLinked(northTable,corner1)]} (r:1.0 ) "];
-"9" [label="{[crossLinked(corner1,table2), crossLinked(corner2,table2), crossLinked(northTable,table2), connected(southTable,appetizer), ~agent_at(counter), has(tray), agent_at(table2), crossLinked(southTable,corner2), connected(northTable,cup), has(cup), ~agent_at(northTable), crossLinked(southTable,table2), crossLinked(northTable,corner1)]} (r:1.0 ) "];
-"11" [label="{[crossLinked(corner1,table2), crossLinked(corner2,table2), crossLinked(northTable,table2), connected(southTable,appetizer), ~agent_at(counter), has(tray), agent_at(table2), crossLinked(southTable,corner2), connected(northTable,cup), has(cup), ~agent_at(northTable), ~agent_at(corner1), crossLinked(southTable,table2), crossLinked(northTable,corner1)]} (r:1.0 ) "];
-"0" [label="{[crossLinked(corner1,table2), crossLinked(southTable,corner2), connected(northTable,cup), agent_at(counter), crossLinked(corner2,table2), crossLinked(northTable,table2), crossLinked(southTable,table2), connected(southTable,appetizer), crossLinked(northTable,corner1)]} (reward:-0.04 ) "];
-"1" [label="{[crossLinked(corner1,table2), crossLinked(southTable,corner2), connected(northTable,cup), agent_at(counter), crossLinked(corner2,table2), crossLinked(northTable,table2), crossLinked(southTable,table2), connected(southTable,appetizer), has(tray), crossLinked(northTable,corner1)]} (reward:-0.04 ) "];
-"2" [label="{[crossLinked(corner1,table2), crossLinked(southTable,corner2), connected(northTable,cup), crossLinked(corner2,table2), crossLinked(northTable,table2), agent_at(southTable), crossLinked(southTable,table2), connected(southTable,appetizer), ~agent_at(counter), has(tray), crossLinked(northTable,corner1)]} (reward:-0.04 ) "];
-"3" [label="{[crossLinked(corner1,table2), crossLinked(southTable,corner2), has(appetizer), connected(northTable,cup), crossLinked(corner2,table2), crossLinked(northTable,table2), agent_at(southTable), crossLinked(southTable,table2), connected(southTable,appetizer), ~agent_at(counter), has(tray), crossLinked(northTable,corner1)]} (reward:-0.04 ) "];
-"5" [label="{[crossLinked(corner1,table2), has(appetizer), ~agent_at(southTable), crossLinked(corner2,table2), crossLinked(northTable,table2), connected(southTable,appetizer), ~agent_at(counter), has(tray), crossLinked(southTable,corner2), connected(northTable,cup), crossLinked(southTable,table2), crossLinked(northTable,corner1), agent_at(corner2)]} (reward:-0.04 ) "];
-"7" [label="{[crossLinked(corner1,table2), crossLinked(southTable,corner2), connected(northTable,cup), agent_at(northTable), crossLinked(corner2,table2), crossLinked(northTable,table2), crossLinked(southTable,table2), connected(southTable,appetizer), ~agent_at(counter), has(tray), crossLinked(northTable,corner1)]} (reward:-0.04 ) "];
-"8" [label="{[crossLinked(corner1,table2), crossLinked(southTable,corner2), connected(northTable,cup), agent_at(northTable), has(cup), crossLinked(corner2,table2), crossLinked(northTable,table2), crossLinked(southTable,table2), connected(southTable,appetizer), ~agent_at(counter), has(tray), crossLinked(northTable,corner1)]} (reward:-0.04 ) "];
-"10" [label="{[crossLinked(corner1,table2), crossLinked(corner2,table2), crossLinked(northTable,table2), connected(southTable,appetizer), ~agent_at(counter), has(tray), crossLinked(southTable,corner2), agent_at(corner1), connected(northTable,cup), has(cup), ~agent_at(northTable), crossLinked(southTable,table2), crossLinked(northTable,corner1)]} (reward:-0.04 ) "];
-"0" -> "1" [ label="getObject(tray) (ProbTrans : 1,00)" ];
-"1" -> "2" [ label="moveTo(counter,southTable) (ProbTrans : 1,00)" ];
-"1" -> "7" [ label="moveTo(counter,northTable) (ProbTrans : 1,00)" ];
-"2" -> "3" [ label="getObject(appetizer) (ProbTrans : 1,00)" ];
-"3" -> "4" [ label="moveTo(southTable,table2) (ProbTrans : 1,00)" ];
-"3" -> "5" [ label="moveTo(southTable,corner2) (ProbTrans : 1,00)" ];
-"5" -> "6" [ label="moveTo(corner2,table2) (ProbTrans : 1,00)" ];
-"7" -> "8" [ label="getObject(cup) (ProbTrans : 1,00)" ];
-"8" -> "9" [ label="moveTo(northTable,table2) (ProbTrans : 1,00)" ];
-"8" -> "10" [ label="moveTo(northTable,corner1) (ProbTrans : 1,00)" ];
-"10" -> "11" [ label="moveTo(corner1,table2) (ProbTrans : 1,00)" ];
-}
+  node [color="#40b9e5" ]
+ size="60,17";
+"5" [label=" S5   : (r:1.0 ), Utility : 1.0 " shape=doubleoctagon];
+"9" [label=" S9   : (r:1.0 ), Utility : 1.0 " shape=doubleoctagon];
+"11" [label=" S11   : (r:1.0 ), Utility : 1.0 " shape=doubleoctagon];
+"0" [label=" S0   : (reward:-0.111 ), Utility : 1.949 "];
+"1" [label=" S1   : (reward:0.04 ), Utility : 2.06 "];
+"2" [label=" S2   : (reward:1.0 ), Utility : 2.02 "];
+"3" [label=" S3   : (reward:0.04 ), Utility : 2.04 "];
+"4" [label=" S4   : (reward:1.0 ), Utility : 2.0 "];
+"6" [label=" S6   : (reward:1.0 ), Utility : 1.612 "];
+"7" [label=" S7   : (reward:0.04 ), Utility : 2.04 "];
+"8" [label=" S8   : (reward:1.0 ), Utility : 2.0 "];
+"10" [label=" S10   : (reward:1.0 ), Utility : 2.0 "];
+"0" -> "1" [ label="getVehicle(car) (ProbTrans : 1,00)"
+, arrowhead = diamond , color=green];"1" -> "2" [ label="moveTo(home,airport,car) (ProbTrans : 1,00)"
+, arrowhead = diamond , color=green];"1" -> "6" [ label="moveTo(home,harbor,car) (ProbTrans : 1,00)"
+,style=dotted, arrowhead=tee];"2" -> "3" [ label="getVehicle(plane) (ProbTrans : 0,50)"
+, arrowhead = diamond , color=green];"3" -> "4" [ label="moveTo(airport,nyc,plane) (ProbTrans : 1,00)"
+, arrowhead = diamond , color=green];"4" -> "5" [ label="moveTo(nyc,london,plane) (ProbTrans : 1,00)"
+, arrowhead = diamond , color=green];"6" -> "7" [ label="getVehicle(ship) (ProbTrans : 0,30)"
+, arrowhead = diamond , color=green];"7" -> "8" [ label="moveTo(harbor,lpool,ship) (ProbTrans : 1,00)"
+, arrowhead = diamond , color=green];"7" -> "10" [ label="moveTo(harbor,soton,ship) (ProbTrans : 1,00)"
+,style=dotted, arrowhead=tee];"8" -> "9" [ label="moveTo(lpool,london,ship) (ProbTrans : 1,00)"
+, arrowhead = diamond , color=green];"10" -> "11" [ label="moveTo(soton,london,ship) (ProbTrans : 1,00)"
+, arrowhead = diamond , color=green];}

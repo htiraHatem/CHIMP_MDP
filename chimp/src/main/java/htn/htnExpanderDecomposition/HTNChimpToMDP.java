@@ -92,7 +92,10 @@ public class HTNChimpToMDP {
 			for (Constraint c : fullyExpanded.getConstraints()) {
 				if (c.getTask2().getActionName().equals(action.getName())) {
 					HTNState i = stateTable.get(c.getTask1());
+					
 					HTNState j = stateTable.get(c.getTask2());
+					j.setReward(c.getTask2().op.getCost());
+					
 
 					if (i == null)
 						throw new RuntimeException(
@@ -160,6 +163,22 @@ public class HTNChimpToMDP {
 		return transitionModel;
 	}
 
+	// a reward	is constant everywhere except the goal
+	public final static HTNReward useDefaultReward(Set<HTNState> states, HTNTaskNetwork fullyExpanded) {
+		HTNReward rewardFunction = new HTNReward() {
+		};
+		for (HTNState sp : states) {
+			//double reward = getBaseReward(sp);
+
+			if(getBaseReward(sp) ==null)
+				rewardFunction.setReward(sp, -0.111);
+			else if(!sp.isFinal())
+			rewardFunction.setReward(sp, getBaseReward(sp));
+			else
+			rewardFunction.setReward(sp, 1.0);
+		}
+		return rewardFunction;
+	}
 	// a reward	is constant everywhere except the goal
 	public final static HTNReward createConstantRewardFunction(Set<HTNState> states, HTNTaskNetwork fullyExpanded) {
 		HTNReward rewardFunction = new HTNReward() {
@@ -265,6 +284,10 @@ public class HTNChimpToMDP {
 		return 1;
 	}
 	
+	private final static Double getBaseReward(HTNState state) {
+		return state.getReward();
+	}
+	
 	public final static HtnMdpFactory<HTNState, HTNAction> MDP(HTNExpander expander, HTNTaskNetwork fullyExpanded) throws Exception {
 		//
 		// get methodes
@@ -298,9 +321,13 @@ public class HTNChimpToMDP {
 		//transitionModel.display();
 		
 		
+		//use the the specified rewards in the domain
+		HTNReward rewardFunction = HTNChimpToMDP.useDefaultReward(states, fullyExpanded);
+
+		
 		// get or create reward function
 		//HTNReward rewardFunction = createProportionalRewardFunction(states, fullyExpanded);
-		HTNReward rewardFunction = HTNChimpToMDP.createConstantRewardFunction(states, fullyExpanded);
+		//HTNReward rewardFunction = HTNChimpToMDP.createConstantRewardFunction(states, fullyExpanded);
 		
 		// a reward	is favorise the shortest path via northTable
 		//HTNReward rewardFunction = HTNChimpToMDP.createScenario1RewardFunction(states, fullyExpanded);

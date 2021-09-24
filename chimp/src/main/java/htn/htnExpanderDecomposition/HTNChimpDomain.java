@@ -93,16 +93,16 @@ public class HTNChimpDomain extends HTNDomain {
 				add.add(p1);
 			}
 
-			// cost TODO to update
-			Operator op = null;
-			double cost = 0;
+			Operator op = null;double cost=1;
+			if(i.GetMDPTemplate()!=null)
+			 cost = i.GetMDPTemplate().get(0);
 
 			String head;
 			List<String> pars = Arrays.asList(i.getStringArgumentNames());
 			head = convertLISPAtom(i.getName(), pars);
 			add.addAll(del.negateAll());
 			op = new Operator(HTNFactory.createOperator(head, pre, add, cost));
-			this.addHtnAction(new Task( HTNFactory.createPrimitiveTask(op), i.getResourceUsageTemplate()));
+			this.addHtnAction(new Task( HTNFactory.createPrimitiveTask(op), i.getResourceUsageTemplate(), cost));
 		}
 
 		// HTNùethods

@@ -8,7 +8,6 @@ import edu.cmu.ita.htn.MultiState;
 import edu.cmu.ita.htn.Task;
 
 /**
- * @author meneguzzi , 
  * @updated by Hatem
  */
 public class HTNState implements Comparable<State> {
@@ -20,8 +19,17 @@ public class HTNState implements Comparable<State> {
 	
 	protected HTNState previousState;
 	protected HTNState nextState;
+	protected Double reward;
 	
 	
+	public Double getReward() {
+		return reward;
+	}
+
+	public void setReward(Double reward) {
+		this.reward = reward;
+	}
+
 	/**
 	 * The fully expanded HTN {@link MultiState} that corresponds to this {@link HTNState}
 	 */

@@ -66,22 +66,22 @@ public class TestGoToLondonChimp {
 		if (mdpGraph != null) {
 			FileWriter writer = new FileWriter(mdpGraph);
 			logger.info("Writing MDP Graph into " + mdpGraph);
-			Dot2Graph.printMDPDot(writer, mdp, true, null);
+			Dot2Graph.printMDPDot(writer, mdp, true, policy);
 			writer.close();
 
 		}
 		// generate a solution based on chimp Backtrack algorithm
 		System.out.println("Found plan? " + chimp.generatePlan());
-
-		if (PRINT_PLAN) {
-			Variable[] planVector = chimp.extractActions();
-			int c = 0;
-			for (Variable act : planVector) {
-				if (act.getComponent() != null)
-					System.out.println(c++ + ".\t" + act);
-			}
-			chimp.printFullPlan();
-		}
+//
+//		if (PRINT_PLAN) {
+//			Variable[] planVector = chimp.extractActions();
+//			int c = 0;
+//			for (Variable act : planVector) {
+//				if (act.getComponent() != null)
+//					System.out.println(c++ + ".\t" + act);
+//			}
+//			chimp.printFullPlan();
+//		}
 
 	}
 }

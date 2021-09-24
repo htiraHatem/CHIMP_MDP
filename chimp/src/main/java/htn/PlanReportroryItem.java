@@ -1,16 +1,18 @@
 package htn;
 
-import com.google.common.collect.Sets;
-import fluentSolver.Fluent;
-import fluentSolver.FluentConstraint;
-import fluentSolver.FluentNetworkSolver;
-import hybridDomainParsing.HybridDomain;
-import hybridDomainParsing.SubDifferentDefinition;
-import integers.IntegerConstraint;
-import integers.IntegerVariable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.concurrent.atomic.*;
+import java.util.logging.Logger;
+
 import org.metacsp.framework.Constraint;
 import org.metacsp.framework.ConstraintNetwork;
-import org.metacsp.framework.ConstraintSolver;
 import org.metacsp.framework.Variable;
 import org.metacsp.framework.VariablePrototype;
 import org.metacsp.multi.allenInterval.AllenIntervalConstraint;
@@ -19,14 +21,18 @@ import org.metacsp.multi.spatial.rectangleAlgebra.RectangularRegion;
 import org.metacsp.multi.spatial.rectangleAlgebra.UnaryRectangleConstraint;
 import org.metacsp.time.Bounds;
 import org.metacsp.utility.logging.MetaCSPLogging;
+
+import com.google.common.collect.Sets;
+
+import fluentSolver.Fluent;
+import fluentSolver.FluentConstraint;
+import fluentSolver.FluentNetworkSolver;
+import hybridDomainParsing.HybridDomain;
+import hybridDomainParsing.SubDifferentDefinition;
+import integers.IntegerConstraint;
 import resourceFluent.ResourceUsageTemplate;
 import unify.CompoundSymbolicValueConstraint;
 import unify.CompoundSymbolicVariable;
-
-import java.util.*;
-import java.util.Map.Entry;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.logging.Logger;
 
 public abstract class PlanReportroryItem {
 	
@@ -51,6 +57,7 @@ public abstract class PlanReportroryItem {
 
 	protected IntegerConstraintTemplate[] integerConstraintTemplates;
 	protected List<SpatialConstraintTemplate> rectangularConstraintTemplates;
+	protected List<Double> mdpTemplate;
 	
 	protected Map<String, Map<String, Integer>> variableOccurrencesMap;
 	protected Map<String,String[]> variablesPossibleValuesMap = new HashMap<>();
@@ -113,6 +120,11 @@ public abstract class PlanReportroryItem {
 	public void addSpatialConstraint(List<SpatialConstraintTemplate> rectangularConstraintTemplates2) {
 		if(!rectangularConstraintTemplates2.isEmpty())
 		this.rectangularConstraintTemplates=rectangularConstraintTemplates2;		
+	}
+	
+	public void addMdpTemplate(List<Double> reward) {
+		if(!reward.isEmpty())
+		this.mdpTemplate=reward;		
 	}
 
 	public String getName() {
@@ -1106,5 +1118,9 @@ public abstract class PlanReportroryItem {
 
 	public String[] getStringArgumentNames() {
 		return arguments;
+	}
+	
+	public List<Double> GetMDPTemplate() {
+		return mdpTemplate;
 	}
 }

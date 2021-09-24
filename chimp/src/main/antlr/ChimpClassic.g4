@@ -59,6 +59,7 @@ op_element : precondition_def #precondition_op_element
              | integer_constraint_def #integer_constraint_op_element
              | spatial_constraint_def #spatial_constraint_op_element
              | delete_spatial_constraint_def #delete_spatial_constraint_op_element
+			 | mdp_reward_def #mdp_reward_op_element
              ;
 
 precondition_def : '(Pre' id predicate ')';
@@ -119,6 +120,8 @@ bound : NUMBER | 'INF';
 
 id_or_task : id | 'task';
 
+mdp_reward_def : '(Reward' DOUBLE ')';
+
 resource_usage_def : '(ResourceUsage' NAME NUMBER ')'
                    | '(ResourceUsage' usage_def param_item* ')';
 
@@ -159,6 +162,7 @@ var_or_const : NAME | VAR_NAME;
 */
 
 VAR_NAME : '?'NAME;
+DOUBLE : NUMBER '.' NUMBER;
 
 NAME : [a-zA-Z!][a-zA-Z0-9\-_!]* ;
 /*COMMENT : ('#' ~[\r\n]* ('\r'|'\n') ('\r'|'\n')? ) -> skip ; */
