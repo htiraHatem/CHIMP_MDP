@@ -15,7 +15,7 @@
 (:operator 
   (Head !getVehicle(?v))
   (Add e1 has(?v))
-  (Reward 0.04)
+  (Reward -0.04)
 )
 
 (:operator 
@@ -24,7 +24,7 @@
   (Pre p2 agent_at(?l1))
   (Del p2)
   (Add e1 agent_at(?l2))
-  #(Reward -0.04)
+  (Reward -0.04)
   #TODO to specify the reward for the final states
 )
 

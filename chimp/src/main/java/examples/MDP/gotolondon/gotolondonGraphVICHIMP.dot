@@ -4,15 +4,15 @@ digraph {
 "5" [label=" S5   : (r:1.0 ), Utility : 1.0 " shape=doubleoctagon];
 "9" [label=" S9   : (r:1.0 ), Utility : 1.0 " shape=doubleoctagon];
 "11" [label=" S11   : (r:1.0 ), Utility : 1.0 " shape=doubleoctagon];
-"0" [label=" S0   : (reward:-0.111 ), Utility : 1.949 "];
-"1" [label=" S1   : (reward:0.04 ), Utility : 2.06 "];
-"2" [label=" S2   : (reward:1.0 ), Utility : 2.02 "];
-"3" [label=" S3   : (reward:0.04 ), Utility : 2.04 "];
-"4" [label=" S4   : (reward:1.0 ), Utility : 2.0 "];
-"6" [label=" S6   : (reward:1.0 ), Utility : 1.612 "];
-"7" [label=" S7   : (reward:0.04 ), Utility : 2.04 "];
-"8" [label=" S8   : (reward:1.0 ), Utility : 2.0 "];
-"10" [label=" S10   : (reward:1.0 ), Utility : 2.0 "];
+"0" [label=" S0   : (reward:-0.111 ), Utility : 0.269 "];
+"1" [label=" S1   : (reward:-0.04 ), Utility : 0.38 "];
+"2" [label=" S2   : (reward:-0.04 ), Utility : 0.42 "];
+"3" [label=" S3   : (reward:-0.04 ), Utility : 0.9199999999999999 "];
+"4" [label=" S4   : (reward:-0.04 ), Utility : 0.96 "];
+"6" [label=" S6   : (reward:-0.04 ), Utility : 0.23599999999999996 "];
+"7" [label=" S7   : (reward:-0.04 ), Utility : 0.9199999999999999 "];
+"8" [label=" S8   : (reward:-0.04 ), Utility : 0.96 "];
+"10" [label=" S10   : (reward:-0.04 ), Utility : 0.96 "];
 "0" -> "1" [ label="getVehicle(car) (ProbTrans : 1,00)"
 , arrowhead = diamond , color=green];"1" -> "2" [ label="moveTo(home,airport,car) (ProbTrans : 1,00)"
 , arrowhead = diamond , color=green];"1" -> "6" [ label="moveTo(home,harbor,car) (ProbTrans : 1,00)"

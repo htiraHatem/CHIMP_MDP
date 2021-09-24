@@ -1260,7 +1260,7 @@ public class ChimpClassicReader implements ChimpClassicVisitor {
 	@Override
 	public Double visitMDP_reward_op_element(Mdp_reward_op_elementContext d) {
 
-		return Double.valueOf(d.mdp_reward_def().DOUBLE().getText());
+		return Double.valueOf(d.mdp_reward_def().double_or_int().getText());
 	}
 
 

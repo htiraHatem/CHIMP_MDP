@@ -120,7 +120,7 @@ bound : NUMBER | 'INF';
 
 id_or_task : id | 'task';
 
-mdp_reward_def : '(Reward' DOUBLE ')';
+mdp_reward_def : '(Reward' double_or_int ')';
 
 resource_usage_def : '(ResourceUsage' NAME NUMBER ')'
                    | '(ResourceUsage' usage_def param_item* ')';
@@ -153,6 +153,8 @@ int_args : var_or_int*;
 
 var_or_int : VAR_NAME | NUMBER;
 
+double_or_int : DOUBLE | (MINUS)? NUMBER;
+
 id : NAME;
 
 var_or_const : NAME | VAR_NAME;
@@ -162,7 +164,9 @@ var_or_const : NAME | VAR_NAME;
 */
 
 VAR_NAME : '?'NAME;
-DOUBLE : NUMBER '.' NUMBER;
+DOUBLE :  (MINUS)? NUMBER '.' NUMBER ;
+MINUS: '-';
+
 
 NAME : [a-zA-Z!][a-zA-Z0-9\-_!]* ;
 /*COMMENT : ('#' ~[\r\n]* ('\r'|'\n') ('\r'|'\n')? ) -> skip ; */
