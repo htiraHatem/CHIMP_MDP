@@ -35,26 +35,24 @@ public class TestRaceMDP {
 	static final boolean PRINT_PLAN = true;
 
 	public static void main(String[] args) throws Exception {
-		
+
 		String domainFile = "src/main/java/examples/MDP/RACE/domainRace.ddl";
 
-		//robot at manArea
+		// robot at manArea
 //		String problemFile = "src/main/java/examples/MDP/RACE/test_m_get_object_0.pdl";
 //		String mdpGraph = "src/main/java/examples/MDP/RACE/test_m_get_object_0.dot";
-		
-		//robot at preManArea
+
+		// robot at preManArea
 //		String problemFile = "src/main/java/examples/MDP/RACE/test_m_get_object_1.pdl";
 //		String mdpGraph = "src/main/java/examples/MDP/RACE/test_m_get_object_1.dot";
 
-		//drive to table2 holding tray + A or B
+		// drive to table2 holding tray + A or B
 		String problemFile = "src/main/java/examples/MDP/RACE/test_m_drive_robot_1.pdl";
 		String mdpGraph = "src/main/java/examples/MDP/RACE/test_m_drive_robot_1.dot";
-		
-		//test spatial Solver and spatial fluents : works !
+
+		// test spatial Solver and spatial fluents : works !
 //		String problemFile = "src/main/java/examples/MDP/RACE/test_m_get_object_testSpatialFluent.pdl";
 //		String mdpGraph = "src/main/java/examples/MDP/RACE/test_spatialFluent.dot";
-		
-
 
 		ValueOrderingH valOH = new UnifyDeepestWeightNewestbindingsValOH();
 		CHIMP.CHIMPBuilder builder;
@@ -78,7 +76,7 @@ public class TestRaceMDP {
 		HtnMdpFactory<HTNState, HTNAction> mdp = HTNChimpToMDP.MDP(expander, fullyExpanded);
 
 		// value iteration
-		//TODO update gamme value and test it
+		// TODO update gamme value and test it
 		ValueIteration<HTNState, HTNAction> pi = new ValueIteration<HTNState, HTNAction>(1);
 		Map<HTNState, Double> policy = pi.valueIteration(mdp, 0.0001);
 
@@ -86,7 +84,7 @@ public class TestRaceMDP {
 			System.out.println("**" + s.getKey() + "  :  " + s.getValue());
 		}
 
-		//test PI
+		// test PI
 
 //		PolicyIteration<HTNState, HTNAction> pi = new PolicyIteration<HTNState, HTNAction>(
 //				new ModifiedPolicyEvaluation<HTNState, HTNAction>(50, 1.0));
@@ -105,10 +103,9 @@ public class TestRaceMDP {
 			writer.close();
 
 		}
-		
-		
+
 //		// generate a solution based on chimp Backtrack algorithm
-		
+
 //		System.out.println("Found plan? " + chimp.generatePlan());
 //
 //		if (PRINT_PLAN) {

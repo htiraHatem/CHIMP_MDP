@@ -23,7 +23,7 @@ import mdpSolver.HTNTransitionProbabilityFunction;
 import mdpSolver.HtnMdpFactory;
 
 /**
- * @author meneguzzi , 
+ * @author meneguzzi ,
  * @updated by Hatem
  */
 public class HTNChimpToMDP {
@@ -43,7 +43,7 @@ public class HTNChimpToMDP {
 		}
 		return actions;
 	}
-	
+
 	public final static Set<HTNState> createMDPStates(HashMap<Task, MultiState> mStates, List<Task> tasks) {
 		logger.info("Creating MDP states");
 
@@ -76,7 +76,7 @@ public class HTNChimpToMDP {
 
 		return new LinkedHashSet<HTNState>(Arrays.asList(states));
 	}
-	
+
 	public final static HTNTransitionProbabilityFunction createTransitionModel(HTNAction actions,
 			HTNTaskNetwork fullyExpanded, Set<HTNState> states, List<HTNState> finalStates) throws Exception {
 		logger.info("Creating Transition Model for MDP");
@@ -92,10 +92,9 @@ public class HTNChimpToMDP {
 			for (Constraint c : fullyExpanded.getConstraints()) {
 				if (c.getTask2().getActionName().equals(action.getName())) {
 					HTNState i = stateTable.get(c.getTask1());
-					
+
 					HTNState j = stateTable.get(c.getTask2());
 					j.setReward(c.getTask2().op.getCost());
-					
 
 					if (i == null)
 						throw new RuntimeException(
@@ -132,7 +131,7 @@ public class HTNChimpToMDP {
 									((Task) si.getTask()).getmDPTemplate().getTransitionProbability());
 						else
 							transitionModel.setTransitionProbability(si, action, sj, 1);
-						
+
 //						if(si.getId()==2) 
 //							transitionModel.setTransitionProbability(si, action, sj, 0.5);
 //						
@@ -148,7 +147,6 @@ public class HTNChimpToMDP {
 //						if((si.getId()==13) && (sj.getId() == 15) )
 //							transitionModel.setTransitionProbability(si, action, sj, 0.7);
 
-						
 						// update transition to test
 //						HTNState s1 = lstate.get(1);//getCare
 //						HTNState s2 = lstate.get(2);//at airport
@@ -159,7 +157,7 @@ public class HTNChimpToMDP {
 //
 //						if(si.equals(s1) && sj.equals(s3))
 //							transitionModel.setTransitionProbability(si, action, sj, 0.9);
-						
+
 					}
 				}
 			}
@@ -167,39 +165,40 @@ public class HTNChimpToMDP {
 		return transitionModel;
 	}
 
-	// a reward	is constant everywhere except the goal
+	// a reward is constant everywhere except the goal
 	public final static HTNReward useDefaultReward(Set<HTNState> states, HTNTaskNetwork fullyExpanded) {
 		HTNReward rewardFunction = new HTNReward() {
 		};
 		for (HTNState sp : states) {
-			//double reward = getBaseReward(sp);
+			// double reward = getBaseReward(sp);
 
-			if(getBaseReward(sp) ==null)
+			if (getBaseReward(sp) == null)
 				rewardFunction.setReward(sp, -0.111);
-			else if(!sp.isFinal())
-			rewardFunction.setReward(sp, getBaseReward(sp));
+			else if (!sp.isFinal())
+				rewardFunction.setReward(sp, getBaseReward(sp));
 			else
-			rewardFunction.setReward(sp, 1.0);
+				rewardFunction.setReward(sp, 1.0);
 		}
 		return rewardFunction;
 	}
-	// a reward	is constant everywhere except the goal
+
+	// a reward is constant everywhere except the goal
 	public final static HTNReward createConstantRewardFunction(Set<HTNState> states, HTNTaskNetwork fullyExpanded) {
 		HTNReward rewardFunction = new HTNReward() {
 		};
 		for (HTNState sp : states) {
 			double reward = getBaseReward(sp.htnState);
 
-			if(!sp.isFinal())
-			rewardFunction.setReward(sp, reward * -0.04);
+			if (!sp.isFinal())
+				rewardFunction.setReward(sp, reward * -0.04);
 			else
-			rewardFunction.setReward(sp, reward * 1);
+				rewardFunction.setReward(sp, reward * 1);
 		}
 		return rewardFunction;
 	}
-	
-	// a reward	is proportional to distance to the goal
-	//length to the goal task
+
+	// a reward is proportional to distance to the goal
+	// length to the goal task
 	public final static HTNReward createProportionalRewardFunction(Set<HTNState> states, HTNTaskNetwork fullyExpanded) {
 		HTNReward rewardFunction = new HTNReward() {
 		};
@@ -214,89 +213,87 @@ public class HTNChimpToMDP {
 		}
 		return rewardFunction;
 	}
-	
-	// a reward	is favorise the shortest path via northTable
+
+	// a reward is favorise the shortest path via northTable
 	public final static HTNReward createScenario1RewardFunction(Set<HTNState> states, HTNTaskNetwork fullyExpanded) {
 		HTNReward rewardFunction = new HTNReward() {
 		};
 		for (HTNState sp : states) {
 			double reward = getBaseReward(sp.htnState);
 
-			if(!sp.isFinal()) {
-				if (sp.getId() ==3)
+			if (!sp.isFinal()) {
+				if (sp.getId() == 3)
 					rewardFunction.setReward(sp, reward * -0.03);
 				else
 					rewardFunction.setReward(sp, reward * -0.04);
-			}
-			else {
-				if (sp.getId() ==7)
+			} else {
+				if (sp.getId() == 7)
 					rewardFunction.setReward(sp, reward * 2);
 				else
-					rewardFunction.setReward(sp, reward * 1);		
+					rewardFunction.setReward(sp, reward * 1);
 			}
 		}
 		return rewardFunction;
 	}
-	
-	// a reward	is favorise the longest/safer path via northTable
+
+	// a reward is favorise the longest/safer path via northTable
 	public final static HTNReward createScenario2RewardFunction(Set<HTNState> states, HTNTaskNetwork fullyExpanded) {
 		HTNReward rewardFunction = new HTNReward() {
 		};
 		for (HTNState sp : states) {
 			double reward = getBaseReward(sp.htnState);
 
-			if(!sp.isFinal()) {
-				if (sp.getId() ==3)
+			if (!sp.isFinal()) {
+				if (sp.getId() == 3)
 					rewardFunction.setReward(sp, reward * -0.03);
 				else
 					rewardFunction.setReward(sp, reward * -0.04);
-			}
-			else {
-				if (sp.getId() ==9)
+			} else {
+				if (sp.getId() == 9)
 					rewardFunction.setReward(sp, reward * 1.1);
 				else
-					rewardFunction.setReward(sp, reward * 1);		
+					rewardFunction.setReward(sp, reward * 1);
 			}
 		}
 		return rewardFunction;
 	}
-	
-	// a reward	is favorise the longest/safer path via southTable
-		public final static HTNReward createScenario3RewardFunction(Set<HTNState> states, HTNTaskNetwork fullyExpanded) {
-			HTNReward rewardFunction = new HTNReward() {
-			};
-			for (HTNState sp : states) {
-				double reward = getBaseReward(sp.htnState);
 
-				if(!sp.isFinal()) {
-					if (sp.getId() ==10)
-						rewardFunction.setReward(sp, reward * -0.03);
-					else
-						rewardFunction.setReward(sp, reward * -0.04);
-				}
-				else {
-					if (sp.getId() ==16)
-						rewardFunction.setReward(sp, reward * 1.1);
-					else
-						rewardFunction.setReward(sp, reward * 1);		
-				}
+	// a reward is favorise the longest/safer path via southTable
+	public final static HTNReward createScenario3RewardFunction(Set<HTNState> states, HTNTaskNetwork fullyExpanded) {
+		HTNReward rewardFunction = new HTNReward() {
+		};
+		for (HTNState sp : states) {
+			double reward = getBaseReward(sp.htnState);
+
+			if (!sp.isFinal()) {
+				if (sp.getId() == 10)
+					rewardFunction.setReward(sp, reward * -0.03);
+				else
+					rewardFunction.setReward(sp, reward * -0.04);
+			} else {
+				if (sp.getId() == 16)
+					rewardFunction.setReward(sp, reward * 1.1);
+				else
+					rewardFunction.setReward(sp, reward * 1);
 			}
-			return rewardFunction;
 		}
-		
+		return rewardFunction;
+	}
+
 	private final static int getBaseReward(MultiState state) {
 		return 1;
 	}
-	
+
 	private final static Double getBaseReward(HTNState state) {
 		return state.getReward();
 	}
-	
-	public final static HtnMdpFactory<HTNState, HTNAction> MDP(HTNExpander expander, HTNTaskNetwork fullyExpanded) throws Exception {
+
+	public final static HtnMdpFactory<HTNState, HTNAction> MDP(HTNExpander expander, HTNTaskNetwork fullyExpanded)
+			throws Exception {
 		//
 		// get methodes
 		HashMap<Task, MultiState> mStates = expander.getMStates();
-		
+
 		// Get actions
 		HTNAction actions = HTNChimpToMDP.createMDPActions(fullyExpanded.getOrderedTasks1());
 
@@ -309,7 +306,7 @@ public class HTNChimpToMDP {
 		for (Task t : unprec) {
 			fullyExpanded.addBeforeConstraint(t0, t);
 		}
-		
+
 		List<Task> tasks = new ArrayList<Task>(fullyExpanded.getOrderedTasks1());
 
 		// create states
@@ -318,33 +315,35 @@ public class HTNChimpToMDP {
 		List<HTNState> finalStates = new ArrayList<HTNState>();
 
 		// get transition function
-		HTNTransitionProbabilityFunction transitionModel = HTNChimpToMDP.createTransitionModel(actions, fullyExpanded, states,
-				finalStates);
+		HTNTransitionProbabilityFunction transitionModel = HTNChimpToMDP.createTransitionModel(actions, fullyExpanded,
+				states, finalStates);
 
 		// Display transitions
-		//transitionModel.display();
-		
-		
-		//use the the specified rewards in the domain
+		// transitionModel.display();
+
+		// use the the specified rewards in the domain
 		HTNReward rewardFunction = HTNChimpToMDP.useDefaultReward(states, fullyExpanded);
 
-		
 		// get or create reward function
-		//HTNReward rewardFunction = createProportionalRewardFunction(states, fullyExpanded);
-		//HTNReward rewardFunction = HTNChimpToMDP.createConstantRewardFunction(states, fullyExpanded);
-		
-		// a reward	is favorise the shortest path via northTable
-		//HTNReward rewardFunction = HTNChimpToMDP.createScenario1RewardFunction(states, fullyExpanded);
-		
-		// a reward	is favorise the longest/safer path via northTable
-		//HTNReward rewardFunction = HTNChimpToMDP.createScenario2RewardFunction(states, fullyExpanded);
+		// HTNReward rewardFunction = createProportionalRewardFunction(states,
+		// fullyExpanded);
+		// HTNReward rewardFunction = HTNChimpToMDP.createConstantRewardFunction(states,
+		// fullyExpanded);
 
-		// a reward	is favorise the longest/safer path via northTable
-		//HTNReward rewardFunction = HTNChimpToMDP.createScenario3RewardFunction(states, fullyExpanded);
-		
+		// a reward is favorise the shortest path via northTable
+		// HTNReward rewardFunction =
+		// HTNChimpToMDP.createScenario1RewardFunction(states, fullyExpanded);
 
-		return new HtnMdpFactory<HTNState, HTNAction>(states,
-				new ArrayList<>(states).get(0), actions, transitionModel, rewardFunction);
+		// a reward is favorise the longest/safer path via northTable
+		// HTNReward rewardFunction =
+		// HTNChimpToMDP.createScenario2RewardFunction(states, fullyExpanded);
+
+		// a reward is favorise the longest/safer path via northTable
+		// HTNReward rewardFunction =
+		// HTNChimpToMDP.createScenario3RewardFunction(states, fullyExpanded);
+
+		return new HtnMdpFactory<HTNState, HTNAction>(states, new ArrayList<>(states).get(0), actions, transitionModel,
+				rewardFunction);
 	}
 
 }

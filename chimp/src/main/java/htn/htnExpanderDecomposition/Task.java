@@ -39,7 +39,8 @@ public class Task extends edu.cmu.ita.htn.Task {
 		setInstance(instance);
 	}
 
-	public Task(edu.cmu.ita.htn.Task createPrimitiveTask, List<ResourceUsageTemplate> resourceUsageTemplate, MDPTemplate mDPTemplate) {
+	public Task(edu.cmu.ita.htn.Task createPrimitiveTask, List<ResourceUsageTemplate> resourceUsageTemplate,
+			MDPTemplate mDPTemplate) {
 		super(createPrimitiveTask);
 		this.resourceUsageIndicators = resourceUsageTemplate;
 		this.mDPTemplate = mDPTemplate;
