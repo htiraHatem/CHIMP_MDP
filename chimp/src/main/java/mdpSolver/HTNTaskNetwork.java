@@ -37,34 +37,25 @@ import unify.CompoundSymbolicVariable;
 			this.orderedTasks = new LinkedList<Task>();
 		}
 		
-		public HTNTaskNetwork (TaskNetwork network){
-			super(network);
-			this.constraints = new HashSet<Constraint>(super.getConstraints());
-			this.orderedTasks = new LinkedList<Task>();
-			if (network instanceof HTNTaskNetwork) {
-				for (Task a : ((HTNTaskNetwork) network).getOrderedTasks1()) {
-					Task t = new Task(a,a.isInstance());
-					orderedTasks.add(t);
-				}
-				this.tasks = new ArrayList<Task>();
-				for (Task a : ((HTNTaskNetwork) network).getTasks1()) {
-					Task t = new Task(a,a.isInstance());
-
-					tasks.add(t);
-				}
-			} else {
-				for (edu.cmu.ita.htn.Task a : network.getOrderedTasks()) {
-					Task t = new Task(a);
-					orderedTasks.add(t); 
-				}
-				this.tasks = new ArrayList<Task>();
-				for (edu.cmu.ita.htn.Task a : network.getTasks()) {
-					tasks.add(new Task(a));
-				}
-
-			}
-
-		}
+//		public HTNTaskNetwork (TaskNetwork network){
+//			super(network);
+//			this.constraints = new HashSet<Constraint>(super.getConstraints());
+//			this.orderedTasks = new LinkedList<Task>();
+//			if (network instanceof HTNTaskNetwork) {
+//				for (Task a : ((HTNTaskNetwork) network).getOrderedTasks1()) {
+//					Task t = new Task(a,a.isInstance());
+//					t.setmDPTemplate(a.getmDPTemplate());
+//					orderedTasks.add(t);
+//				}
+//				this.tasks = new ArrayList<Task>();
+//				for (Task a : ((HTNTaskNetwork) network).getTasks1()) {
+//					Task t = new Task(a,a.isInstance());
+//					t.setmDPTemplate(a.getmDPTemplate());
+//					tasks.add(t);
+//				}
+//			}
+//
+//		}
 		
 		public HTNTaskNetwork (FluentNetworkSolver network) throws Exception{
 			//to update
@@ -109,8 +100,29 @@ import unify.CompoundSymbolicVariable;
 //			}
 		}
 		
-		
+		/**
+		 * Creates a task network that assumes the elements in it are in full order (and creates constraints to this effect)
+		 * @param tasks
+		 */
+		public HTNTaskNetwork(Task tasks[]) {
+			this();
+			this.addTasks(tasks);
+			this.orderedTasks.addAll(this.tasks);
+			for(int i=0; i < tasks.length-1 ; i++) {
+				this.addBeforeConstraint(tasks[i], tasks[i+1]);
+			}
+		}
 
+		/**
+		 * Helper method
+		 * @param tasks
+		 */
+		public void addTasks(Task ... tasks) {
+			for(Task t:tasks) {
+				this.tasks.add(t);
+			}
+			this.orderedTasks.clear();
+		}
 
 		public HashSet<Constraint> getConstraints() {
 			return this.constraints;

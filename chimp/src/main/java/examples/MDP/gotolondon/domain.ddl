@@ -15,7 +15,8 @@
 (:operator 
   (Head !getVehicle(?v))
   (Add e1 has(?v))
-  (Reward -0.04)
+  (Reward -0.04) # reward is attached with action and will be assigned to the current state 
+  (TransitionProb 0.8) # tranistion probability is attached to the Task
 )
 
 (:operator 
@@ -25,6 +26,7 @@
   (Del p2)
   (Add e1 agent_at(?l2))
   (Reward -0.04)
+  (TransitionProb 0.2)
   #TODO to specify the reward for the final states
 )
 

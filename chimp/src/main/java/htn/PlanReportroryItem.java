@@ -57,7 +57,7 @@ public abstract class PlanReportroryItem {
 
 	protected IntegerConstraintTemplate[] integerConstraintTemplates;
 	protected List<SpatialConstraintTemplate> rectangularConstraintTemplates;
-	protected List<Double> mdpTemplate;
+	protected MDPTemplate mdpTemplate;
 	
 	protected Map<String, Map<String, Integer>> variableOccurrencesMap;
 	protected Map<String,String[]> variablesPossibleValuesMap = new HashMap<>();
@@ -122,9 +122,8 @@ public abstract class PlanReportroryItem {
 		this.rectangularConstraintTemplates=rectangularConstraintTemplates2;		
 	}
 	
-	public void addMdpTemplate(List<Double> reward) {
-		if(!reward.isEmpty())
-		this.mdpTemplate=reward;		
+	public void addMdpTemplate(MDPTemplate mdpTemplate) {
+		this.mdpTemplate=mdpTemplate;		
 	}
 
 	public String getName() {
@@ -1120,7 +1119,7 @@ public abstract class PlanReportroryItem {
 		return arguments;
 	}
 	
-	public List<Double> GetMDPTemplate() {
+	public MDPTemplate GetMDPTemplate() {
 		return mdpTemplate;
 	}
 }

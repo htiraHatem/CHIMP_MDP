@@ -92,8 +92,7 @@ public class HTNExpander {
 		return fullDecomposition(problem, domain);
 	}
 
-	private final HTNTaskNetwork fullDecomposition(HTNTaskNetwork problem, HTNChimpDomain domain) {
-		HTNTaskNetwork ChimpProblem = new HTNTaskNetwork(problem);
+	private final HTNTaskNetwork fullDecomposition(HTNTaskNetwork ChimpProblem, HTNChimpDomain domain) {
 		// At this point we have finished expanding the HTN
 		if (ChimpProblem.allTasksArePrimitive() && getUnresolvedTask(ChimpProblem) == null) {
 			return ChimpProblem;
@@ -236,9 +235,9 @@ public class HTNExpander {
 			boolean inPlace, HTNDomain domain) {
 		assert (network.hasTask(task));
 
-		if (!inPlace) {
-			network = new HTNTaskNetwork(network);
-		}
+//		if (!inPlace) {
+//			network = new HTNTaskNetwork(network);
+//		}
 		List<Constraint> constraintsAfter = network.findConstraintsWithTaskAfter(task);
 		List<Constraint> constraintsBefore = network.findConstraintsWithTaskBefore(task);
 		network.removeTask(task);

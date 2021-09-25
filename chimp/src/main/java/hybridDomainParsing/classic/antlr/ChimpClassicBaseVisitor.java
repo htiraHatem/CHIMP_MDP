@@ -8,6 +8,7 @@ import hybridDomainParsing.classic.antlr.ChimpClassicParser.Delete_spatial_const
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Delete_spatial_constraint_op_elementContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Mdp_reward_defContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Mdp_reward_op_elementContext;
+import hybridDomainParsing.classic.antlr.ChimpClassicParser.Mdp_transitionprobability_op_elementContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Spatial_constraint1_defContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Spatial_constraint2_defContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Spatial_constraint_defContext;
@@ -593,6 +594,11 @@ public class ChimpClassicBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 
 	@Override
 	public Double visitMDP_reward_op_element(Mdp_reward_op_elementContext ctx) {
+		return (Double) visitChildren(ctx);
+	}
+	
+	@Override
+	public Double visitMDP_transitionprobability_op_element(Mdp_transitionprobability_op_elementContext ctx) {
 		return (Double) visitChildren(ctx);
 	}
 

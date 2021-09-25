@@ -8,6 +8,7 @@ import htn.HTNOperator;
 import htn.HTNPrecondition;
 import htn.IntArg;
 import htn.IntegerConstraintTemplate;
+import htn.MDPTemplate;
 import htn.OrderingConstraintTemplate;
 import htn.PlanReportroryItem;
 import htn.SpatialConstraintTemplate;
@@ -19,6 +20,7 @@ import hybridDomainParsing.classic.antlr.ChimpClassicParser.Delete_spatial_const
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Delete_spatial_constraint_defContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Mdp_reward_defContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Mdp_reward_op_elementContext;
+import hybridDomainParsing.classic.antlr.ChimpClassicParser.Mdp_transitionprobability_op_elementContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Spatial_constraint_op_elementContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Unary_spatial_constraint_typeContext;
 import integers.IntegerConstraint;
@@ -414,8 +416,9 @@ public class ChimpClassicReader implements ChimpClassicVisitor {
         List<IntegerConstraintTemplate> integerConstraintTemplates = new ArrayList<>();
         List<ResourceUsageTemplate> resourceUsageTemplates = new ArrayList<>();
         List<SpatialConstraintTemplate> rectangularConstraintTemplates = new ArrayList<>();
-        List<Double> reward = new ArrayList<>();
+        MDPTemplate mdpTemplate = new MDPTemplate();
         for (ChimpClassicParser.Op_elementContext d : ctx.op_element()) {
+
             if (d instanceof ChimpClassicParser.Precondition_op_elementContext) {
                 parsedPreconditions.add(visitPrecondition_op_element(
                         (ChimpClassicParser.Precondition_op_elementContext) d));
@@ -456,9 +459,15 @@ public class ChimpClassicReader implements ChimpClassicVisitor {
             	rectangularConstraintTemplates.add((SpatialConstraintTemplate) visitDeleteSpatial_constraint_op_element(
                         (ChimpClassicParser.Delete_spatial_constraint_op_elementContext) d));
             }else if (d instanceof ChimpClassicParser.Mdp_reward_op_elementContext) {
-            	reward.add(visitMDP_reward_op_element(
+            	mdpTemplate.setReward(visitMDP_reward_op_element(
                         (ChimpClassicParser.Mdp_reward_op_elementContext) d));
+            }else if (d instanceof ChimpClassicParser.Mdp_transitionprobability_op_elementContext) {
+            	mdpTemplate.setTransitionProbability(visitMDP_transitionprobability_op_element(
+                        (ChimpClassicParser.Mdp_transitionprobability_op_elementContext) d));
             }
+//            if((mdp.getReward() != null) || (mdp.getTransitionProbability() != null))
+//        	mdpTemplate.add(mdp);
+
         }
 
         HTNPrecondition[] htnPreconditions = createHTNPreconditionsAndNegativeEffects(head,
@@ -484,7 +493,7 @@ public class ChimpClassicReader implements ChimpClassicVisitor {
                 integerConstraintTemplates.toArray(new IntegerConstraintTemplate[integerConstraintTemplates.size()]));
 
         op.addSpatialConstraint(rectangularConstraintTemplates);
-        op.addMdpTemplate(reward);
+        op.addMdpTemplate(mdpTemplate);
 
         op.addResourceUsageTemplates(resourceUsageTemplates);
 
@@ -1259,8 +1268,12 @@ public class ChimpClassicReader implements ChimpClassicVisitor {
     
 	@Override
 	public Double visitMDP_reward_op_element(Mdp_reward_op_elementContext d) {
-
 		return Double.valueOf(d.mdp_reward_def().double_or_int().getText());
+	}
+
+	@Override
+	public Double visitMDP_transitionprobability_op_element(Mdp_transitionprobability_op_elementContext ctx) {
+		return Double.valueOf(ctx.mdp_transitionProbability_def().double_or_int().getText());
 	}
 
 

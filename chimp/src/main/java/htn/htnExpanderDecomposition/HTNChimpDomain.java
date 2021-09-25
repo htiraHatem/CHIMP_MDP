@@ -22,6 +22,7 @@ import edu.cmu.ita.htn.parser.Token;
 import examples.MDP.TestVI;
 import htn.EffectTemplate;
 import htn.HTNPrecondition;
+import htn.MDPTemplate;
 import htn.PlanReportroryItem;
 import hybridDomainParsing.ClassicHybridDomain;
 import jason.asSemantics.Unifier;
@@ -94,22 +95,22 @@ public class HTNChimpDomain extends HTNDomain {
 			}
 
 			Operator op = null;double cost=1;
-			if(i.GetMDPTemplate()!=null)
-			 cost = i.GetMDPTemplate().get(0);
+			if(i.GetMDPTemplate().getReward()!=null)
+			 cost = i.GetMDPTemplate().getReward();
 
 			String head;
 			List<String> pars = Arrays.asList(i.getStringArgumentNames());
 			head = convertLISPAtom(i.getName(), pars);
 			add.addAll(del.negateAll());
 			op = new Operator(HTNFactory.createOperator(head, pre, add, cost));
-			this.addHtnAction(new Task( HTNFactory.createPrimitiveTask(op), i.getResourceUsageTemplate(), cost));
+			this.addHtnAction(new Task( HTNFactory.createPrimitiveTask(op), i.getResourceUsageTemplate(), i.GetMDPTemplate()));
 		}
 
 		// HTNùethods
 		for (PlanReportroryItem i : M) {
 			String head;
 			LogicExpression pre = null;
-			TaskNetwork tn = null;
+			HTNTaskNetwork tn = null;
 
 			List<String> pars = Arrays.asList(i.getStringArgumentNames());
 			head = convertLISPAtom(i.getName(), pars);
@@ -138,7 +139,13 @@ public class HTNChimpDomain extends HTNDomain {
 
 				List<String> effArg = Arrays.asList(eff.getInputArgs());
 				String head1 = convertLISPAtom(eff.getName(), effArg);
-				Task sub = new Task (HTNFactory.createTask(head1));				
+				Task sub = new Task (HTNFactory.createTask(head1));	
+				for(Task tsk : this.htnActions) {
+					String  subTaskName =eff.getName().substring(1);;
+					
+					if(tsk.getName().equals(subTaskName))
+						sub.setmDPTemplate(tsk.getmDPTemplate());
+				}
 
 				tl.add(sub);
 			}
@@ -181,11 +188,11 @@ public class HTNChimpDomain extends HTNDomain {
 	    return domain;
 	  }
 	
-	  private final TaskNetwork createTaskNetwork(List< Task > tasks, boolean ordered) {
+	  private final HTNTaskNetwork createTaskNetwork(List< Task > tasks, boolean ordered) {
 	        if(ordered) {
-	                return new TaskNetwork(tasks.toArray(new Task[0]));
+	                return new HTNTaskNetwork(tasks.toArray(new Task[0]));
 	        } else {
-	                TaskNetwork tn = new TaskNetwork();
+	        	HTNTaskNetwork tn = new HTNTaskNetwork();
 	                for(Task t:tasks) tn.addTask(t);
 	                return tn;
 	        }

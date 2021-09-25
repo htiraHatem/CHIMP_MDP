@@ -13,6 +13,7 @@ import java.util.List;
 
 import aima.core.agent.State;
 import edu.cmu.ita.htn.Operator;
+import htn.MDPTemplate;
 
 /**
  * @Updated by Hatem
@@ -23,7 +24,7 @@ public class Task extends edu.cmu.ita.htn.Task {
 	private static final long serialVersionUID = 1L;
 
 	protected List<ResourceUsageTemplate> resourceUsageIndicators = new ArrayList<ResourceUsageTemplate>();
-	protected Double reward;
+	protected MDPTemplate mDPTemplate = new MDPTemplate();
 
 	public Task(String sTask) throws Exception {
 		super(sTask);
@@ -38,14 +39,22 @@ public class Task extends edu.cmu.ita.htn.Task {
 		setInstance(instance);
 	}
 
-	public Task(edu.cmu.ita.htn.Task createPrimitiveTask, List<ResourceUsageTemplate> resourceUsageTemplate, Double reward) {
+	public Task(edu.cmu.ita.htn.Task createPrimitiveTask, List<ResourceUsageTemplate> resourceUsageTemplate, MDPTemplate mDPTemplate) {
 		super(createPrimitiveTask);
 		this.resourceUsageIndicators = resourceUsageTemplate;
-		this.reward = reward;
+		this.mDPTemplate = mDPTemplate;
 	}
 
 	public Unifier getUn() {
 		return un;
+	}
+
+	public MDPTemplate getmDPTemplate() {
+		return mDPTemplate;
+	}
+
+	public void setmDPTemplate(MDPTemplate mDPTemplate) {
+		this.mDPTemplate = mDPTemplate;
 	}
 
 	public void setUn(Unifier un) {

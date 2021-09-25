@@ -127,22 +127,26 @@ public class HTNChimpToMDP {
 					if (prob != 0) {
 						HTNState si = lstate.get(i);
 						HTNState sj = lstate.get(j);
-						transitionModel.setTransitionProbability(si, action, sj, 1);
+						if (((Task) si.getTask()).getmDPTemplate().getTransitionProbability() != null)
+							transitionModel.setTransitionProbability(si, action, sj,
+									((Task) si.getTask()).getmDPTemplate().getTransitionProbability());
+						else
+							transitionModel.setTransitionProbability(si, action, sj, 1);
 						
-						if(si.getId()==2) 
-							transitionModel.setTransitionProbability(si, action, sj, 0.5);
-						
-						if((si.getId()==6) && (sj.getId() == 7) )
-							transitionModel.setTransitionProbability(si, action, sj, 0.3);
-						
-						if((si.getId()==6) && (sj.getId() == 8) )
-							transitionModel.setTransitionProbability(si, action, sj, 0.7);
-						
-						if((si.getId()==13) && (sj.getId() == 14) )
-							transitionModel.setTransitionProbability(si, action, sj, 0.3);
-						
-						if((si.getId()==13) && (sj.getId() == 15) )
-							transitionModel.setTransitionProbability(si, action, sj, 0.7);
+//						if(si.getId()==2) 
+//							transitionModel.setTransitionProbability(si, action, sj, 0.5);
+//						
+//						if((si.getId()==6) && (sj.getId() == 7) )
+//							transitionModel.setTransitionProbability(si, action, sj, 0.3);
+//						
+//						if((si.getId()==6) && (sj.getId() == 8) )
+//							transitionModel.setTransitionProbability(si, action, sj, 0.7);
+//						
+//						if((si.getId()==13) && (sj.getId() == 14) )
+//							transitionModel.setTransitionProbability(si, action, sj, 0.3);
+//						
+//						if((si.getId()==13) && (sj.getId() == 15) )
+//							transitionModel.setTransitionProbability(si, action, sj, 0.7);
 
 						
 						// update transition to test

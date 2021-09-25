@@ -1,5 +1,3 @@
-package hybridDomainParsing.classic.antlr;
-
 // Generated from ChimpClassic.g4 by ANTLR 4.9.1
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;

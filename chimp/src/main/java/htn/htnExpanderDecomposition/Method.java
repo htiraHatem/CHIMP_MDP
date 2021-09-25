@@ -54,12 +54,12 @@ public class Method {
 		this.taskNetwork = taskNetwork;
 	}
 	
-	public Method(String head, Task task2, LogicExpression pre, TaskNetwork tn) {
-		this.name = head;
-		this.task = task2;
-		this.precond = pre;
-		this.taskNetwork = new HTNTaskNetwork(tn);
-		}
+//	public Method(String head, Task task2, LogicExpression pre, TaskNetwork tn) {
+//		this.name = head;
+//		this.task = task2;
+//		this.precond = pre;
+//		this.taskNetwork = new HTNTaskNetwork(tn);
+//		}
 
 
 	/**
@@ -106,7 +106,8 @@ public class Method {
 //		for(int i=0; i<taskNetwork.tasks.size(); i++) {
 //			Task t = taskNetwork.tasks.get(i);
 			Task tInstance =  Task.instantiateTask(t, un, domain.getInstances());
-			instMap.put((Task) t, tInstance);
+			tInstance.setmDPTemplate(t.getmDPTemplate());
+			instMap.put(t, tInstance);
 //			instMap[i] = tInstance;
 			tnInstance.addTask(tInstance);
 		}
