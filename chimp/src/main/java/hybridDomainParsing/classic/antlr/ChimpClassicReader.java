@@ -18,11 +18,14 @@ import hybridDomainParsing.HybridDomain;
 import hybridDomainParsing.SubDifferentDefinition;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Delete_spatial_constraint1_defContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Delete_spatial_constraint_defContext;
+import hybridDomainParsing.classic.antlr.ChimpClassicParser.If_mdp_defContext;
+import hybridDomainParsing.classic.antlr.ChimpClassicParser.If_mdp_op_elementContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Mdp_reward_defContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Mdp_reward_op_elementContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Mdp_transitionprobability_op_elementContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Spatial_constraint_op_elementContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Unary_spatial_constraint_typeContext;
+import hybridDomainParsing.classic.antlr.ChimpClassicParser.Value_restriction_defContext;
 import integers.IntegerConstraint;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -464,7 +467,11 @@ public class ChimpClassicReader implements ChimpClassicVisitor {
             }else if (d instanceof ChimpClassicParser.Mdp_transitionprobability_op_elementContext) {
             	mdpTemplate.setTransitionProbability(visitMDP_transitionprobability_op_element(
                         (ChimpClassicParser.Mdp_transitionprobability_op_elementContext) d));
+            }else if (d instanceof ChimpClassicParser.If_mdp_op_elementContext) {
+            	mdpTemplate.setMdpTemplate( visitMDP_if_op_element((If_mdp_op_elementContext) d));
             }
+            
+            //visitMDP_if_op_element(If_mdp_defContext
 //            if((mdp.getReward() != null) || (mdp.getTransitionProbability() != null))
 //        	mdpTemplate.add(mdp);
 
@@ -1276,5 +1283,17 @@ public class ChimpClassicReader implements ChimpClassicVisitor {
 		return Double.valueOf(ctx.mdp_transitionProbability_def().double_or_int().getText());
 	}
 
+	@Override
+	public MDPTemplate visitMDP_if_op_element(If_mdp_op_elementContext d) {
+		Value_restriction_defContext valueRes = d.if_mdp_def().value_restriction_def();
+        String varName = valueRes.VAR_NAME().toString();
+        List<String> constants = visitConstant_list(valueRes.constant_list());
+        ValueRestriction VR =  new ValueRestriction(varName, constants);
+        
+        Mdp_reward_defContext rewardDef = d.if_mdp_def().mdp_reward_def();
+        Double reward = Double.valueOf(rewardDef.double_or_int().getText());
+        
+		return new MDPTemplate(VR,reward);
+	}
 
 }

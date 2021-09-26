@@ -61,6 +61,7 @@ op_element : precondition_def #precondition_op_element
              | delete_spatial_constraint_def #delete_spatial_constraint_op_element
 			 | mdp_reward_def #mdp_reward_op_element
 			 | mdp_transitionProbability_def #mdp_transitionprobability_op_element
+			 | if_mdp_def #if_mdp_op_element
 			  ;
 
 precondition_def : '(Pre' id predicate ')';
@@ -122,7 +123,10 @@ bound : NUMBER | 'INF';
 id_or_task : id | 'task';
 
 mdp_reward_def : '(Reward' double_or_int ')';
+
 mdp_transitionProbability_def : '(TransitionProb' double_or_int ')';
+
+if_mdp_def : '(if' value_restriction_def mdp_reward_def ')';
 
 resource_usage_def : '(ResourceUsage' NAME NUMBER ')'
                    | '(ResourceUsage' usage_def param_item* ')';

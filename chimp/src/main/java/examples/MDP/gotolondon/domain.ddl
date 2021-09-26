@@ -17,6 +17,7 @@
   (Add e1 has(?v))
   (Reward -0.04) # reward is attached with action and will be assigned to the current state 
   (TransitionProb 0.8) # tranistion probability is attached to the Task
+  (if (Values ?v car) (Reward -0.01))
 )
 
 (:operator 
