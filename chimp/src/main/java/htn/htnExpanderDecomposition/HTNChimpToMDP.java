@@ -5,9 +5,11 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -15,6 +17,9 @@ import edu.cmu.ita.htn.Constraint;
 import edu.cmu.ita.htn.HTNFactory;
 import edu.cmu.ita.htn.MultiState;
 import edu.cmu.ita.mdp.TransitionMatrix;
+import htn.MDPTemplate;
+import jason.asSemantics.Unifier;
+import jason.asSyntax.Term;
 import mdpSolver.HTNAction;
 import mdpSolver.HTNReward;
 import mdpSolver.HTNState;
@@ -170,13 +175,23 @@ public class HTNChimpToMDP {
 		HTNReward rewardFunction = new HTNReward() {
 		};
 		for (HTNState sp : states) {
-			// double reward = getBaseReward(sp);
-
+			List<MDPTemplate> mdpTemp = ((Task) sp.getTask()).getmDPTemplate().getMdpTemplates();
+			Unifier terms = sp.getTask().getUnifier();
+			for (MDPTemplate m : mdpTemp) {
+				String c = null;
+				// update it with unifier
+				c = HTNChimpDomain.convertLISPTerm(m.getValueRestriction().varName);
+				Term var = terms.get(c);
+				if (m.getValueRestriction().constants.contains(var.toString())) {
+					rewardFunction.setReward(sp, m.getReward());
+				}
+				// to update
+			}
 			if (getBaseReward(sp) == null)
 				rewardFunction.setReward(sp, -0.111);
-			else if (!sp.isFinal())
+			else if ((!sp.isFinal()) && (!rewardFunction.exists(sp)))
 				rewardFunction.setReward(sp, getBaseReward(sp));
-			else
+			else if(!rewardFunction.exists(sp))
 				rewardFunction.setReward(sp, 1.0);
 		}
 		return rewardFunction;

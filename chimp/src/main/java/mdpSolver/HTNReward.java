@@ -29,6 +29,10 @@ public class HTNReward implements Comparable<RewardFunction<HTNState>> {
 	public void setReward(HTNState sp, Double reward) {
 		stateToReward.put(sp, reward);
 	}
+	
+	public Boolean exists(HTNState sp) {
+		return stateToReward.containsKey(sp);
+	}
 
 	@Override
 	public String toString() {

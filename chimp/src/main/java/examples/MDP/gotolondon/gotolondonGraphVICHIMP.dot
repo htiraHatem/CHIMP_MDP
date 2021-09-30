@@ -5,11 +5,11 @@ digraph {
 "7" [label=" S7   : (r:1.0 ), Utility : 1.0 " shape=doubleoctagon];
 "11" [label=" S11   : (r:1.0 ), Utility : 1.0 " shape=doubleoctagon];
 "0" [label=" S0   : (reward:-0.111 ), Utility : -0.111 "];
-"1" [label=" S1   : (reward:-0.04 ), Utility : -0.04 "];
-"2" [label=" S2   : (reward:-0.04 ), Utility : -0.0224 "];
-"3" [label=" S3   : (reward:-0.04 ), Utility : 0.088 "];
+"1" [label=" S1   : (reward:-0.01 ), Utility : -0.01 "];
+"2" [label=" S2   : (reward:-0.04 ), Utility : -0.013199999999999996 "];
+"3" [label=" S3   : (reward:-0.01 ), Utility : 0.134 "];
 "4" [label=" S4   : (reward:-0.04 ), Utility : 0.16 "];
-"6" [label=" S6   : (reward:-0.04 ), Utility : 0.16 "];
+"6" [label=" S6   : (reward:-0.02 ), Utility : 0.18000000000000002 "];
 "8" [label=" S8   : (reward:-0.04 ), Utility : -0.0224 "];
 "9" [label=" S9   : (reward:-0.04 ), Utility : 0.088 "];
 "10" [label=" S10   : (reward:-0.04 ), Utility : 0.16 "];
@@ -18,8 +18,8 @@ digraph {
 , arrowhead = diamond , color=green];"1" -> "8" [ label="moveTo(home,airport,car) (ProbTrans : 0,80)"
 ,style=dotted, arrowhead=tee];"2" -> "3" [ label="getVehicle(ship) (ProbTrans : 0,20)"
 , arrowhead = diamond , color=green];"3" -> "4" [ label="moveTo(harbor,lpool,ship) (ProbTrans : 0,80)"
-, arrowhead = diamond , color=green];"3" -> "6" [ label="moveTo(harbor,soton,ship) (ProbTrans : 0,80)"
-,style=dotted, arrowhead=tee];"4" -> "5" [ label="moveTo(lpool,london,ship) (ProbTrans : 0,20)"
+,style=dotted, arrowhead=tee];"3" -> "6" [ label="moveTo(harbor,soton,ship) (ProbTrans : 0,80)"
+, arrowhead = diamond , color=green];"4" -> "5" [ label="moveTo(lpool,london,ship) (ProbTrans : 0,20)"
 , arrowhead = diamond , color=green];"6" -> "7" [ label="moveTo(soton,london,ship) (ProbTrans : 0,20)"
 , arrowhead = diamond , color=green];"8" -> "9" [ label="getVehicle(plane) (ProbTrans : 0,20)"
 , arrowhead = diamond , color=green];"9" -> "10" [ label="moveTo(airport,nyc,plane) (ProbTrans : 0,80)"

@@ -27,7 +27,7 @@ public class MDPTemplate {
 	}
 
 	public MDPTemplate(ValueRestriction vR, Double reward) {
-		valueRestriction = vR;
+		setValueRestriction(vR);
 		this.reward = reward;
 	}
 
@@ -50,6 +50,14 @@ public class MDPTemplate {
 	}
 	public void setTransitionProbability(Double transitionProbability1) {
 		transitionProbability = transitionProbability1;
+	}
+
+	public ValueRestriction getValueRestriction() {
+		return valueRestriction;
+	}
+
+	public void setValueRestriction(ValueRestriction valueRestriction) {
+		this.valueRestriction = valueRestriction;
 	}
 
 

@@ -213,7 +213,7 @@ public class HTNChimpDomain extends HTNDomain {
 		return sb.toString();
 	}
 
-	private final static String convertLISPTerm(String term) {
+	public final static String convertLISPTerm(String term) {
 		if (term.startsWith("?")) {
 			return "V" + term.substring(1);
 		} else if (term.startsWith("!")) {
