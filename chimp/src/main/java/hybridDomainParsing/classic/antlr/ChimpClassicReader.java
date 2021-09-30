@@ -18,6 +18,7 @@ import hybridDomainParsing.HybridDomain;
 import hybridDomainParsing.SubDifferentDefinition;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Delete_spatial_constraint1_defContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Delete_spatial_constraint_defContext;
+import hybridDomainParsing.classic.antlr.ChimpClassicParser.Else_mdp_op_elementContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.If_mdp_defContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.If_mdp_op_elementContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Mdp_reward_defContext;
@@ -469,7 +470,11 @@ public class ChimpClassicReader implements ChimpClassicVisitor {
                         (ChimpClassicParser.Mdp_transitionprobability_op_elementContext) d));
             }else if (d instanceof ChimpClassicParser.If_mdp_op_elementContext) {
             	mdpTemplate.setMdpTemplate( visitMDP_if_op_element((If_mdp_op_elementContext) d));
+            }else if (d instanceof ChimpClassicParser.Else_mdp_op_elementContext) {
+            	mdpTemplate.setReward( visitMDP_else_op_element((Else_mdp_op_elementContext) d));
             }
+            
+            
             
             //visitMDP_if_op_element(If_mdp_defContext
 //            if((mdp.getReward() != null) || (mdp.getTransitionProbability() != null))
@@ -1294,6 +1299,12 @@ public class ChimpClassicReader implements ChimpClassicVisitor {
         Double reward = Double.valueOf(rewardDef.double_or_int().getText());
         
 		return new MDPTemplate(VR,reward);
+	}
+
+	@Override
+	public Double visitMDP_else_op_element(Else_mdp_op_elementContext ctx) {
+		return Double.valueOf(ctx.else_mdp_def().mdp_reward_def().double_or_int().getText());
+
 	}
 
 }
