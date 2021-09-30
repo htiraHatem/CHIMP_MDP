@@ -99,7 +99,7 @@ public class HTNChimpToMDP {
 					HTNState i = stateTable.get(c.getTask1());
 
 					HTNState j = stateTable.get(c.getTask2());
-					//j.setReward(c.getTask2().op.getCost());
+					// j.setReward(c.getTask2().op.getCost());
 
 					if (i == null)
 						throw new RuntimeException(
@@ -175,28 +175,23 @@ public class HTNChimpToMDP {
 		HTNReward rewardFunction = new HTNReward() {
 		};
 		for (HTNState sp : states) {
-			MDPTemplate temMDP =((Task) sp.getTask()).getmDPTemplate();
+			MDPTemplate temMDP = ((Task) sp.getTask()).getmDPTemplate();
 			List<MDPTemplate> templates = temMDP.getMdpTemplates();
 			Unifier terms = sp.getTask().getUnifier();
-			if((templates.isEmpty()) || (temMDP.getReward() != null))
-			for (MDPTemplate m : templates) {
-				String c = null;
-				// update it with unifier
-				c = HTNChimpDomain.convertLISPTerm(m.getValueRestriction().varName);
-				Term var = terms.get(c);
-				if (m.getValueRestriction().constants.contains(var.toString())) 
-					rewardFunction.setReward(sp, m.getReward());
-				else if((temMDP.getReward() != null) && (!rewardFunction.exists(sp)))
-					rewardFunction.setReward(sp,temMDP.getReward());
-//				else 
-//					rewardFunction.setReward(sp, (double) 0);
-
-				// to update
-			}
-			if (! rewardFunction.exists(sp))
-				rewardFunction.setReward(sp, -0.111);
-//			else if ((sp.isFinal()) && (!rewardFunction.exists(sp)))
-//				rewardFunction.setReward(sp, 1.0);
+			if ((templates.isEmpty()) || (temMDP.getReward() != null))
+				for (MDPTemplate m : templates) {
+					String c = null;
+					// update it with unifier
+					c = HTNChimpDomain.convertLISPTerm(m.getValueRestriction().varName);
+					Term var = terms.get(c);
+					if (m.getValueRestriction().constants.contains(var.toString()))
+						rewardFunction.setReward(sp, m.getReward());
+					else if ((temMDP.getReward() != null) && (!rewardFunction.exists(sp)))
+						rewardFunction.setReward(sp, temMDP.getReward());
+				}
+			// assign the reward to the initial state
+			if ((sp.getTask().toString().equals("s0")) && (!rewardFunction.exists(sp)))
+				rewardFunction.setReward(sp, -0.4);
 		}
 		return rewardFunction;
 	}

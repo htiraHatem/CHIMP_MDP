@@ -406,53 +406,53 @@ public class HTNExpander {
 		return msRes;
 	}
 
-	public static void main(String[] args) throws Exception {
-
-		String problemFile = "src/main/java/examples/MDP/gotolondon/problemChimp.pdl";
-		String domainFile = "src/main/java/examples/MDP/gotolondon/domainChimp.ddl";
-
-//	        String problemFile = "problems/test_m_serve_coffee_problem_1.pdl";
-//	        String domainFile = "domains/ordered_domain.ddl";
-
-		ValueOrderingH valOH = new UnifyDeepestWeightNewestbindingsValOH();
-		CHIMP.CHIMPBuilder builder;
-
-		try {
-			builder = new CHIMP.CHIMPBuilder(domainFile, problemFile).valHeuristic(valOH).htnUnification(true);
-		} catch (DomainParsingException e) {
-			e.printStackTrace();
-			return;
-		}
-		CHIMP chimp = builder.build();
-		FluentNetworkSolver fluentSolver = chimp.getFluentSolver();
-
-		// expanding the HTN
-		HTNTaskNetwork tasknetwork = new HTNTaskNetwork(fluentSolver);
-		HTNChimpDomain HTNd = HTNChimpDomain.parseHTNChimpDomain(builder);
-		HTNExpander expander = new HTNExpander();
-		HTNTaskNetwork fullyExpanded = expander.createFullyExpandedHTN(fluentSolver.getConstraintSolvers()[0],
-				tasknetwork, HTNd);
-
-		HtnMdpFactory<HTNState, HTNAction> mdp = HTNChimpToMDP.MDP(expander, fullyExpanded);
-
-		// value iteration
-		ValueIteration<HTNState, HTNAction> pi = new ValueIteration<HTNState, HTNAction>(1.0);
-		Map<HTNState, Double> policy = pi.valueIteration(mdp, 0.0001);
-
-		for (Entry<HTNState, Double> s : policy.entrySet()) {
-			System.out.println(s.getKey() + "  :  " + s.getValue());
-		}
-
-		// convert to dot language
-		String mdpGraph = "src/main/java/examples/MDP/gotolondon/gotolondonGraphVICHIMP.dot";
-
-		if (mdpGraph != null) {
-			FileWriter writer = new FileWriter(mdpGraph);
-			logger.info("Writing MDP Graph into " + mdpGraph);
-			Dot2Graph.printMDPDot(writer, mdp, true, null);
-			writer.close();
-
-		}
-
-	}
+//	public static void main(String[] args) throws Exception {
+//
+//		String problemFile = "src/main/java/examples/MDP/gotolondon/problemChimp.pdl";
+//		String domainFile = "src/main/java/examples/MDP/gotolondon/domainChimp.ddl";
+//
+////	        String problemFile = "problems/test_m_serve_coffee_problem_1.pdl";
+////	        String domainFile = "domains/ordered_domain.ddl";
+//
+//		ValueOrderingH valOH = new UnifyDeepestWeightNewestbindingsValOH();
+//		CHIMP.CHIMPBuilder builder;
+//
+//		try {
+//			builder = new CHIMP.CHIMPBuilder(domainFile, problemFile).valHeuristic(valOH).htnUnification(true);
+//		} catch (DomainParsingException e) {
+//			e.printStackTrace();
+//			return;
+//		}
+//		CHIMP chimp = builder.build();
+//		FluentNetworkSolver fluentSolver = chimp.getFluentSolver();
+//
+//		// expanding the HTN
+//		HTNTaskNetwork tasknetwork = new HTNTaskNetwork(fluentSolver);
+//		HTNChimpDomain HTNd = HTNChimpDomain.parseHTNChimpDomain(builder);
+//		HTNExpander expander = new HTNExpander();
+//		HTNTaskNetwork fullyExpanded = expander.createFullyExpandedHTN(fluentSolver.getConstraintSolvers()[0],
+//				tasknetwork, HTNd);
+//
+//		HtnMdpFactory<HTNState, HTNAction> mdp = HTNChimpToMDP.MDP(expander, fullyExpanded);
+//
+//		// value iteration
+//		ValueIteration<HTNState, HTNAction> pi = new ValueIteration<HTNState, HTNAction>(1.0);
+//		Map<HTNState, Double> policy = pi.valueIteration(mdp, 0.0001);
+//
+//		for (Entry<HTNState, Double> s : policy.entrySet()) {
+//			System.out.println(s.getKey() + "  :  " + s.getValue());
+//		}
+//
+//		// convert to dot language
+//		String mdpGraph = "src/main/java/examples/MDP/gotolondon/gotolondonGraphVICHIMP.dot";
+//
+//		if (mdpGraph != null) {
+//			FileWriter writer = new FileWriter(mdpGraph);
+//			logger.info("Writing MDP Graph into " + mdpGraph);
+//			Dot2Graph.printMDPDot(writer, mdp, true, null);
+//			writer.close();
+//
+//		}
+//
+//	}
 }
