@@ -1,7 +1,11 @@
 package examples.MDP;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
+import aima.core.agent.Action;
 import aima.core.environment.cellworld.Cell;
 import aima.core.environment.cellworld.CellWorld;
 import aima.core.environment.cellworld.CellWorldAction;
@@ -10,10 +14,12 @@ import aima.core.probability.example.MDPFactory;
 import aima.core.probability.mdp.MarkovDecisionProcess;
 import aima.core.probability.mdp.Policy;
 import aima.core.probability.mdp.RewardFunction;
+import aima.core.probability.mdp.impl.LookupPolicy;
 import aima.core.probability.mdp.impl.MDP;
 import aima.core.probability.mdp.impl.ModifiedPolicyEvaluation;
 import aima.core.probability.mdp.search.PolicyIteration;
 import aima.core.probability.mdp.search.ValueIteration;
+import aima.core.util.Util;
 
 public class TestMDPSolver {
 
@@ -81,7 +87,10 @@ public class TestMDPSolver {
 		PolicyIteration<Cell<Double>, CellWorldAction> pi = new PolicyIteration<Cell<Double>, CellWorldAction>(
 				new ModifiedPolicyEvaluation<Cell<Double>, CellWorldAction>(50, 1.0));
 
-		Policy<Cell<Double>, CellWorldAction> policy = pi.policyIteration(mdp);
+		//Policy<Cell<Double>, CellWorldAction> policy = pi.policyIteration(mdp);
+
+		Map<Cell<Double>, CellWorldAction> p = initialPolicyVector(mdp);
+		LookupPolicy<Cell<Double>, CellWorldAction> policy = new LookupPolicy<Cell<Double>, CellWorldAction>(p);
 
 		System.out.println("(1,1) = " + policy.action(cw.getCellAt(1, 1)));
 		System.out.println("(1,2) = " + policy.action(cw.getCellAt(1, 2)));
@@ -99,6 +108,29 @@ public class TestMDPSolver {
 		System.out.println("(4,3) = " + policy.action(cw.getCellAt(4, 3)));
 
 		System.out.println("=========================");
+		
+
+	}
+	/**
+	 * Create a policy vector indexed by state, initially random.
+	 * 
+	 * @param mdp
+	 *            an MDP with states S, actions A(s), transition model P(s'|s,a)
+	 * @return a policy vector indexed by state, initially random.
+	 */
+	public static <S, A extends Action> Map<Cell<Double>, CellWorldAction> initialPolicyVector(
+			MarkovDecisionProcess<Cell<Double>, CellWorldAction> mdp) {
+		Map<Cell<Double>, CellWorldAction> pi = new LinkedHashMap<Cell<Double>, CellWorldAction>();
+		List<CellWorldAction> actions = new ArrayList<CellWorldAction>();
+		for (Cell<Double> s : mdp.states()) {
+			actions.clear();
+			actions.addAll(mdp.actions(s));
+			// Handle terminal states (i.e. no actions).
+			if (actions.size() > 0) {
+				pi.put(s, Util.selectRandomlyFromList(actions));
+			}
+		}
+		return pi;
 	}
 
 	public static void main(String[] args) {
