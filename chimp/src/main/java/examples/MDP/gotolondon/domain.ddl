@@ -16,9 +16,11 @@
   (Head !getVehicle(?v))
   (Add e1 has(?v))
   #(Reward -0.04)
-  (TransitionProb 0.8) # tranistion probability is attached to the Task
+  (TransitionProb 1) # tranistion probability is attached to the Task
    # reward is attached with action and will be assigned to the current state 
   (if (Values ?v car ship) (Reward -0.01))
+  (if (Values ?v car ship) (TransitionProb 0.1))
+
   #(if (Values ?v ship) (Reward -0.01))
   (else (Reward -0.04))
 )
@@ -29,9 +31,11 @@
   (Pre p2 agent_at(?l1))
   (Del p2)
   (Add e1 agent_at(?l2))
-  (TransitionProb 0.2)
+  (TransitionProb 1)
   (if (Values ?l2 soton) (Reward -0.02))
   (if (Values ?l2 london) (Reward 1)) #final state
+  (if (Values ?l2 harbor) (TransitionProb 0.2))
+  (if (Values ?l2 airport) (TransitionProb 0.8))
   (else (Reward -0.04))
 
   #TODO to specify the reward for the final states

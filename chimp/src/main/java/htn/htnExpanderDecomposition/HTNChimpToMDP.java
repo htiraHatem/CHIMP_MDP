@@ -131,11 +131,32 @@ public class HTNChimpToMDP {
 					if (prob != 0) {
 						HTNState si = lstate.get(i);
 						HTNState sj = lstate.get(j);
-						if (((Task) si.getTask()).getmDPTemplate().getTransitionProbability() != null)
-							transitionModel.setTransitionProbability(si, action, sj,
-									((Task) si.getTask()).getmDPTemplate().getTransitionProbability());
-						else
+						
+						MDPTemplate temMDP = ((Task) sj.getTask()).getmDPTemplate();
+						List<MDPTemplate> templates = temMDP.getMdpTemplates();
+						Unifier terms = sj.getTask().getUnifier();
+						if ((templates.isEmpty()) || (temMDP.getTransitionProbability() != null))
+							for (MDPTemplate m : templates) {
+								if (m.getTransitionProbability() != null) {
+									String c = null;
+									// update it with unifier
+									c = HTNChimpDomain.convertLISPTerm(m.getValueRestriction().varName);
+									Term var = terms.get(c);
+									
+									if (m.getValueRestriction().constants.contains(var.toString()))
+										transitionModel.setTransitionProbability(si, action, sj,
+												m.getTransitionProbability());
+									else if ((temMDP.getReward() != null) && (!transitionModel.exists(si, action, sj)))
+										transitionModel.setTransitionProbability(si, action, sj, 1);
+									}}
+						if ((si.getTask().toString().equals("s0")) && (!transitionModel.exists(si, action, sj)))
 							transitionModel.setTransitionProbability(si, action, sj, 1);
+//						
+//						if (((Task) si.getTask()).getmDPTemplate().getTransitionProbability() != null)
+//							transitionModel.setTransitionProbability(si, action, sj,
+//									((Task) si.getTask()).getmDPTemplate().getTransitionProbability());
+//						else
+//							transitionModel.setTransitionProbability(si, action, sj, 1);
 
 //						if(si.getId()==2) 
 //							transitionModel.setTransitionProbability(si, action, sj, 0.5);
@@ -180,14 +201,16 @@ public class HTNChimpToMDP {
 			Unifier terms = sp.getTask().getUnifier();
 			if ((templates.isEmpty()) || (temMDP.getReward() != null))
 				for (MDPTemplate m : templates) {
-					String c = null;
-					// update it with unifier
-					c = HTNChimpDomain.convertLISPTerm(m.getValueRestriction().varName);
-					Term var = terms.get(c);
-					if (m.getValueRestriction().constants.contains(var.toString()))
-						rewardFunction.setReward(sp, m.getReward());
-					else if ((temMDP.getReward() != null) && (!rewardFunction.exists(sp)))
-						rewardFunction.setReward(sp, temMDP.getReward());
+					if (m.getReward() != null) {
+						String c = null;
+						// update it with unifier
+						c = HTNChimpDomain.convertLISPTerm(m.getValueRestriction().varName);
+						Term var = terms.get(c);
+						if (m.getValueRestriction().constants.contains(var.toString()))
+							rewardFunction.setReward(sp, m.getReward());
+						else if ((temMDP.getReward() != null) && (!rewardFunction.exists(sp)))
+							rewardFunction.setReward(sp, temMDP.getReward());
+					}
 				}
 			// assign the reward to the initial state
 			if ((sp.getTask().toString().equals("s0")) && (!rewardFunction.exists(sp)))

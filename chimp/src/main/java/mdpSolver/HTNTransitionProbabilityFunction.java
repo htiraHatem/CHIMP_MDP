@@ -42,6 +42,12 @@ public class HTNTransitionProbabilityFunction implements Comparable<TransitionPr
 		}
 	}
 
+	public Boolean exists(HTNState si, HTNAction action, HTNState sj) {
+		HtnMdpTransition<HTNState, HTNAction> t = new HtnMdpTransition<HTNState, HTNAction>(
+				si, action, sj);
+		return transitionToProbability.containsKey(t);
+	}
+	
 	public Double getTransitionProbability(HTNState s, HTNAction a, HTNState sDelta) {
 		HtnMdpTransition<HTNState, HTNAction> key = new HtnMdpTransition<HTNState, HTNAction>(
 				s, a, sDelta);

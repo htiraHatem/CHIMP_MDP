@@ -21,6 +21,8 @@ import hybridDomainParsing.classic.antlr.ChimpClassicParser.Delete_spatial_const
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Else_mdp_op_elementContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.If_mdp_defContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.If_mdp_op_elementContext;
+import hybridDomainParsing.classic.antlr.ChimpClassicParser.If_transition_mdp_defContext;
+import hybridDomainParsing.classic.antlr.ChimpClassicParser.If_transition_mdp_op_elementContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Mdp_reward_defContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Mdp_reward_op_elementContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Mdp_transitionprobability_op_elementContext;
@@ -472,6 +474,8 @@ public class ChimpClassicReader implements ChimpClassicVisitor {
             	mdpTemplate.setMdpTemplate( visitMDP_if_op_element((If_mdp_op_elementContext) d));
             }else if (d instanceof ChimpClassicParser.Else_mdp_op_elementContext) {
             	mdpTemplate.setReward( visitMDP_else_op_element((Else_mdp_op_elementContext) d));
+            }else if (d instanceof ChimpClassicParser.If_transition_mdp_op_elementContext) {
+            	mdpTemplate.setMdpTemplate( visitMDP_if_transition_op_element((If_transition_mdp_op_elementContext) d));
             }
             
             
@@ -1305,6 +1309,17 @@ public class ChimpClassicReader implements ChimpClassicVisitor {
 	public Double visitMDP_else_op_element(Else_mdp_op_elementContext ctx) {
 		return Double.valueOf(ctx.else_mdp_def().mdp_reward_def().double_or_int().getText());
 
+	}
+
+	@Override
+	public MDPTemplate visitMDP_if_transition_op_element(If_transition_mdp_op_elementContext d) {
+		Value_restriction_defContext valueRes = d.if_transition_mdp_def().value_restriction_def();
+		String varName = valueRes.VAR_NAME().toString();
+		List<String> constants = visitConstant_list(valueRes.constant_list());
+		ValueRestriction VR = new ValueRestriction(varName, constants);
+		Double transition = Double.valueOf(d.if_transition_mdp_def().mdp_transitionProbability_def().double_or_int().getText());
+		MDPTemplate mdpT = new MDPTemplate();
+		return mdpT.SetTransitionRestriction(VR, transition);
 	}
 
 }

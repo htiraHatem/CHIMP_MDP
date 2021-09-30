@@ -30,6 +30,12 @@ public class MDPTemplate {
 		setValueRestriction(vR);
 		this.reward = reward;
 	}
+	
+	public MDPTemplate SetTransitionRestriction(ValueRestriction vR, Double transitionProbability) {
+		setValueRestriction(vR);
+		this.transitionProbability = transitionProbability;
+		return this;
+	}
 
 	public List<MDPTemplate> getMdpTemplates() {
 		return mdpTemplates;
