@@ -613,8 +613,8 @@ public class ChimpClassicBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 		return (MDPTemplate) visitChildren(ctx);
 	}
 	@Override
-	public Double visitMDP_else_op_element(Else_mdp_op_elementContext ctx) {
-		return (Double) visitChildren(ctx);
+	public MDPTemplate visitMDP_else_op_element(Else_mdp_op_elementContext ctx) {
+		return (MDPTemplate) visitChildren(ctx);
 	}
 	@Override
 	public MDPTemplate visitMDP_if_transition_op_element(If_transition_mdp_op_elementContext ctx) {

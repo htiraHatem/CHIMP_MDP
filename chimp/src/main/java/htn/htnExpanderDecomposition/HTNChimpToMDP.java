@@ -199,7 +199,7 @@ public class HTNChimpToMDP {
 			MDPTemplate temMDP = ((Task) sp.getTask()).getmDPTemplate();
 			List<MDPTemplate> templates = temMDP.getMdpTemplates();
 			Unifier terms = sp.getTask().getUnifier();
-			if ((templates.isEmpty()) || (temMDP.getReward() != null))
+			if ((templates.size()>0) || (temMDP.getReward() != null))
 				for (MDPTemplate m : templates) {
 					if (m.getReward() != null) {
 						String c = null;

@@ -540,7 +540,7 @@ public interface ChimpClassicVisitor<T> extends ParseTreeVisitor<T> {
 	
 	MDPTemplate visitMDP_if_op_element(If_mdp_op_elementContext ctx);
 	
-	Double visitMDP_else_op_element(Else_mdp_op_elementContext ctx);
+	MDPTemplate visitMDP_else_op_element(Else_mdp_op_elementContext ctx);
 	
 	MDPTemplate visitMDP_if_transition_op_element(If_transition_mdp_op_elementContext d);
 

@@ -471,12 +471,16 @@ public class ChimpClassicReader implements ChimpClassicVisitor {
             	mdpTemplate.setTransitionProbability(visitMDP_transitionprobability_op_element(
                         (ChimpClassicParser.Mdp_transitionprobability_op_elementContext) d));
             }else if (d instanceof ChimpClassicParser.If_mdp_op_elementContext) {
-            	mdpTemplate.setMdpTemplate( visitMDP_if_op_element((If_mdp_op_elementContext) d));
-            }else if (d instanceof ChimpClassicParser.Else_mdp_op_elementContext) {
-            	mdpTemplate.setReward( visitMDP_else_op_element((Else_mdp_op_elementContext) d));
-            }else if (d instanceof ChimpClassicParser.If_transition_mdp_op_elementContext) {
-            	mdpTemplate.setMdpTemplate( visitMDP_if_transition_op_element((If_transition_mdp_op_elementContext) d));
-            }
+				mdpTemplate.setMdpTemplate(visitMDP_if_op_element((If_mdp_op_elementContext) d));
+			} else if (d instanceof ChimpClassicParser.Else_mdp_op_elementContext) {
+				if (visitMDP_else_op_element((Else_mdp_op_elementContext) d).getReward() != null)
+					mdpTemplate.setReward(visitMDP_else_op_element((Else_mdp_op_elementContext) d).getReward());
+				if (visitMDP_else_op_element((Else_mdp_op_elementContext) d).getTransitionProbability() != null)
+					mdpTemplate.setTransitionProbability(
+							visitMDP_else_op_element((Else_mdp_op_elementContext) d).getTransitionProbability());
+			} else if (d instanceof ChimpClassicParser.If_transition_mdp_op_elementContext) {
+				mdpTemplate.setMdpTemplate(visitMDP_if_transition_op_element((If_transition_mdp_op_elementContext) d));
+			}
             
             
             
@@ -1306,9 +1310,14 @@ public class ChimpClassicReader implements ChimpClassicVisitor {
 	}
 
 	@Override
-	public Double visitMDP_else_op_element(Else_mdp_op_elementContext ctx) {
-		return Double.valueOf(ctx.else_mdp_def().mdp_reward_def().double_or_int().getText());
-
+	public MDPTemplate visitMDP_else_op_element(Else_mdp_op_elementContext ctx) {
+		MDPTemplate mdpT = new MDPTemplate();
+		if (ctx.else_mdp_def().mdp_reward_def() != null)
+			mdpT.setReward(Double.valueOf(ctx.else_mdp_def().mdp_reward_def().double_or_int().getText()));
+		if (ctx.else_mdp_def().mdp_transitionProbability_def() != null)
+			mdpT.setTransitionProbability(
+					Double.valueOf(ctx.else_mdp_def().mdp_transitionProbability_def().double_or_int().getText()));
+		return mdpT;
 	}
 
 	@Override
