@@ -32,6 +32,7 @@ import resourceFluent.FluentResourceUsageScheduler;
 import resourceFluent.FluentScheduler;
 
 public class HTNChimpDomain extends HTNDomain {
+
 	ArrayList<Method> htnMethods = new ArrayList<Method>();
 	ArrayList<Task> htnActions = new ArrayList<htn.htnExpanderDecomposition.Task>();
 	HashMap<htn.htnExpanderDecomposition.Task, htn.htnExpanderDecomposition.Task> htnInstances = new HashMap<htn.htnExpanderDecomposition.Task, htn.htnExpanderDecomposition.Task>();
@@ -339,6 +340,10 @@ public class HTNChimpDomain extends HTNDomain {
 	
 	public void addHtnAction(Task t) {
 		this.htnActions.add(t);
+	}
+	
+	public Vector<FluentResourceUsageScheduler> getResourceSchedulers() {
+		return resourceSchedulers;
 	}
 
 }

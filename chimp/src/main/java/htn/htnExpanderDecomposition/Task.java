@@ -25,18 +25,32 @@ public class Task extends edu.cmu.ita.htn.Task {
 
 	protected List<ResourceUsageTemplate> resourceUsageIndicators = new ArrayList<ResourceUsageTemplate>();
 	protected MDPTemplate mDPTemplate = new MDPTemplate();
+	
+	/**  The amount of capacity the resource is left after executing this Task */
+	protected int remainedResourceUsageLevel;
 
 	public Task(String sTask) throws Exception {
 		super(sTask);
+		remainedResourceUsageLevel = 0;
 	}
 
 	public Task(edu.cmu.ita.htn.Task a) {
 		super(a);
+		remainedResourceUsageLevel = 0;
 	}
 
 	public Task(Task a, boolean instance) {
 		super(a);
 		setInstance(instance);
+		remainedResourceUsageLevel = 0;
+	}
+
+	public int getRemainedResourceUsageLevelResourceUsageLevel() {
+		return remainedResourceUsageLevel;
+	}
+	
+	public void setRemainedResourceUsageLevel(int restResourceUsageLevel) {
+		this.remainedResourceUsageLevel = restResourceUsageLevel;
 	}
 
 	public Task(edu.cmu.ita.htn.Task createPrimitiveTask, List<ResourceUsageTemplate> resourceUsageTemplate,
@@ -44,6 +58,7 @@ public class Task extends edu.cmu.ita.htn.Task {
 		super(createPrimitiveTask);
 		this.resourceUsageIndicators = resourceUsageTemplate;
 		this.mDPTemplate = mDPTemplate;
+		remainedResourceUsageLevel = 0;
 	}
 
 	public Unifier getUn() {
@@ -119,5 +134,6 @@ public class Task extends edu.cmu.ita.htn.Task {
 			return false;
 		}
 	}
+
 
 }

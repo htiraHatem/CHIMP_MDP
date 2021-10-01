@@ -41,6 +41,10 @@ public class FluentResourceUsageScheduler extends Schedulable {
 		this.capacity = cap;
 	}
 	
+	public int getCapacity() {
+		return capacity;
+	}
+
 	@Override
 	public ConstraintNetwork[] getMetaVariables() {
 		updateUsageMap();

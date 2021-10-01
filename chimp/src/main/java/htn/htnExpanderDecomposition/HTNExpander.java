@@ -103,7 +103,8 @@ public class HTNExpander {
 		// debugPrintHTN(t, problem);
 		if (t.isPrimitive()) {
 			System.out.print("*");
-			System.out.println(t.toString());
+			t.setRemainedResourceUsageLevel(domain.getResourceSchedulers().get(0).getCapacity()  -t.getResourceUsageIndicators().get(0).getResourceUsageLevel());
+			System.out.println(t.toString() + " " + t.getResourceUsageIndicators() + " " + t.getRemainedResourceUsageLevelResourceUsageLevel());
 
 			List<Operator> ops = findOperatorsFor(t, ChimpProblem, domain, t.getUn());
 			if (ops.isEmpty()) {
