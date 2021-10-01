@@ -7,6 +7,7 @@
   connected)
 
 
+(Resource Money 1000)
 
 ################################
 ####  OPERATORS ################
@@ -21,6 +22,9 @@
   (if (Values ?v car ship) (Reward -0.01) (TransitionProb 1))
   (if (Values ?v plane) (TransitionProb 0.8))
   (else (Reward -0.04) (TransitionProb 1))
+
+  (ResourceUsage 
+  (Usage BatteryStorageCapacity 20))
 )
 
 (:operator 
@@ -34,6 +38,10 @@
   (if (Values ?l2 harbor) (TransitionProb 0.2))
   (if (Values ?l2 airport) (TransitionProb 0.8))
   (else (Reward -0.04) (TransitionProb 1)) # in all the other states
+
+   (ResourceUsage 
+  (Usage BatteryStorageCapacity 40))
+ # (if (< resource 20) (increase resource 0.01)
 
 )
 

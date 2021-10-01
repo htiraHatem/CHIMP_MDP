@@ -205,7 +205,7 @@ public class HTNExpander {
 	 * @param domain
 	 */
 	protected void expandWithAllMethodsInPlace(HTNTaskNetwork problem, Task task, List<MethodOption> methods,
-			HTNDomain domain) {
+			HTNChimpDomain domain) {
 		deltaStar(problem, task, methods, true, domain);
 	}
 
@@ -218,7 +218,7 @@ public class HTNExpander {
 	 * @return
 	 */
 	protected HTNTaskNetwork expandWithAllMethods(HTNTaskNetwork network, Task task, List<MethodOption> options,
-			HTNDomain domain) {
+			HTNChimpDomain domain) {
 		return deltaStar(network, task, options, false, domain);
 	}
 
@@ -232,7 +232,7 @@ public class HTNExpander {
 	 * @return
 	 */
 	private final HTNTaskNetwork deltaStar(HTNTaskNetwork network, Task task, Collection<MethodOption> options,
-			boolean inPlace, HTNDomain domain) {
+			boolean inPlace, HTNChimpDomain domain) {
 		assert (network.hasTask(task));
 
 //		if (!inPlace) {
@@ -249,7 +249,7 @@ public class HTNExpander {
 		for (MethodOption mo : options) {
 			assert (mo.m.getTask().equals(task));
 			// logger.info("Expanding task '"+task+"' with method '"+mo.m+"'");
-			HTNTaskNetwork substChimp = mo.getMethod().getInstantiatedTaskNetwork((HTNChimpDomain) domain, mo.un);
+			HTNTaskNetwork substChimp = mo.getMethod().getInstantiatedTaskNetwork( domain, mo.un);
 
 			// HTNTaskNetwork substChimp = new HTNTaskNetwork(subst);
 			for (Task t : substChimp.getTasks1()) {

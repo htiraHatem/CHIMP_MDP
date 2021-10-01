@@ -58,6 +58,14 @@ public class Task extends edu.cmu.ita.htn.Task {
 		this.mDPTemplate = mDPTemplate;
 	}
 
+	public List<ResourceUsageTemplate> getResourceUsageIndicators() {
+		return resourceUsageIndicators;
+	}
+
+	public void setResourceUsageIndicators(List<ResourceUsageTemplate> resourceUsageIndicators) {
+		this.resourceUsageIndicators = resourceUsageIndicators;
+	}
+
 	public void setUn(Unifier un) {
 		this.un = un;
 	}

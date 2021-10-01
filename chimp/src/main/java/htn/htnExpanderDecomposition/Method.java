@@ -90,6 +90,12 @@ public class Method {
 //			Task t = taskNetwork.tasks.get(i);
 			Task tInstance = Task.instantiateTask(t, un, domain.getInstances());
 			tInstance.setmDPTemplate(t.getmDPTemplate());
+			//add resource usage to each expandable Task
+			for(Task act :  domain.htnActions) {
+				if(t.getFunctor().equals(act.getFunctor()) && (t.getTerms().size() == act.getTerms().size()))
+						tInstance.setResourceUsageIndicators(act.getResourceUsageIndicators());
+				
+			}
 			instMap.put(t, tInstance);
 //			instMap[i] = tInstance;
 			tnInstance.addTask(tInstance);
