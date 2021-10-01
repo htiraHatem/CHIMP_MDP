@@ -128,8 +128,12 @@ mdp_reward_def : '(Reward' double_or_int ')';
 
 mdp_transitionProbability_def : '(TransitionProb' double_or_int ')';
 
-if_mdp_def : '(if' value_restriction_def mdp_reward_def ')';
+if_mdp_def : if_reward_mdp_def | if_transition_mdp_def |if_reward_transition_mdp_def;
+
+if_reward_mdp_def : '(if' value_restriction_def mdp_reward_def ')';
 if_transition_mdp_def : '(if' value_restriction_def mdp_transitionProbability_def ')';
+if_reward_transition_mdp_def : '(if' value_restriction_def mdp_reward_def mdp_transitionProbability_def ')';
+
 else_mdp_def : '(else' mdp_reward_def ')' | '(else' mdp_transitionProbability_def ')' | '(else' mdp_reward_def mdp_transitionProbability_def ')';
 
 resource_usage_def : '(ResourceUsage' NAME NUMBER ')'

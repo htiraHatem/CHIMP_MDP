@@ -25,6 +25,7 @@ import hybridDomainParsing.classic.antlr.ChimpClassicParser.If_transition_mdp_de
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.If_transition_mdp_op_elementContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Mdp_reward_defContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Mdp_reward_op_elementContext;
+import hybridDomainParsing.classic.antlr.ChimpClassicParser.Mdp_transitionProbability_defContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Mdp_transitionprobability_op_elementContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Spatial_constraint_op_elementContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Unary_spatial_constraint_typeContext;
@@ -1298,15 +1299,46 @@ public class ChimpClassicReader implements ChimpClassicVisitor {
 
 	@Override
 	public MDPTemplate visitMDP_if_op_element(If_mdp_op_elementContext d) {
-		Value_restriction_defContext valueRes = d.if_mdp_def().value_restriction_def();
-        String varName = valueRes.VAR_NAME().toString();
-        List<String> constants = visitConstant_list(valueRes.constant_list());
-        ValueRestriction VR =  new ValueRestriction(varName, constants);
-        
-        Mdp_reward_defContext rewardDef = d.if_mdp_def().mdp_reward_def();
-        Double reward = Double.valueOf(rewardDef.double_or_int().getText());
-        
-		return new MDPTemplate(VR,reward);
+		ValueRestriction VR = null;
+		Double reward = null;
+		Double transition = null;
+		MDPTemplate mdpT = new MDPTemplate();
+
+		if (d.if_mdp_def().if_reward_mdp_def() != null) {
+			Value_restriction_defContext valueRes = d.if_mdp_def().if_reward_mdp_def().value_restriction_def();
+			String varName = valueRes.VAR_NAME().toString();
+			List<String> constants = visitConstant_list(valueRes.constant_list());
+			VR = new ValueRestriction(varName, constants);
+			Mdp_reward_defContext rewardDef = d.if_mdp_def().if_reward_mdp_def().mdp_reward_def();
+			reward = Double.valueOf(rewardDef.double_or_int().getText());
+			return new MDPTemplate(VR, reward);
+		} else if (d.if_mdp_def().if_transition_mdp_def() != null) {
+			Value_restriction_defContext valueRes = d.if_mdp_def().if_transition_mdp_def().value_restriction_def();
+			String varName = valueRes.VAR_NAME().toString();
+			List<String> constants = visitConstant_list(valueRes.constant_list());
+			VR = new ValueRestriction(varName, constants);
+			Mdp_transitionProbability_defContext transitionDef = d.if_mdp_def().if_transition_mdp_def()
+					.mdp_transitionProbability_def();
+			transition = Double.valueOf(transitionDef.double_or_int().getText());
+			mdpT.SetTransitionRestriction(VR, transition);
+			return mdpT;
+		} else if (d.if_mdp_def().if_reward_transition_mdp_def() != null) {
+			Value_restriction_defContext valueRes = d.if_mdp_def().if_reward_transition_mdp_def().value_restriction_def();
+			String varName = valueRes.VAR_NAME().toString();
+			List<String> constants = visitConstant_list(valueRes.constant_list());
+			VR = new ValueRestriction(varName, constants);
+			//add reward to the template
+			Mdp_reward_defContext rewardDef = d.if_mdp_def().if_reward_transition_mdp_def().mdp_reward_def();
+			reward = Double.valueOf(rewardDef.double_or_int().getText());
+			mdpT= new MDPTemplate(VR, reward);
+			//add transition to the template
+			Mdp_transitionProbability_defContext transitionDef = d.if_mdp_def().if_reward_transition_mdp_def()
+					.mdp_transitionProbability_def();
+			transition = Double.valueOf(transitionDef.double_or_int().getText());
+			mdpT.SetTransitionRestriction(VR, transition);
+			return mdpT;	
+			}
+		return mdpT;
 	}
 
 	@Override

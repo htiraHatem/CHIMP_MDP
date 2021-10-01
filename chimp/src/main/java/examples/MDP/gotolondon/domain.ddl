@@ -18,10 +18,8 @@
   #(Reward -0.04)
    # transition probability is attached to the Task
    # reward is attached with action and will be assigned to the current state 
-  (if (Values ?v car ship) (Reward -0.01))
-  (if (Values ?v car ship) (TransitionProb 1))
+  (if (Values ?v car ship) (Reward -0.01) (TransitionProb 1))
   (if (Values ?v plane) (TransitionProb 0.8))
-  #(if (Values ?v ship) (Reward -0.01))
   (else (Reward -0.04) (TransitionProb 1))
 )
 
