@@ -13,6 +13,12 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.logging.Logger;
 
+import org.metacsp.meta.TCSP.TCSPSolver;
+import org.metacsp.multi.TCSP.DistanceConstraint;
+import org.metacsp.multi.TCSP.DistanceConstraintSolver;
+import org.metacsp.multi.TCSP.MultiTimePoint;
+import org.metacsp.time.Bounds;
+
 import edu.cmu.ita.htn.Constraint;
 import edu.cmu.ita.htn.HTNFactory;
 import edu.cmu.ita.htn.MultiState;
@@ -88,8 +94,16 @@ public class HTNChimpToMDP {
 
 		HTNTransitionProbabilityFunction transitionModel = new HTNTransitionProbabilityFunction(finalStates);
 		HashMap<Task, HTNState> stateTable = new HashMap<Task, HTNState>();
+		
+		//TCSP 
+		int maxResourceLevel = fullyExpanded.getResourceSchedulers().get(0).getCapacity();
+		TCSPSolver metaSolver = new TCSPSolver(0, maxResourceLevel, 0);
+		DistanceConstraintSolver groundSolver = (DistanceConstraintSolver)metaSolver.getConstraintSolvers()[0];	
+		MultiTimePoint init = groundSolver.getSink();
+		
 		for (HTNState s : states) {
-			stateTable.put((Task) s.getTask(), s);
+			stateTable.put((Task)s.getTask(), s);
+			((Task) s.getTask()).setRCVariable((MultiTimePoint)groundSolver.createVariable() );
 		}
 
 		for (HTNAction action : actions.actions()) {
@@ -151,6 +165,33 @@ public class HTNChimpToMDP {
 									}}
 						if ((si.getTask().toString().equals("s0")) && (!transitionModel.exists(si, action, sj)))
 							transitionModel.setTransitionProbability(si, action, sj, 1);
+						
+						
+						//create the distance constraints of TCSP
+						int level =((Task)sj.getTask()).getResourceUsageIndicators().get(0).getResourceUsageLevel();
+						Bounds bounds = new Bounds(-level, -level);
+						DistanceConstraint DC = new DistanceConstraint(bounds);
+
+						if (si.getTask().toString().equals("s0"))
+							DC.setFrom(init);
+						else
+							DC.setFrom(((Task)si.getTask()).getRCVariable());
+
+						DC.setTo(((Task) sj.getTask()).getRCVariable());
+
+						if (si.getRemainedResource())
+							sj.setRemainedResource(groundSolver.addConstraint(DC));
+						else
+							sj.setRemainedResource(false);
+
+						System.out.println(sj.getRemainedResource());
+
+								
+						
+						
+						
+						
+						
 //						
 //						if (((Task) si.getTask()).getmDPTemplate().getTransitionProbability() != null)
 //							transitionModel.setTransitionProbability(si, action, sj,

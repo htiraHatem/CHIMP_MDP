@@ -1,40 +1,26 @@
 package htn.htnExpanderDecomposition;
 
-import java.io.FileWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.logging.Logger;
 
 import org.metacsp.framework.ConstraintSolver;
-import org.metacsp.framework.ValueOrderingH;
 import org.metacsp.framework.Variable;
-import org.metacsp.framework.multi.MultiVariable;
+import org.metacsp.meta.TCSP.TCSPSolver;
+import org.metacsp.multi.TCSP.DistanceConstraintSolver;
+import org.metacsp.multi.TCSP.MultiTimePoint;
 
-import com.google.common.base.Predicates;
-
-import aima.core.probability.mdp.search.ValueIteration;
 import edu.cmu.ita.htn.Constraint;
-import edu.cmu.ita.htn.HTNDomain;
 import edu.cmu.ita.htn.HTNFactory;
 import edu.cmu.ita.htn.MultiState;
 import edu.cmu.ita.htn.Operator;
 import edu.cmu.ita.htn.State;
-import fluentSolver.FluentNetworkSolver;
-import htn.valOrderingHeuristics.UnifyDeepestWeightNewestbindingsValOH;
-import hybridDomainParsing.DomainParsingException;
 import jason.asSemantics.Unifier;
-import mdpSolver.HTNAction;
-import mdpSolver.HTNState;
 import mdpSolver.HTNTaskNetwork;
-import mdpSolver.HtnMdpFactory;
-import planner.CHIMP;
-import ui.Dot2Graph;
+import resourceFluent.FluentResourceUsageScheduler;
 import unify.CompoundSymbolicVariable;
 
 public class HTNExpander {
@@ -69,7 +55,8 @@ public class HTNExpander {
 		S0 = new State();
 		Variable[] sa = constraintSolver.getVariables();
 		Object task = constraintSolver.getComponents().values().toArray()[0];
-
+		
+		
 		for (Variable i : sa) {
 			if (!task.toString().contains(i.toString())) {
 				Variable[] terms = ((CompoundSymbolicVariable) i).getInternalVariables();
@@ -89,7 +76,11 @@ public class HTNExpander {
 			}
 		}
 		initialState = new MultiState(S0);
-		return fullDecomposition(problem, domain);
+		HTNTaskNetwork fd = fullDecomposition(problem, domain);
+		// get resources
+		List<FluentResourceUsageScheduler> fluentSchedulers = domain.getResourceSchedulers();
+			fd.setResourceSchedulers(fluentSchedulers);		
+		return fd;
 	}
 
 	private final HTNTaskNetwork fullDecomposition(HTNTaskNetwork ChimpProblem, HTNChimpDomain domain) {
@@ -98,14 +89,13 @@ public class HTNExpander {
 			return ChimpProblem;
 		}
 		Task t = getUnresolvedTask(ChimpProblem);
-
+		
 		// Remove this print just for debugging purposes
 		// debugPrintHTN(t, problem);
 		if (t.isPrimitive()) {
 			System.out.print("*");
-			t.setRemainedResourceUsageLevel(domain.getResourceSchedulers().get(0).getCapacity()  -t.getResourceUsageIndicators().get(0).getResourceUsageLevel());
-			System.out.println(t.toString() + " " + t.getResourceUsageIndicators() + " " + t.getRemainedResourceUsageLevelResourceUsageLevel());
-
+			System.out.println(t.toString());
+		
 			List<Operator> ops = findOperatorsFor(t, ChimpProblem, domain, t.getUn());
 			if (ops.isEmpty()) {
 				throw new RuntimeException("No operators found for task " + t);

@@ -11,7 +11,10 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
+import org.metacsp.multi.TCSP.MultiTimePoint;
+
 import aima.core.agent.State;
+import aima.core.search.csp.Variable;
 import edu.cmu.ita.htn.Operator;
 import htn.MDPTemplate;
 
@@ -27,30 +30,27 @@ public class Task extends edu.cmu.ita.htn.Task {
 	protected MDPTemplate mDPTemplate = new MDPTemplate();
 	
 	/**  The amount of capacity the resource is left after executing this Task */
-	protected int remainedResourceUsageLevel;
+	protected MultiTimePoint RCVariable;
+	
+	public MultiTimePoint getRCVariable() {
+		return RCVariable;
+	}
+
+	public void setRCVariable(MultiTimePoint multiTimePoint) {
+		RCVariable = multiTimePoint;
+	}
 
 	public Task(String sTask) throws Exception {
 		super(sTask);
-		remainedResourceUsageLevel = 0;
 	}
 
 	public Task(edu.cmu.ita.htn.Task a) {
 		super(a);
-		remainedResourceUsageLevel = 0;
 	}
 
 	public Task(Task a, boolean instance) {
 		super(a);
 		setInstance(instance);
-		remainedResourceUsageLevel = 0;
-	}
-
-	public int getRemainedResourceUsageLevelResourceUsageLevel() {
-		return remainedResourceUsageLevel;
-	}
-	
-	public void setRemainedResourceUsageLevel(int restResourceUsageLevel) {
-		this.remainedResourceUsageLevel = restResourceUsageLevel;
 	}
 
 	public Task(edu.cmu.ita.htn.Task createPrimitiveTask, List<ResourceUsageTemplate> resourceUsageTemplate,
@@ -58,7 +58,6 @@ public class Task extends edu.cmu.ita.htn.Task {
 		super(createPrimitiveTask);
 		this.resourceUsageIndicators = resourceUsageTemplate;
 		this.mDPTemplate = mDPTemplate;
-		remainedResourceUsageLevel = 0;
 	}
 
 	public Unifier getUn() {

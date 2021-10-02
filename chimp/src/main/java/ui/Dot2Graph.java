@@ -47,7 +47,16 @@ public class Dot2Graph {
 				out.print("\"" + s.getId() + "\" [label=\" S" + s.getId() + "   : (r:" + source.reward(s) + " )");
 				if (policy != null)
 					out.print(", Utility : " + policy.get(s));
-				out.println(" \" shape=doubleoctagon];");
+				
+				if(s.getRemainedResource()) {
+					out.print("  , (resource : " +  ((htn.htnExpanderDecomposition.Task)s.getTask()).getRCVariable() + ")");
+					out.println("  \" shape=doubleoctagon];");
+
+				}
+				else
+					out.println(" \" color = red ,  shape=doubleoctagon]");
+
+					
 			}
 			for (HTNState s : source.getNonFinalStates()) {
 				ArrayList<String> OhneStatic = new ArrayList<String>();
@@ -58,13 +67,20 @@ public class Dot2Graph {
 				}
 				// easy to understand
 				out.print("\"" + s.getId() + "\" [label=\" S" + s.getId() + "   : (reward:" + source.reward(s) + " )");
+			
 				// more details !!
 				// out.print("\""+s.getId()+"\" [label=\""+s.getLabel()()+"
 				// (reward:"+source.reward(s)+ " )");
+				
+
 				if (policy != null)
 					out.print(", Utility : " + policy.get(s));
-
-				out.println(" \"];");
+				
+				if(s.getRemainedResource())
+				out.print("  , (resource : " +  ((htn.htnExpanderDecomposition.Task)s.getTask()).getRCVariable() + ") \"]");
+				else
+					out.println(" \" color = red ]");
+				//out.println(" \"];");
 			}
 		}
 
@@ -84,6 +100,7 @@ public class Dot2Graph {
 						double prob = source.gethTNTransitionProbabilityFunction().getTransitionProbability(is, a, ds);
 						// if(prob != 1) {
 						out.print(" (ProbTrans : " + df.format(prob) + ")");
+						
 						// }
 
 						out.println("\"");

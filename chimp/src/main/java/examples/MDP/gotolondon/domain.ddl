@@ -7,7 +7,7 @@
   connected)
 
 
-(Resource Money 1000)
+(Resource Money 120)
 
 ################################
 ####  OPERATORS ################

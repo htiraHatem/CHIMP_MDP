@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Vector;
 
 import org.metacsp.framework.ConstraintSolver;
 import org.metacsp.framework.Variable;
@@ -17,6 +18,7 @@ import edu.cmu.ita.htn.TaskNetwork;
 import fluentSolver.FluentNetworkSolver;
 import htn.htnExpanderDecomposition.HTNChimpDomain;
 import htn.htnExpanderDecomposition.Task;
+import resourceFluent.FluentResourceUsageScheduler;
 import unify.CompoundSymbolicVariable;
 
 /**
@@ -27,6 +29,14 @@ public class HTNTaskNetwork extends TaskNetwork {
 	protected HashSet<Constraint> constraints;
 	protected LinkedList<Task> orderedTasks;
 	protected List<Task> tasks;
+ 	protected Vector<FluentResourceUsageScheduler> resourceSchedulers = 
+			new Vector<FluentResourceUsageScheduler>();
+
+	public void setResourceSchedulers(List<FluentResourceUsageScheduler> fluentSchedulers) {
+		for (FluentResourceUsageScheduler f : fluentSchedulers) {
+			resourceSchedulers.add(f);
+		}
+	}
 
 	public HTNTaskNetwork() {
 		super();
@@ -300,5 +310,9 @@ public class HTNTaskNetwork extends TaskNetwork {
 			}
 		}
 		return res;
+	}
+
+	public Vector<FluentResourceUsageScheduler> getResourceSchedulers() {
+		return resourceSchedulers;
 	}
 }

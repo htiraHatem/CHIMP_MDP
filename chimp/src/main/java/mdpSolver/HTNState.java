@@ -20,8 +20,17 @@ public class HTNState implements Comparable<State> {
 	protected HTNState previousState;
 	protected HTNState nextState;
 	protected Double reward;
+	protected Boolean remainedResource = true;
 	
 	
+	public Boolean getRemainedResource() {
+		return remainedResource;
+	}
+
+	public void setRemainedResource(Boolean remainedResource) {
+		this.remainedResource = remainedResource;
+	}
+
 	public Double getReward() {
 		return reward;
 	}
