@@ -43,9 +43,6 @@
   (if (Values ?l2 airport) (TransitionProb 0.8))
   (else (Reward -0.04) (TransitionProb 1)) # in all the other states
 
-# withdraw money in the airport
-  (if (Values ?l2 airport) (Increase Money 30))
-
    (ResourceUsage 
   (Usage Money 40))
  # (if (< resource 20) (increase resource 0.01)
@@ -53,14 +50,19 @@
 )
 
 (:operator 
-  (Head !goToBank())
+  (Head !goToBank(?city))
   (Pre p1 hasMoney(false))
+  (Pre p2 agent_at(?city))
   (Del p1)
+
   (Add e1 hasMoney(true))
   (Reward -0.04)
   (TransitionProb 1)
      (ResourceUsage 
   (Usage Money 10))
+
+  # withdraw money in the airport
+  (Increase Money 100)
 )
 
 (:method
@@ -89,9 +91,9 @@
 (:method 
 (Head moveTo(london))
 (Pre p1 has(plane))
-#(Pre p2 hasMoney(false))
+(Pre p2 hasMoney(undef))
 (Sub s1 !moveTo(airport nyc plane))
-#(Sub s2 !goToBank())
+(Sub s2 !goToBank(nyc))
 (Sub s3 !moveTo(nyc london plane))
 )
 

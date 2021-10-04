@@ -147,11 +147,13 @@ public class HTNChimpToMDP {
 					if (prob != 0) {
 						HTNState si = lstate.get(i);
 						HTNState sj = lstate.get(j);
+						if(sj.getId()==5)
+							System.out.print(si.getLabel());
 
 						MDPTemplate temMDP = ((Task) sj.getTask()).getmDPTemplate();
 						List<MDPTemplate> templates = temMDP.getMdpTemplates();
 						Unifier terms = sj.getTask().getUnifier();
-						if ((templates.isEmpty()) || (temMDP.getTransitionProbability() != null))
+						if (!templates.isEmpty())
 							for (MDPTemplate m : templates) {
 								if (m.getTransitionProbability() != null) {
 									String c = null;
@@ -166,6 +168,10 @@ public class HTNChimpToMDP {
 										transitionModel.setTransitionProbability(si, action, sj, 1);
 								}
 							}
+						else if((temMDP.getTransitionProbability() != null))
+							transitionModel.setTransitionProbability(si, action, sj, temMDP.getTransitionProbability());
+
+							
 						if ((si.getTask().toString().equals("s0")) && (!transitionModel.exists(si, action, sj)))
 							transitionModel.setTransitionProbability(si, action, sj, 1);
 
