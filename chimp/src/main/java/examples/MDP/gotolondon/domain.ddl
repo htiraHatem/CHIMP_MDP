@@ -7,7 +7,7 @@
   connected)
 
 
-(Resource Money 1200)
+(Resource Money 150)
 
 ################################
 ####  OPERATORS ################
@@ -22,9 +22,8 @@
   (if (Values ?v car ship) (Reward -0.01) (TransitionProb 1))
   (if (Values ?v plane) (TransitionProb 0.8))
   (else (Reward -0.04) (TransitionProb 1))
-
-(Increase Money 50)
-(Decrease Money 10)
+#(Increase Money 50)
+#(Decrease Money 10)
  # (if (< money 20) (increase reward/cost 0.01)
  # (if (Values ?v plane) (increase reward/cost 0.01)
 
@@ -43,6 +42,9 @@
   (if (Values ?l2 harbor) (TransitionProb 0.2))
   (if (Values ?l2 airport) (TransitionProb 0.8))
   (else (Reward -0.04) (TransitionProb 1)) # in all the other states
+
+# withdraw money in the airport
+  (if (Values ?l2 airport) (Increase Money 30))
 
    (ResourceUsage 
   (Usage Money 40))

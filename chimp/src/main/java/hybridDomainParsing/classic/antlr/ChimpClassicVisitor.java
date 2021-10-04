@@ -12,6 +12,7 @@ import hybridDomainParsing.classic.antlr.ChimpClassicParser.Delete_spatial_const
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Else_mdp_op_elementContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.If_mdp_defContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.If_mdp_op_elementContext;
+import hybridDomainParsing.classic.antlr.ChimpClassicParser.If_resource_increase_decrease_op_elementContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.If_transition_mdp_defContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.If_transition_mdp_op_elementContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Mdp_reward_defContext;
@@ -549,6 +550,8 @@ public interface ChimpClassicVisitor<T> extends ParseTreeVisitor<T> {
 	T visitResource_increase_op_element(Resource_increase_op_elementContext d);
 	
 	T visitResource_decrease_op_element(Resource_decrease_op_elementContext d);
+	
+	T visitIf_Resource_increase_decrease_op_element(If_resource_increase_decrease_op_elementContext d);
 
 
 }

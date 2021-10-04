@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import htn.MDPTemplate;
+import hybridDomainParsing.classic.antlr.ChimpClassicReader.ValueRestriction;
 
 
 public class ResourceUsageTemplate {
@@ -35,7 +36,9 @@ public class ResourceUsageTemplate {
 	 */
 	private List<ResourceUsageTemplate> resourceManipulationTemplates = new ArrayList<ResourceUsageTemplate>();
 
-
+	
+	private ValueRestriction ValueRestriction;
+	
 	public ResourceUsageTemplate(String resourceName, int[] resourceRequirementPositions,
 			String[] resourceRequirements, int resourceUsageLevel) {
 		super();
@@ -60,6 +63,23 @@ public class ResourceUsageTemplate {
 		this.resourceRequirementPositions = null;
 		this.resourceRequirements = null;
 		this.resourceManipulationTemplates = new ArrayList<ResourceUsageTemplate>();
+	}
+
+	public ResourceUsageTemplate(ValueRestriction vr, String resourceName2, int usageLevel, ResourceMan resManip2) {
+		this.resourceName = resourceName2;
+		this.resourceUsageLevel = usageLevel;
+		this.ResManip = resManip2;
+		this.resourceRequirementPositions = null;
+		this.resourceRequirements = null;
+		this.resourceManipulationTemplates = new ArrayList<ResourceUsageTemplate>();
+		this.ValueRestriction=vr;
+	}
+	public ValueRestriction getValueRestriction() {
+		return ValueRestriction;
+	}
+
+	public void setValueRestriction(ValueRestriction valueRestriction) {
+		ValueRestriction = valueRestriction;
 	}
 
 	public ResourceUsageTemplate() {

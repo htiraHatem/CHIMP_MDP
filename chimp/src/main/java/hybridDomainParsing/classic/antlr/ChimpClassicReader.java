@@ -21,13 +21,16 @@ import hybridDomainParsing.classic.antlr.ChimpClassicParser.Delete_spatial_const
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Else_mdp_op_elementContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.If_mdp_defContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.If_mdp_op_elementContext;
+import hybridDomainParsing.classic.antlr.ChimpClassicParser.If_resource_increase_decrease_op_elementContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.If_transition_mdp_defContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.If_transition_mdp_op_elementContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Mdp_reward_defContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Mdp_reward_op_elementContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Mdp_transitionProbability_defContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Mdp_transitionprobability_op_elementContext;
+import hybridDomainParsing.classic.antlr.ChimpClassicParser.Resource_decrease_defContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Resource_decrease_op_elementContext;
+import hybridDomainParsing.classic.antlr.ChimpClassicParser.Resource_increase_defContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Resource_increase_op_elementContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Spatial_constraint_op_elementContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Unary_spatial_constraint_typeContext;
@@ -496,6 +499,8 @@ public class ChimpClassicReader implements ChimpClassicVisitor {
 				resourceUsageTemplate.setResourceManipulationTemplate(visitResource_increase_op_element((Resource_increase_op_elementContext) d));
 			} else if (d instanceof ChimpClassicParser.Resource_decrease_op_elementContext) {
 				resourceUsageTemplate.setResourceManipulationTemplate(visitResource_decrease_op_element((Resource_decrease_op_elementContext) d));
+			} else if (d instanceof ChimpClassicParser.If_resource_increase_decrease_op_elementContext) {
+				resourceUsageTemplate.setResourceManipulationTemplate(visitIf_Resource_increase_decrease_op_element((If_resource_increase_decrease_op_elementContext) d));
 			}
             
             
@@ -1403,6 +1408,45 @@ public class ChimpClassicReader implements ChimpClassicVisitor {
 		ResManip = ResourceMan.Decrease;
 
 		return new ResourceUsageTemplate(resourceName, usageLevel, ResManip);
+	}
+
+	@Override
+	public ResourceUsageTemplate visitIf_Resource_increase_decrease_op_element(If_resource_increase_decrease_op_elementContext d) {
+		ValueRestriction VR = null;
+		String resourceName = null;
+		int usageLevel = 0;
+		ResourceMan ResManip = null;
+
+		if (d.if_resource_increase_decrease_def().if_resource_increase_def() != null) {
+			Value_restriction_defContext valueRes = d.if_resource_increase_decrease_def().if_resource_increase_def()
+					.value_restriction_def();
+			String varName = valueRes.VAR_NAME().toString();
+			List<String> constants = visitConstant_list(valueRes.constant_list());
+			VR = new ValueRestriction(varName, constants);
+
+			Resource_increase_defContext increaseDef = d.if_resource_increase_decrease_def().if_resource_increase_def()
+					.resource_increase_def();
+			
+			resourceName = increaseDef.NAME().getText();
+			usageLevel = numberToInt(increaseDef.NUMBER());
+			ResManip = ResourceMan.Increase;
+			return new ResourceUsageTemplate(VR, resourceName, usageLevel, ResManip);
+		} else if (d.if_resource_increase_decrease_def().if_resource_decrease_def() != null) {
+			Value_restriction_defContext valueRes = d.if_resource_increase_decrease_def().if_resource_decrease_def()
+					.value_restriction_def();
+			String varName = valueRes.VAR_NAME().toString();
+			List<String> constants = visitConstant_list(valueRes.constant_list());
+			VR = new ValueRestriction(varName, constants);
+
+			Resource_decrease_defContext decreaseDef = d.if_resource_increase_decrease_def().if_resource_decrease_def()
+					.resource_decrease_def();
+			resourceName = decreaseDef.NAME().getText();
+			usageLevel = numberToInt(decreaseDef.NUMBER());
+			ResManip = ResourceMan.Decrease;
+			return new ResourceUsageTemplate(VR, resourceName, usageLevel, ResManip);
+		}
+		return new ResourceUsageTemplate();
+
 	}
 
 }

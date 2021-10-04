@@ -96,16 +96,16 @@ public class HTNChimpToMDP {
 
 		HTNTransitionProbabilityFunction transitionModel = new HTNTransitionProbabilityFunction(finalStates);
 		HashMap<Task, HTNState> stateTable = new HashMap<Task, HTNState>();
-		
-		//TCSP 
+
+		// TCSP
 		int maxResourceLevel = fullyExpanded.getResourceSchedulers().get(0).getCapacity();
 		TCSPSolver metaSolver = new TCSPSolver(0, maxResourceLevel, 0);
-		DistanceConstraintSolver groundSolver = (DistanceConstraintSolver)metaSolver.getConstraintSolvers()[0];	
+		DistanceConstraintSolver groundSolver = (DistanceConstraintSolver) metaSolver.getConstraintSolvers()[0];
 		MultiTimePoint init = groundSolver.getSink();
-		
+
 		for (HTNState s : states) {
-			stateTable.put((Task)s.getTask(), s);
-			((Task) s.getTask()).setRCVariable((MultiTimePoint)groundSolver.createVariable() );
+			stateTable.put((Task) s.getTask(), s);
+			((Task) s.getTask()).setRCVariable((MultiTimePoint) groundSolver.createVariable());
 		}
 
 		for (HTNAction action : actions.actions()) {
@@ -147,7 +147,7 @@ public class HTNChimpToMDP {
 					if (prob != 0) {
 						HTNState si = lstate.get(i);
 						HTNState sj = lstate.get(j);
-						
+
 						MDPTemplate temMDP = ((Task) sj.getTask()).getmDPTemplate();
 						List<MDPTemplate> templates = temMDP.getMdpTemplates();
 						Unifier terms = sj.getTask().getUnifier();
@@ -158,44 +158,58 @@ public class HTNChimpToMDP {
 									// update it with unifier
 									c = HTNChimpDomain.convertLISPTerm(m.getValueRestriction().varName);
 									Term var = terms.get(c);
-									
+
 									if (m.getValueRestriction().constants.contains(var.toString()))
 										transitionModel.setTransitionProbability(si, action, sj,
 												m.getTransitionProbability());
 									else if ((temMDP.getReward() != null) && (!transitionModel.exists(si, action, sj)))
 										transitionModel.setTransitionProbability(si, action, sj, 1);
-									}}
+								}
+							}
 						if ((si.getTask().toString().equals("s0")) && (!transitionModel.exists(si, action, sj)))
 							transitionModel.setTransitionProbability(si, action, sj, 1);
-						
-						
-						//create the distance constraints of TCSP
-						int level =((Task)sj.getTask()).getResourceUsageIndicators().get(0).getResourceUsageLevel();
-						int levelI =(int) ((Task)si.getTask()).getRCVariable().getUpperBound();
-						
-						List<ResourceUsageTemplate> manipulationTemps = ((Task)sj.getTask()).getResourceUsageIndicators().get(0).getResourceManipulationTemplates();
-						if(! manipulationTemps.isEmpty() || (manipulationTemps !=null)) {
-							for(ResourceUsageTemplate rt :manipulationTemps ) {
-								if(rt.getResManip().equals(ResourceMan.Increase))
-									level -= rt.getResourceUsageLevel();
-								if(rt.getResManip().equals(ResourceMan.Decrease))
-									level += rt.getResourceUsageLevel();
-								
+
+						// create the distance constraints of TCSP
+						int level = ((Task) sj.getTask()).getResourceUsageIndicators().get(0).getResourceUsageLevel();
+						int levelI = (int) ((Task) si.getTask()).getRCVariable().getUpperBound();
+
+						List<ResourceUsageTemplate> manipulationTemps = ((Task) sj.getTask())
+								.getResourceUsageIndicators().get(0).getResourceManipulationTemplates();
+						if (!manipulationTemps.isEmpty() || (manipulationTemps != null)) {
+							for (ResourceUsageTemplate rt : manipulationTemps) {
+								if (rt.getValueRestriction() != null) {
+									// verify if the value restriction equal to value the parameter of the
+									// operator(unifier)
+									String c = HTNChimpDomain.convertLISPTerm(rt.getValueRestriction().varName);
+									Term var = terms.get(c);
+									if (rt.getValueRestriction().constants.contains(var.toString())) {
+										if (rt.getResManip().equals(ResourceMan.Increase))
+											level -= rt.getResourceUsageLevel();
+										else if (rt.getResManip().equals(ResourceMan.Decrease))
+											level += rt.getResourceUsageLevel();
+									}
+
+								} else {
+									if (rt.getResManip().equals(ResourceMan.Increase))
+										level -= rt.getResourceUsageLevel();
+									if (rt.getResManip().equals(ResourceMan.Decrease))
+										level += rt.getResourceUsageLevel();
+								}
+
 							}
 						}
-						
-						//check that level will not surpass the  maxResourceLevel
-						//TODO to update!!
-						if(maxResourceLevel< (levelI - level))
-							level =0;
+
+						// check that level will not surpass the maxResourceLevel
+						// TODO to update!!
+						if (maxResourceLevel < (levelI - level))
+							level = levelI - maxResourceLevel;
 						Bounds bounds = new Bounds(-level, -level);
 						DistanceConstraint DC = new DistanceConstraint(bounds);
-						
 
 						if (si.getTask().toString().equals("s0"))
 							DC.setFrom(init);
 						else
-							DC.setFrom(((Task)si.getTask()).getRCVariable());
+							DC.setFrom(((Task) si.getTask()).getRCVariable());
 
 						DC.setTo(((Task) sj.getTask()).getRCVariable());
 
@@ -206,12 +220,6 @@ public class HTNChimpToMDP {
 
 						System.out.println(sj.getRemainedResource());
 
-								
-						
-						
-						
-						
-						
 //						
 //						if (((Task) si.getTask()).getmDPTemplate().getTransitionProbability() != null)
 //							transitionModel.setTransitionProbability(si, action, sj,
@@ -260,7 +268,7 @@ public class HTNChimpToMDP {
 			MDPTemplate temMDP = ((Task) sp.getTask()).getmDPTemplate();
 			List<MDPTemplate> templates = temMDP.getMdpTemplates();
 			Unifier terms = sp.getTask().getUnifier();
-			if ((templates.size()>0) && (temMDP.getReward() != null))
+			if ((templates.size() > 0) && (temMDP.getReward() != null))
 				for (MDPTemplate m : templates) {
 					if (m.getReward() != null) {
 						String c = null;
@@ -275,7 +283,7 @@ public class HTNChimpToMDP {
 				}
 			else if ((temMDP.getReward() != null))
 				rewardFunction.setReward(sp, temMDP.getReward());
-				
+
 			// assign the reward to the initial state
 			if ((sp.getTask().toString().equals("s0")) && (!rewardFunction.exists(sp)))
 				rewardFunction.setReward(sp, -0.4);
