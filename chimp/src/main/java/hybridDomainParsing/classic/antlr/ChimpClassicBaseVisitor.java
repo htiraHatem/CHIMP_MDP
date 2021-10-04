@@ -15,6 +15,8 @@ import hybridDomainParsing.classic.antlr.ChimpClassicParser.If_transition_mdp_op
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Mdp_reward_defContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Mdp_reward_op_elementContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Mdp_transitionprobability_op_elementContext;
+import hybridDomainParsing.classic.antlr.ChimpClassicParser.Resource_decrease_op_elementContext;
+import hybridDomainParsing.classic.antlr.ChimpClassicParser.Resource_increase_op_elementContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Spatial_constraint1_defContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Spatial_constraint2_defContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Spatial_constraint_defContext;
@@ -619,6 +621,14 @@ public class ChimpClassicBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 	@Override
 	public MDPTemplate visitMDP_if_transition_op_element(If_transition_mdp_op_elementContext ctx) {
 		return (MDPTemplate) visitChildren(ctx);
+	}
+	@Override
+	public T visitResource_increase_op_element(Resource_increase_op_elementContext d) {
+		return (T) visitChildren(d);
+	}
+	@Override
+	public T visitResource_decrease_op_element(Resource_decrease_op_elementContext d) {
+		return (T) visitChildren(d);
 	}
 
 }

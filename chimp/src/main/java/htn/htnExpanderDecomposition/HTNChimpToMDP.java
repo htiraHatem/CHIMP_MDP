@@ -32,6 +32,8 @@ import mdpSolver.HTNState;
 import mdpSolver.HTNTaskNetwork;
 import mdpSolver.HTNTransitionProbabilityFunction;
 import mdpSolver.HtnMdpFactory;
+import resourceFluent.ResourceUsageTemplate;
+import resourceFluent.ResourceUsageTemplate.ResourceMan;
 
 /**
  * @author meneguzzi ,
@@ -169,8 +171,26 @@ public class HTNChimpToMDP {
 						
 						//create the distance constraints of TCSP
 						int level =((Task)sj.getTask()).getResourceUsageIndicators().get(0).getResourceUsageLevel();
+						int levelI =(int) ((Task)si.getTask()).getRCVariable().getUpperBound();
+						
+						List<ResourceUsageTemplate> manipulationTemps = ((Task)sj.getTask()).getResourceUsageIndicators().get(0).getResourceManipulationTemplates();
+						if(! manipulationTemps.isEmpty() || (manipulationTemps !=null)) {
+							for(ResourceUsageTemplate rt :manipulationTemps ) {
+								if(rt.getResManip().equals(ResourceMan.Increase))
+									level -= rt.getResourceUsageLevel();
+								if(rt.getResManip().equals(ResourceMan.Decrease))
+									level += rt.getResourceUsageLevel();
+								
+							}
+						}
+						
+						//check that level will not surpass the  maxResourceLevel
+						//TODO to update!!
+						if(maxResourceLevel< (levelI - level))
+							level =0;
 						Bounds bounds = new Bounds(-level, -level);
 						DistanceConstraint DC = new DistanceConstraint(bounds);
+						
 
 						if (si.getTask().toString().equals("s0"))
 							DC.setFrom(init);
@@ -240,7 +260,7 @@ public class HTNChimpToMDP {
 			MDPTemplate temMDP = ((Task) sp.getTask()).getmDPTemplate();
 			List<MDPTemplate> templates = temMDP.getMdpTemplates();
 			Unifier terms = sp.getTask().getUnifier();
-			if ((templates.size()>0) || (temMDP.getReward() != null))
+			if ((templates.size()>0) && (temMDP.getReward() != null))
 				for (MDPTemplate m : templates) {
 					if (m.getReward() != null) {
 						String c = null;
@@ -253,6 +273,9 @@ public class HTNChimpToMDP {
 							rewardFunction.setReward(sp, temMDP.getReward());
 					}
 				}
+			else if ((temMDP.getReward() != null))
+				rewardFunction.setReward(sp, temMDP.getReward());
+				
 			// assign the reward to the initial state
 			if ((sp.getTask().toString().equals("s0")) && (!rewardFunction.exists(sp)))
 				rewardFunction.setReward(sp, -0.4);

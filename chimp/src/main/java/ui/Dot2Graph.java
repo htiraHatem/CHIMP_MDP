@@ -69,7 +69,7 @@ public class Dot2Graph {
 				out.print("\"" + s.getId() + "\" [label=\" S" + s.getId() + "   : (reward:" + source.reward(s) + " )");
 			
 				// more details !!
-				// out.print("\""+s.getId()+"\" [label=\""+s.getLabel()()+"
+				// out.print("\""+s.getId()+"\" [label=\""+s.getLabel()+"
 				// (reward:"+source.reward(s)+ " )");
 				
 

@@ -27,6 +27,8 @@ import hybridDomainParsing.classic.antlr.ChimpClassicParser.Mdp_reward_defContex
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Mdp_reward_op_elementContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Mdp_transitionProbability_defContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Mdp_transitionprobability_op_elementContext;
+import hybridDomainParsing.classic.antlr.ChimpClassicParser.Resource_decrease_op_elementContext;
+import hybridDomainParsing.classic.antlr.ChimpClassicParser.Resource_increase_op_elementContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Spatial_constraint_op_elementContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Unary_spatial_constraint_typeContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Value_restriction_defContext;
@@ -47,6 +49,7 @@ import org.metacsp.time.Bounds;
 import resourceFluent.FluentResourceUsageScheduler;
 import resourceFluent.FluentScheduler;
 import resourceFluent.ResourceUsageTemplate;
+import resourceFluent.ResourceUsageTemplate.ResourceMan;
 
 import java.io.IOException;
 import java.util.*;
@@ -421,8 +424,9 @@ public class ChimpClassicReader implements ChimpClassicVisitor {
         List<SubDifferentDefinition> subDifferentDefinitions = new ArrayList<>();
         List<AdditionalConstraintTemplate> temporalConstraintTemplates = new ArrayList<>();
         List<IntegerConstraintTemplate> integerConstraintTemplates = new ArrayList<>();
-        List<ResourceUsageTemplate> resourceUsageTemplates = new ArrayList<>();
+        //List<ResourceUsageTemplate> resourceUsageTemplates = new ArrayList<>();
         List<SpatialConstraintTemplate> rectangularConstraintTemplates = new ArrayList<>();
+        ResourceUsageTemplate resourceUsageTemplate =new ResourceUsageTemplate();
         MDPTemplate mdpTemplate = new MDPTemplate();
         for (ChimpClassicParser.Op_elementContext d : ctx.op_element()) {
 
@@ -457,8 +461,15 @@ public class ChimpClassicReader implements ChimpClassicVisitor {
                 integerConstraintTemplates.add(visitInteger_constraint_op_element(
                         (ChimpClassicParser.Integer_constraint_op_elementContext) d));
             } else if (d instanceof ChimpClassicParser.Resource_usage_op_elementContext) {
-                resourceUsageTemplates.add(visitResource_usage_op_element(
-                        (ChimpClassicParser.Resource_usage_op_elementContext) d));
+//                resourceUsageTemplates.add(visitResource_usage_op_element(
+//                        (ChimpClassicParser.Resource_usage_op_elementContext) d));
+            	List<ResourceUsageTemplate> temp = new ArrayList<ResourceUsageTemplate>();
+				if(resourceUsageTemplate.getResourceManipulationTemplates().size()>0)
+            		 temp=   resourceUsageTemplate.getResourceManipulationTemplates();
+				
+            	resourceUsageTemplate=(visitResource_usage_op_element(
+                      (ChimpClassicParser.Resource_usage_op_elementContext) d));
+            	resourceUsageTemplate.setResourceManipulationTemplates(temp);
             } else if (d instanceof ChimpClassicParser.Spatial_constraint_op_elementContext) {
             	rectangularConstraintTemplates.add((SpatialConstraintTemplate) visitSpatial_constraint_op_element(
                         (ChimpClassicParser.Spatial_constraint_op_elementContext) d));
@@ -481,7 +492,12 @@ public class ChimpClassicReader implements ChimpClassicVisitor {
 							visitMDP_else_op_element((Else_mdp_op_elementContext) d).getTransitionProbability());
 			} else if (d instanceof ChimpClassicParser.If_transition_mdp_op_elementContext) {
 				mdpTemplate.setMdpTemplate(visitMDP_if_transition_op_element((If_transition_mdp_op_elementContext) d));
+			} else if (d instanceof ChimpClassicParser.Resource_increase_op_elementContext) {
+				resourceUsageTemplate.setResourceManipulationTemplate(visitResource_increase_op_element((Resource_increase_op_elementContext) d));
+			} else if (d instanceof ChimpClassicParser.Resource_decrease_op_elementContext) {
+				resourceUsageTemplate.setResourceManipulationTemplate(visitResource_decrease_op_element((Resource_decrease_op_elementContext) d));
 			}
+            
             
             
             
@@ -516,7 +532,7 @@ public class ChimpClassicReader implements ChimpClassicVisitor {
         op.addSpatialConstraint(rectangularConstraintTemplates);
         op.addMdpTemplate(mdpTemplate);
 
-        op.addResourceUsageTemplates(resourceUsageTemplates);
+        op.addResourceUsageTemplates(Arrays.asList(resourceUsageTemplate));
 
         return op;
     }
@@ -1361,6 +1377,32 @@ public class ChimpClassicReader implements ChimpClassicVisitor {
 		Double transition = Double.valueOf(d.if_transition_mdp_def().mdp_transitionProbability_def().double_or_int().getText());
 		MDPTemplate mdpT = new MDPTemplate();
 		return mdpT.SetTransitionRestriction(VR, transition);
+	}
+
+	@Override
+	public ResourceUsageTemplate visitResource_increase_op_element(Resource_increase_op_elementContext ctx) {
+		String resourceName = null;
+		int usageLevel = 0;
+		ResourceMan ResManip = null;
+
+		resourceName = ctx.resource_increase_def().NAME().getText();
+		usageLevel = numberToInt(ctx.resource_increase_def().NUMBER());
+		ResManip = ResourceMan.Increase;
+
+		return new ResourceUsageTemplate(resourceName, usageLevel, ResManip);
+	}
+
+	@Override
+	public ResourceUsageTemplate visitResource_decrease_op_element(Resource_decrease_op_elementContext ctx) {
+		String resourceName = null;
+		int usageLevel = 0;
+		ResourceMan ResManip = null;
+
+		resourceName = ctx.resource_decrease_def().NAME().getText();
+		usageLevel = numberToInt(ctx.resource_decrease_def().NUMBER());
+		ResManip = ResourceMan.Decrease;
+
+		return new ResourceUsageTemplate(resourceName, usageLevel, ResManip);
 	}
 
 }

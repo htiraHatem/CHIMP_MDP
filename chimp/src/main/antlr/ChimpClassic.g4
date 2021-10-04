@@ -64,6 +64,8 @@ op_element : precondition_def #precondition_op_element
 			 | if_mdp_def #if_mdp_op_element
 			 | else_mdp_def #else_mdp_op_element
 			 | if_transition_mdp_def #if_transition_mdp_op_element 
+			 | resource_increase_def #resource_increase_op_element
+			 | resource_decrease_def #resource_decrease_op_element
 			  ;
 
 precondition_def : '(Pre' id predicate ')';
@@ -135,6 +137,9 @@ if_transition_mdp_def : '(if' value_restriction_def mdp_transitionProbability_de
 if_reward_transition_mdp_def : '(if' value_restriction_def mdp_reward_def mdp_transitionProbability_def ')';
 
 else_mdp_def : '(else' mdp_reward_def ')' | '(else' mdp_transitionProbability_def ')' | '(else' mdp_reward_def mdp_transitionProbability_def ')';
+
+resource_increase_def : '(Increase' NAME NUMBER ')';
+resource_decrease_def : '(Decrease' NAME NUMBER ')';
 
 resource_usage_def : '(ResourceUsage' NAME NUMBER ')'
                    | '(ResourceUsage' usage_def param_item* ')';

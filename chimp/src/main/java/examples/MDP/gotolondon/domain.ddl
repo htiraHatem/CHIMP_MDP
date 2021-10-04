@@ -3,11 +3,11 @@
 (MaxArgs 3)
 
 (PredicateSymbols
-  has agent_at !getVehicle !moveTo obtainVehicle goTo moveTo
+  has agent_at !getVehicle !moveTo obtainVehicle goTo moveTo hasMoney true !goToBank
   connected)
 
 
-(Resource Money 120)
+(Resource Money 1200)
 
 ################################
 ####  OPERATORS ################
@@ -23,8 +23,13 @@
   (if (Values ?v plane) (TransitionProb 0.8))
   (else (Reward -0.04) (TransitionProb 1))
 
+(Increase Money 50)
+(Decrease Money 10)
+ # (if (< money 20) (increase reward/cost 0.01)
+ # (if (Values ?v plane) (increase reward/cost 0.01)
+
   (ResourceUsage 
-  (Usage BatteryStorageCapacity 20))
+  (Usage Money 20))
 )
 
 (:operator 
@@ -40,9 +45,20 @@
   (else (Reward -0.04) (TransitionProb 1)) # in all the other states
 
    (ResourceUsage 
-  (Usage BatteryStorageCapacity 40))
+  (Usage Money 40))
  # (if (< resource 20) (increase resource 0.01)
 
+)
+
+(:operator 
+  (Head !goToBank())
+  (Pre p1 hasMoney(false))
+  (Del p1)
+  (Add e1 hasMoney(true))
+  (Reward -0.04)
+  (TransitionProb 1)
+     (ResourceUsage 
+  (Usage Money 10))
 )
 
 (:method
@@ -71,8 +87,10 @@
 (:method 
 (Head moveTo(london))
 (Pre p1 has(plane))
+#(Pre p2 hasMoney(false))
 (Sub s1 !moveTo(airport nyc plane))
-(Sub s2 !moveTo(nyc london plane))
+#(Sub s2 !goToBank())
+(Sub s3 !moveTo(nyc london plane))
 )
 
 (:method
@@ -82,11 +100,13 @@
 (Sub s2 !moveTo(soton london ship))
 )
 
+
+
 (:method 
 (Head moveTo(london))
 (Pre p1 has(ship))
 (Sub s1 !moveTo(harbor lpool ship))
-(Sub s2 !moveTo(lpool london ship))
+(Sub s3 !moveTo(lpool london ship))
 )
 
 

@@ -2,13 +2,15 @@
 
 (ArgumentSymbols
 london
-home airport harbor ship p1 pp Ship
+home airport harbor ship  true
 car plan placingAreaEastLeftTable1 manipulationAreaSouthTable1 
 )
 
 
 (Fluent f1 agent_at(home))
 (Constraint Release[0,0](f1))
+
+(Fluent f2 hasMoney(false))
 
 #(Fluent f2 has(car))
 #(Constraint Release[0,0](f2))
