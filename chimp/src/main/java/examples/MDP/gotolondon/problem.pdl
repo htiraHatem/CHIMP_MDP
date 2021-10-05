@@ -2,7 +2,7 @@
 
 (ArgumentSymbols
 london
-home airport harbor ship  true false bank feet
+home airport harbor ship  true false bank feet undef
 car plan placingAreaEastLeftTable1 manipulationAreaSouthTable1 
 )
 
@@ -10,14 +10,10 @@ car plan placingAreaEastLeftTable1 manipulationAreaSouthTable1
 (Fluent f1 agent_at(home))
 (Constraint Release[0,0](f1))
 
-(Fluent f2 hasMoney(false))
+(Fluent f2 hasMoney(undef))
+(Fluent f3 onFoot(true))
 
-#(Fluent f2 has(car))
-#(Constraint Release[0,0](f2))
 
-#(Task t1 !getVehicle(car))
-#(Task t1 !moveTo(home airport car))
-#(Task t1 obtainVehicle())
 (Task t1 goTo(london))
 
 )

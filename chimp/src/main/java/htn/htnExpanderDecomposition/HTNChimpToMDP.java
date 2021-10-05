@@ -225,6 +225,9 @@ public class HTNChimpToMDP {
 							sj.setRemainedResource(false);
 
 						System.out.println(sj.getRemainedResource());
+						
+						if(sj.getId() == 7)
+							System.out.println(sj);
 
 //						
 //						if (((Task) si.getTask()).getmDPTemplate().getTransitionProbability() != null)
