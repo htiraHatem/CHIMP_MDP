@@ -72,6 +72,9 @@
   (TransitionProb 1)
      (ResourceUsage 
   (Usage Money 10))
+
+  (if (IC Money > 2) (Increase (Reward 0.02)))
+
 (Increase (Reward 0.02))
   # withdraw money in the airport
   (if (Values ?v bank) (Increase Money 100))

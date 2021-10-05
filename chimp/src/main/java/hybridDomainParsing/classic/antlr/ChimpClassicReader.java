@@ -23,6 +23,8 @@ import hybridDomainParsing.classic.antlr.ChimpClassicParser.Else_mdp_op_elementC
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.If_mdp_defContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.If_mdp_op_elementContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.If_resource_increase_decrease_op_elementContext;
+import hybridDomainParsing.classic.antlr.ChimpClassicParser.If_reward_increase_decrease_defContext;
+import hybridDomainParsing.classic.antlr.ChimpClassicParser.If_reward_increase_decrease_op_elementContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.If_transition_mdp_defContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.If_transition_mdp_op_elementContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Mdp_reward_defContext;
@@ -35,6 +37,7 @@ import hybridDomainParsing.classic.antlr.ChimpClassicParser.Resource_decrease_de
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Resource_decrease_op_elementContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Resource_increase_defContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Resource_increase_op_elementContext;
+import hybridDomainParsing.classic.antlr.ChimpClassicParser.Reward_mdp_decrease_defContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Reward_mdp_increase_defContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Spatial_constraint_op_elementContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Unary_spatial_constraint_typeContext;
@@ -1466,8 +1469,38 @@ public class ChimpClassicReader implements ChimpClassicVisitor {
 			ResManip = RewardMan.Increase;
 			level = Double.valueOf(def.reward_mdp_increase_def().mdp_reward_def().double_or_int().getText());
 			return new MDPTemplate(level,ResManip);
+		} else 		if(def.reward_mdp_decrease_def()!=null) {
+			Reward_mdp_decrease_defContext rewardDef =def.reward_mdp_decrease_def();
+			//Double reward = Double.valueOf(rewardDef.NAME().getText());
+			ResManip = RewardMan.Decrease;
+			level = Double.valueOf(def.reward_mdp_decrease_def().mdp_reward_def().double_or_int().getText());
+			return new MDPTemplate(level,ResManip);
 		}
 		return null;
+	}
+
+	@Override
+	public MDPTemplate visitIf_mdp_reward_increase_decrease_op_element(If_reward_increase_decrease_op_elementContext d) {
+	If_reward_increase_decrease_defContext def = d.if_reward_increase_decrease_def();
+		RewardMan ResManip;
+		if (def.mdp_reward_increase_decrease_def().reward_mdp_increase_def() != null) {
+			
+            IntegerConstraintTemplate IC = visitInteger_constraint1_def(def.integer_constraint1_def());
+			Reward_mdp_increase_defContext rewardDef =def.mdp_reward_increase_decrease_def().reward_mdp_increase_def();
+			ResManip = RewardMan.Increase;
+			Double level = Double.valueOf(def.mdp_reward_increase_decrease_def().reward_mdp_increase_def().mdp_reward_def().double_or_int().getText());
+			return new MDPTemplate(IC,level, ResManip);
+		}else
+			if (def.mdp_reward_increase_decrease_def().reward_mdp_decrease_def() != null) {
+				
+	            IntegerConstraintTemplate IC = visitInteger_constraint1_def(def.integer_constraint1_def());
+				Reward_mdp_increase_defContext rewardDef =def.mdp_reward_increase_decrease_def().reward_mdp_increase_def();
+				ResManip = RewardMan.Decrease;
+				Double level = Double.valueOf(def.mdp_reward_increase_decrease_def().reward_mdp_decrease_def().mdp_reward_def().double_or_int().getText());
+				return new MDPTemplate(IC,level, ResManip);
+			}
+			
+		return new MDPTemplate();
 	}
 
 }

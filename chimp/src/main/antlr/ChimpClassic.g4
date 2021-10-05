@@ -68,6 +68,7 @@ op_element : precondition_def #precondition_op_element
 			 | resource_decrease_def #resource_decrease_op_element
 			 | if_resource_increase_decrease_def #if_resource_increase_decrease_op_element
 			 | mdp_reward_increase_decrease_def #mdp_reward_increase_decrease_op_element
+			 | if_reward_increase_decrease_def #if_reward_increase_decrease_op_element
 			  ;
 
 precondition_def : '(Pre' id predicate ')';
@@ -146,6 +147,7 @@ if_resource_decrease_def : '(if' value_restriction_def resource_decrease_def ')'
 
 else_mdp_def : '(else' mdp_reward_def ')' | '(else' mdp_transitionProbability_def ')' | '(else' mdp_reward_def mdp_transitionProbability_def ')';
 
+if_reward_increase_decrease_def : '(if' integer_constraint1_def mdp_reward_increase_decrease_def ')' ;
 
 mdp_reward_increase_decrease_def : reward_mdp_increase_def | reward_mdp_decrease_def;
 reward_mdp_increase_def : '(Increase' mdp_reward_def ')';

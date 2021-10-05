@@ -18,6 +18,7 @@ public class MDPTemplate {
     private ValueRestriction valueRestriction=null;
     private List<MDPTemplate>  mdpTemplates= new ArrayList<MDPTemplate>();
 	private RewardMan RManip=null;
+	private IntegerConstraintTemplate IC;
 
     
 
@@ -41,6 +42,12 @@ public class MDPTemplate {
 	public MDPTemplate(Double level, RewardMan resManip) {
 		this.reward = level;
 		this.RManip = resManip;
+	}
+
+	public MDPTemplate(IntegerConstraintTemplate iC, Double level, RewardMan resManip) {
+		this.reward = level;
+		this.RManip = resManip;
+		this.IC =iC;
 	}
 
 	public MDPTemplate SetTransitionRestriction(ValueRestriction vR, Double transitionProbability) {
