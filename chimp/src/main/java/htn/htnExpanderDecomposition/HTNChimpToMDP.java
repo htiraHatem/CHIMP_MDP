@@ -166,6 +166,9 @@ public class HTNChimpToMDP {
 												m.getTransitionProbability());
 									else if ((temMDP.getReward() != null) && (!transitionModel.exists(si, action, sj)))
 										transitionModel.setTransitionProbability(si, action, sj, 1);
+								}else //TODO to check !!!
+								{
+									transitionModel.setTransitionProbability(si, action, sj, 1);
 								}
 							}
 						else if((temMDP.getTransitionProbability() != null))
@@ -280,14 +283,27 @@ public class HTNChimpToMDP {
 			if ((templates.size() > 0) && (temMDP.getReward() != null))
 				for (MDPTemplate m : templates) {
 					if (m.getReward() != null) {
-						String c = null;
-						// update it with unifier
-						c = HTNChimpDomain.convertLISPTerm(m.getValueRestriction().varName);
-						Term var = terms.get(c);
-						if (m.getValueRestriction().constants.contains(var.toString()))
-							rewardFunction.setReward(sp, m.getReward());
-						else if ((temMDP.getReward() != null) && (!rewardFunction.exists(sp)))
-							rewardFunction.setReward(sp, temMDP.getReward());
+						if (m.getValueRestriction() != null) {
+							String c = null;
+							// update it with unifier
+							c = HTNChimpDomain.convertLISPTerm(m.getValueRestriction().varName);
+							Term var = terms.get(c);
+							if (m.getValueRestriction().constants.contains(var.toString()))
+								rewardFunction.setReward(sp, m.getReward());
+							else if ((temMDP.getReward() != null) && (!rewardFunction.exists(sp)))
+								rewardFunction.setReward(sp, temMDP.getReward());
+						} else if (m.getRManip() != null) {
+
+							switch (m.getRManip()) {
+							case Decrease:
+								rewardFunction.setReward(sp, temMDP.getReward() - m.getReward());
+								break;
+							case Increase:
+								rewardFunction.setReward(sp, temMDP.getReward() + m.getReward());
+								break;
+							}
+						}
+
 					}
 				}
 			else if ((temMDP.getReward() != null))

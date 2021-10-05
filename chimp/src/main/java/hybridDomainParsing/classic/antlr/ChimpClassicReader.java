@@ -9,6 +9,7 @@ import htn.HTNPrecondition;
 import htn.IntArg;
 import htn.IntegerConstraintTemplate;
 import htn.MDPTemplate;
+import htn.MDPTemplate.RewardMan;
 import htn.OrderingConstraintTemplate;
 import htn.PlanReportroryItem;
 import htn.SpatialConstraintTemplate;
@@ -25,6 +26,8 @@ import hybridDomainParsing.classic.antlr.ChimpClassicParser.If_resource_increase
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.If_transition_mdp_defContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.If_transition_mdp_op_elementContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Mdp_reward_defContext;
+import hybridDomainParsing.classic.antlr.ChimpClassicParser.Mdp_reward_increase_decrease_defContext;
+import hybridDomainParsing.classic.antlr.ChimpClassicParser.Mdp_reward_increase_decrease_op_elementContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Mdp_reward_op_elementContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Mdp_transitionProbability_defContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Mdp_transitionprobability_op_elementContext;
@@ -32,6 +35,7 @@ import hybridDomainParsing.classic.antlr.ChimpClassicParser.Resource_decrease_de
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Resource_decrease_op_elementContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Resource_increase_defContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Resource_increase_op_elementContext;
+import hybridDomainParsing.classic.antlr.ChimpClassicParser.Reward_mdp_increase_defContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Spatial_constraint_op_elementContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Unary_spatial_constraint_typeContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Value_restriction_defContext;
@@ -501,6 +505,8 @@ public class ChimpClassicReader implements ChimpClassicVisitor {
 				resourceUsageTemplate.setResourceManipulationTemplate(visitResource_decrease_op_element((Resource_decrease_op_elementContext) d));
 			} else if (d instanceof ChimpClassicParser.If_resource_increase_decrease_op_elementContext) {
 				resourceUsageTemplate.setResourceManipulationTemplate(visitIf_Resource_increase_decrease_op_element((If_resource_increase_decrease_op_elementContext) d));
+			} else if (d instanceof ChimpClassicParser.Mdp_reward_increase_decrease_op_elementContext) {
+				mdpTemplate.setMdpTemplate(visitMdp_reward_increase_decrease_op_element((Mdp_reward_increase_decrease_op_elementContext) d));
 			}
             
             
@@ -1447,6 +1453,21 @@ public class ChimpClassicReader implements ChimpClassicVisitor {
 		}
 		return new ResourceUsageTemplate();
 
+	}
+
+	@Override
+	public MDPTemplate visitMdp_reward_increase_decrease_op_element(Mdp_reward_increase_decrease_op_elementContext ctx) {
+		Double level = 0.0;
+		RewardMan ResManip = null;
+		Mdp_reward_increase_decrease_defContext def = ctx.mdp_reward_increase_decrease_def();
+		if(def.reward_mdp_increase_def()!=null) {
+			Reward_mdp_increase_defContext rewardDef =def.reward_mdp_increase_def();
+			//Double reward = Double.valueOf(rewardDef.NAME().getText());
+			ResManip = RewardMan.Increase;
+			level = Double.valueOf(def.reward_mdp_increase_def().mdp_reward_def().double_or_int().getText());
+			return new MDPTemplate(level,ResManip);
+		}
+		return null;
 	}
 
 }

@@ -16,6 +16,7 @@ import hybridDomainParsing.classic.antlr.ChimpClassicParser.If_resource_increase
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.If_transition_mdp_defContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.If_transition_mdp_op_elementContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Mdp_reward_defContext;
+import hybridDomainParsing.classic.antlr.ChimpClassicParser.Mdp_reward_increase_decrease_op_elementContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Mdp_reward_op_elementContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Mdp_transitionprobability_op_elementContext;
 import hybridDomainParsing.classic.antlr.ChimpClassicParser.Resource_decrease_op_elementContext;
@@ -552,6 +553,8 @@ public interface ChimpClassicVisitor<T> extends ParseTreeVisitor<T> {
 	T visitResource_decrease_op_element(Resource_decrease_op_elementContext d);
 	
 	T visitIf_Resource_increase_decrease_op_element(If_resource_increase_decrease_op_elementContext d);
+	
+	T visitMdp_reward_increase_decrease_op_element(Mdp_reward_increase_decrease_op_elementContext d);
 
 
 }

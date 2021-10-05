@@ -24,7 +24,7 @@
   (else (Reward -0.04) (TransitionProb 1))
 #(Increase Money 50)
 #(Decrease Money 10)
- # (if (< money 20) (increase reward/cost 0.01)
+ # (if (< money 20) (increase reward/cost 0.01))
  # (if (Values ?v plane) (increase reward/cost 0.01)
 
 
@@ -46,7 +46,7 @@
 
    (ResourceUsage 
   (Usage Money 40))
- # (if (IC ?Money > 2) (decrease Reward 0.01)
+ # (if (IC ?Money > 2) (decrease/increase Reward/transitionProb 0.01)
  
 
 )
@@ -68,13 +68,13 @@
   (Head !enter(?v))
   (Pre p2 agent_at(?v))
   (Add e1 hasMoney(true))
-  (Reward -0.01)
+  (Reward -0.04)
   (TransitionProb 1)
      (ResourceUsage 
   (Usage Money 10))
-
+(Increase (Reward 0.02))
   # withdraw money in the airport
-  (Increase Money 100)
+  (if (Values ?v bank) (Increase Money 100))
 )
 
 (:method
