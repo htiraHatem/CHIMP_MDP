@@ -511,6 +511,11 @@ public class ChimpClassicReader implements ChimpClassicVisitor {
 			} else if (d instanceof ChimpClassicParser.Mdp_reward_increase_decrease_op_elementContext) {
 				mdpTemplate.setMdpTemplate(visitMdp_reward_increase_decrease_op_element((Mdp_reward_increase_decrease_op_elementContext) d));
 			}
+			else if (d instanceof ChimpClassicParser.If_reward_increase_decrease_op_elementContext) {
+				mdpTemplate.setMdpTemplate(visitIf_mdp_reward_increase_decrease_op_element((If_reward_increase_decrease_op_elementContext) d));
+			}
+            
+            
             
             
             

@@ -16,20 +16,23 @@
 (:operator 
   (Head !getVehicle(?v))
   (Add e1 has(?v))
-  #(Reward -0.04)
+  (Reward -0.04)
    # transition probability is attached to the Task
    # reward is attached with action and will be assigned to the current state 
-  (if (Values ?v car ship) (Reward -0.01) (TransitionProb 1))
-  (if (Values ?v plane) (TransitionProb 0.8))
+ # (if (Values ?v car ship) (Reward -0.01) (TransitionProb 1))
+  (if (Values ?v plane) (Reward -0.01) (TransitionProb 0.8))
   (else (Reward -0.04) (TransitionProb 1))
+
+  #tofix  not working
+    (if (Values ?v plane) (TransitionProb 0.8))
+
 #(Increase Money 50)
 #(Decrease Money 10)
  # (if (< money 20) (increase reward/cost 0.01))
  # (if (Values ?v plane) (increase reward/cost 0.01)
 
 
-  (ResourceUsage 
-  (Usage Money 20))
+(ResourceUsage (Usage Money 20))
 )
 
 (:operator 
@@ -44,8 +47,7 @@
   (if (Values ?l2 airport) (TransitionProb 0.8))
   (else (Reward -0.04) (TransitionProb 1)) # in all the other states
 
-   (ResourceUsage 
-  (Usage Money 40))
+  (ResourceUsage (Usage Money 40))
  # (if (IC ?Money > 2) (decrease/increase Reward/transitionProb 0.01)
  
 
@@ -59,9 +61,11 @@
   (Add e1 agent_at(?l2))
   (Reward -0.01)
   (TransitionProb 0.1)
+  (ResourceUsage (Usage Money 0))
 
-     (ResourceUsage 
-  (Usage Money 0))
+    # increase the cost if the condition is met
+ # (if (IC ?Money < 75) (Increase (Reward -0.04)))
+ (if (IC ?Money < 75) (Decrease (Reward 0.03)))
 )
 
 (:operator 
@@ -70,10 +74,7 @@
   (Add e1 hasMoney(true))
   (Reward -0.04)
   (TransitionProb 1)
-     (ResourceUsage 
-  (Usage Money 10))
-
-  (if (IC Money > 2) (Increase (Reward 0.02)))
+  (ResourceUsage (Usage Money 10))
 
 (Increase (Reward 0.02))
   # withdraw money in the airport

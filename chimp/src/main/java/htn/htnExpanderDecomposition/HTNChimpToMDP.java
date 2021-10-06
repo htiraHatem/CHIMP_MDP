@@ -23,6 +23,7 @@ import edu.cmu.ita.htn.Constraint;
 import edu.cmu.ita.htn.HTNFactory;
 import edu.cmu.ita.htn.MultiState;
 import edu.cmu.ita.mdp.TransitionMatrix;
+import htn.IntegerConstraintTemplate;
 import htn.MDPTemplate;
 import jason.asSemantics.Unifier;
 import jason.asSyntax.Term;
@@ -280,9 +281,11 @@ public class HTNChimpToMDP {
 			MDPTemplate temMDP = ((Task) sp.getTask()).getmDPTemplate();
 			List<MDPTemplate> templates = temMDP.getMdpTemplates();
 			Unifier terms = sp.getTask().getUnifier();
+			long remainedRC = ((Task) sp.getTask()).getRCVariable().getUpperBound();
 			if ((templates.size() > 0) && (temMDP.getReward() != null))
 				for (MDPTemplate m : templates) {
 					if (m.getReward() != null) {
+						// assign the reward based on value restriction
 						if (m.getValueRestriction() != null) {
 							String c = null;
 							// update it with unifier
@@ -293,15 +296,15 @@ public class HTNChimpToMDP {
 							else if ((temMDP.getReward() != null) && (!rewardFunction.exists(sp)))
 								rewardFunction.setReward(sp, temMDP.getReward());
 						} else if (m.getRManip() != null) {
-
-							switch (m.getRManip()) {
-							case Decrease:
-								rewardFunction.setReward(sp, temMDP.getReward() - m.getReward());
-								break;
-							case Increase:
-								rewardFunction.setReward(sp, temMDP.getReward() + m.getReward());
-								break;
-							}
+							// increase/decrease the reward
+							if(m.getIC()!=null) {
+								
+								if (switchf(remainedRC ,m))
+									rewardFunction.setReward(sp,rewardMan(m,temMDP));
+								else
+									rewardFunction.setReward(sp,temMDP.getReward());
+							} else
+								rewardFunction.setReward(sp,rewardMan(m,temMDP));
 						}
 
 					}
@@ -314,6 +317,41 @@ public class HTNChimpToMDP {
 				rewardFunction.setReward(sp, -0.4);
 		}
 		return rewardFunction;
+	}
+	
+	private static Double rewardMan(MDPTemplate m, MDPTemplate temMDP) {
+		switch (m.getRManip()) {
+		case Decrease:
+			return temMDP.getReward() - m.getReward();
+		case Increase:
+			return temMDP.getReward() + m.getReward();
+		}
+		return null;
+	}
+	
+	private static boolean switchf(long remained, MDPTemplate m) {
+	IntegerConstraintTemplate integerConstr = m.getIC();
+	int threshold = integerConstr.cste;
+	String op = integerConstr.op1;
+	Boolean verif = false;
+	switch (op) {
+	case ">=":
+		verif = (remained >= threshold);
+		break;
+	case "<=":
+		verif = (remained <= threshold);
+		break;
+	case "<":
+		verif = (remained < threshold);
+		break;
+	case ">":
+		verif = (remained > threshold);
+		break;
+	case "!=":
+		verif = (remained != threshold);
+		break;
+	}
+	return verif;
 	}
 
 	// a reward is constant everywhere except the goal

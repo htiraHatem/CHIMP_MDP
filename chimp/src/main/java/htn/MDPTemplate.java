@@ -47,7 +47,7 @@ public class MDPTemplate {
 	public MDPTemplate(IntegerConstraintTemplate iC, Double level, RewardMan resManip) {
 		this.reward = level;
 		this.RManip = resManip;
-		this.IC =iC;
+		this.setIC(iC);
 	}
 
 	public MDPTemplate SetTransitionRestriction(ValueRestriction vR, Double transitionProbability) {
@@ -87,6 +87,14 @@ public class MDPTemplate {
 
 	public RewardMan getRManip() {
 		return RManip;
+	}
+
+	public IntegerConstraintTemplate getIC() {
+		return IC;
+	}
+
+	public void setIC(IntegerConstraintTemplate iC) {
+		IC = iC;
 	}
 
 
