@@ -11,7 +11,10 @@ car plan placingAreaEastLeftTable1 manipulationAreaSouthTable1
 (Constraint Release[0,0](f1))
 
 (Fluent f2 hasMoney(undef))
+#to fix!!
 (Fluent f3 onFoot(true))
+(Fluent f4 has(feet))
+
 
 
 (Task t1 goTo(london))

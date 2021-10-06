@@ -43,6 +43,7 @@ import resourceFluent.ResourceUsageTemplate.ResourceMan;
 public class HTNChimpToMDP {
 
 	private static final Logger logger = Logger.getLogger(HTNChimpToMDP.class.getName());
+	static Boolean resourceSolver=false;
 
 	public final static HTNAction createMDPActions(LinkedList<htn.htnExpanderDecomposition.Task> linkedList) {
 		HashSet<String> uniqueActions = new HashSet<String>();
@@ -97,17 +98,28 @@ public class HTNChimpToMDP {
 
 		HTNTransitionProbabilityFunction transitionModel = new HTNTransitionProbabilityFunction(finalStates);
 		HashMap<Task, HTNState> stateTable = new HashMap<Task, HTNState>();
-
+		
 		// TCSP
-		int maxResourceLevel = fullyExpanded.getResourceSchedulers().get(0).getCapacity();
-		TCSPSolver metaSolver = new TCSPSolver(0, maxResourceLevel, 0);
-		DistanceConstraintSolver groundSolver = (DistanceConstraintSolver) metaSolver.getConstraintSolvers()[0];
-		MultiTimePoint init = groundSolver.getSink();
+		int maxResourceLevel = 0;
+		TCSPSolver metaSolver ;
+		DistanceConstraintSolver groundSolver=null;
+		MultiTimePoint init = null;
+		if (!fullyExpanded.getResourceSchedulers().isEmpty()) {
+			resourceSolver=true;
+			maxResourceLevel = fullyExpanded.getResourceSchedulers().get(0).getCapacity();
+			metaSolver = new TCSPSolver(0, maxResourceLevel, 0);
+			groundSolver = (DistanceConstraintSolver) metaSolver.getConstraintSolvers()[0];
+			init = groundSolver.getSink();
 
-		for (HTNState s : states) {
-			stateTable.put((Task) s.getTask(), s);
-			((Task) s.getTask()).setRCVariable((MultiTimePoint) groundSolver.createVariable());
-		}
+			for (HTNState s : states) {
+				stateTable.put((Task) s.getTask(), s);
+				((Task) s.getTask()).setRCVariable((MultiTimePoint) groundSolver.createVariable());
+			}
+		} else
+			for (HTNState s : states) {
+				stateTable.put((Task) s.getTask(), s);
+			}
+
 
 		for (HTNAction action : actions.actions()) {
 			TransitionMatrix matrix = new TransitionMatrix(states.size());
@@ -148,7 +160,7 @@ public class HTNChimpToMDP {
 					if (prob != 0) {
 						HTNState si = lstate.get(i);
 						HTNState sj = lstate.get(j);
-						if(sj.getId()==5)
+						if (sj.getId() == 5)
 							System.out.print(si.getLabel());
 
 						MDPTemplate temMDP = ((Task) sj.getTask()).getmDPTemplate();
@@ -156,6 +168,7 @@ public class HTNChimpToMDP {
 						Unifier terms = sj.getTask().getUnifier();
 						if (!templates.isEmpty())
 							for (MDPTemplate m : templates) {
+								// assign probability
 								if (m.getTransitionProbability() != null) {
 									String c = null;
 									// update it with unifier
@@ -167,18 +180,19 @@ public class HTNChimpToMDP {
 												m.getTransitionProbability());
 									else if ((temMDP.getReward() != null) && (!transitionModel.exists(si, action, sj)))
 										transitionModel.setTransitionProbability(si, action, sj, 1);
-								}else //TODO to check !!!
+								} else // TODO to check !!!
 								{
 									transitionModel.setTransitionProbability(si, action, sj, 1);
 								}
 							}
-						else if((temMDP.getTransitionProbability() != null))
+						else if ((temMDP.getTransitionProbability() != null))
 							transitionModel.setTransitionProbability(si, action, sj, temMDP.getTransitionProbability());
 
-							
+						// assign for the initial state
 						if ((si.getTask().toString().equals("s0")) && (!transitionModel.exists(si, action, sj)))
 							transitionModel.setTransitionProbability(si, action, sj, 1);
 
+						if(resourceSolver) {
 						// create the distance constraints of TCSP
 						int level = ((Task) sj.getTask()).getResourceUsageIndicators().get(0).getResourceUsageLevel();
 						int levelI = (int) ((Task) si.getTask()).getRCVariable().getUpperBound();
@@ -229,9 +243,7 @@ public class HTNChimpToMDP {
 							sj.setRemainedResource(false);
 
 						System.out.println(sj.getRemainedResource());
-						
-						if(sj.getId() == 7)
-							System.out.println(sj);
+						}
 
 //						
 //						if (((Task) si.getTask()).getmDPTemplate().getTransitionProbability() != null)
@@ -281,7 +293,9 @@ public class HTNChimpToMDP {
 			MDPTemplate temMDP = ((Task) sp.getTask()).getmDPTemplate();
 			List<MDPTemplate> templates = temMDP.getMdpTemplates();
 			Unifier terms = sp.getTask().getUnifier();
-			long remainedRC = ((Task) sp.getTask()).getRCVariable().getUpperBound();
+			long remainedRC=-1 ;
+			if(resourceSolver)
+				remainedRC= ((Task) sp.getTask()).getRCVariable().getUpperBound();
 			if ((templates.size() > 0) && (temMDP.getReward() != null))
 				for (MDPTemplate m : templates) {
 					if (m.getReward() != null) {
@@ -295,16 +309,16 @@ public class HTNChimpToMDP {
 								rewardFunction.setReward(sp, m.getReward());
 							else if ((temMDP.getReward() != null) && (!rewardFunction.exists(sp)))
 								rewardFunction.setReward(sp, temMDP.getReward());
-						} else if (m.getRManip() != null) {
+						} else if ((m.getRManip() != null) && (remainedRC > -1)) {
 							// increase/decrease the reward
-							if(m.getIC()!=null) {
-								
-								if (switchf(remainedRC ,m))
-									rewardFunction.setReward(sp,rewardMan(m,temMDP));
+							if (m.getIC() != null) {
+
+								if (switchf(remainedRC, m))
+									rewardFunction.setReward(sp, rewardMan(m, temMDP));
 								else
-									rewardFunction.setReward(sp,temMDP.getReward());
+									rewardFunction.setReward(sp, temMDP.getReward());
 							} else
-								rewardFunction.setReward(sp,rewardMan(m,temMDP));
+								rewardFunction.setReward(sp, rewardMan(m, temMDP));
 						}
 
 					}
@@ -318,7 +332,7 @@ public class HTNChimpToMDP {
 		}
 		return rewardFunction;
 	}
-	
+
 	private static Double rewardMan(MDPTemplate m, MDPTemplate temMDP) {
 		switch (m.getRManip()) {
 		case Decrease:
@@ -328,30 +342,30 @@ public class HTNChimpToMDP {
 		}
 		return null;
 	}
-	
+
 	private static boolean switchf(long remained, MDPTemplate m) {
-	IntegerConstraintTemplate integerConstr = m.getIC();
-	int threshold = integerConstr.cste;
-	String op = integerConstr.op1;
-	Boolean verif = false;
-	switch (op) {
-	case ">=":
-		verif = (remained >= threshold);
-		break;
-	case "<=":
-		verif = (remained <= threshold);
-		break;
-	case "<":
-		verif = (remained < threshold);
-		break;
-	case ">":
-		verif = (remained > threshold);
-		break;
-	case "!=":
-		verif = (remained != threshold);
-		break;
-	}
-	return verif;
+		IntegerConstraintTemplate integerConstr = m.getIC();
+		int threshold = integerConstr.cste;
+		String op = integerConstr.op1;
+		Boolean verif = false;
+		switch (op) {
+		case ">=":
+			verif = (remained >= threshold);
+			break;
+		case "<=":
+			verif = (remained <= threshold);
+			break;
+		case "<":
+			verif = (remained < threshold);
+			break;
+		case ">":
+			verif = (remained > threshold);
+			break;
+		case "!=":
+			verif = (remained != threshold);
+			break;
+		}
+		return verif;
 	}
 
 	// a reward is constant everywhere except the goal

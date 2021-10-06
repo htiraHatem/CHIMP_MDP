@@ -3,10 +3,9 @@
 (MaxArgs 3)
 
 (PredicateSymbols
-  has agent_at !getVehicle !moveTo obtainVehicle goTo moveTo
+  has agent_at !getVehicle !moveTo obtainVehicle goTo moveTo hasMoney true !enter !walkTo onFoot
   connected)
 
-(Resource CashFunds 200)
 
 ################################
 ####  OPERATORS ################
@@ -15,16 +14,8 @@
 (:operator 
   (Head !getVehicle(?v))
   (Add e1 has(?v))
-  
-  (if ?v values car) 
-     (ResourceUsage CashFunds 5)
-
-  (if ?v values plan) 
-    (ResourceUsage CashFunds 100)
-  
-  (if ?v values ship) 
-   (ResourceUsage CashFunds 90)
-  
+  (Reward -0.04)
+    (TransitionProb 1)
 
 )
 
@@ -34,6 +25,12 @@
   (Pre p2 agent_at(?l1))
   (Del p2)
   (Add e1 agent_at(?l2))
+  (if (Values ?l2 london) (Reward 1)) # final state
+
+  (Reward -0.04)
+    (TransitionProb 1)
+
+
 )
 
 (:method

@@ -10,9 +10,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.metacsp.multi.TCSP.MultiTimePoint;
+
 import edu.cmu.ita.htn.MultiState;
 import edu.cmu.ita.htn.Proposition;
 import edu.cmu.ita.htn.State;
+import htn.htnExpanderDecomposition.Task;
 import mdpSolver.HTNAction;
 import mdpSolver.HTNState;
 import mdpSolver.HtnMdpFactory;
@@ -37,6 +40,7 @@ public class Dot2Graph {
 			for (HTNState s : source.getFinalstates()) {
 				ArrayList<String> OhneStatic = new ArrayList<String>();
 				Object[] a = s.getHtnState().iterator().next().toArray();
+				 MultiTimePoint RCVariable = ((htn.htnExpanderDecomposition.Task) s.getTask()).getRCVariable();
 				for (Object i : a) {
 					if ((!i.toString().contains("crossLinked")) && (!i.toString().contains("connected")))
 						OhneStatic.add(i.toString());
@@ -47,20 +51,22 @@ public class Dot2Graph {
 				out.print("\"" + s.getId() + "\" [label=\" S" + s.getId() + "   : (r:" + source.reward(s) + " )");
 				if (policy != null)
 					out.print(", Utility : " + policy.get(s));
-				
-				if(s.getRemainedResource()) {
-					out.print("  , (resource : " +  ((htn.htnExpanderDecomposition.Task)s.getTask()).getRCVariable() + ")");
+				if (RCVariable != null)
+					if (s.getRemainedResource()) {
+						out.print("  , (resource : " +RCVariable.getUpperBound() + ")");
+						out.println("  \" shape=doubleoctagon];");
+					} else
+						out.println(" \" color = red ,  shape=doubleoctagon]");
+
+				else
 					out.println("  \" shape=doubleoctagon];");
 
-				}
-				else
-					out.println(" \" color = red ,  shape=doubleoctagon]");
-
-					
 			}
 			for (HTNState s : source.getNonFinalStates()) {
 				ArrayList<String> OhneStatic = new ArrayList<String>();
 				Object[] a = s.getHtnState().iterator().next().toArray();
+				 MultiTimePoint RCVariable = ((htn.htnExpanderDecomposition.Task) s.getTask()).getRCVariable();
+
 				for (Object i : a) {
 					if ((!i.toString().contains("crossLinked")) && (!i.toString().contains("connected")))
 						OhneStatic.add(i.toString());
@@ -72,15 +78,16 @@ public class Dot2Graph {
 				// out.print("\""+s.getId()+"\" [label=\""+s.getLabel()+"
 				// (reward:"+source.reward(s)+ " )");
 				
-
 				if (policy != null)
 					out.print(", Utility : " + policy.get(s));
-				
-				if(s.getRemainedResource())
-				out.print("  , (resource : " +  ((htn.htnExpanderDecomposition.Task)s.getTask()).getRCVariable() + ") \"]");
+
+				if (RCVariable != null)
+					if (s.getRemainedResource())
+						out.print("  , (resource : " + RCVariable.getUpperBound()	+ ") \"]");
+					else
+						out.println(" \" color = red ]");
 				else
-					out.println(" \" color = red ]");
-				//out.println(" \"];");
+					out.println(" \"];");
 			}
 		}
 

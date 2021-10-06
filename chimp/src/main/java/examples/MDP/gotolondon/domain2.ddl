@@ -26,12 +26,6 @@
   #tofix  not working
     (if (Values ?v plane) (TransitionProb 0.8))
 
-#(Increase Money 50)
-#(Decrease Money 10)
- # (if (< money 20) (increase reward/cost 0.01))
- # (if (Values ?v plane) (increase reward/cost 0.01)
-
-
 (ResourceUsage (Usage Money 20))
 )
 
@@ -41,10 +35,11 @@
   (Pre p2 agent_at(?l1))
   (Del p2)
   (Add e1 agent_at(?l2))
-  (if (Values ?l2 soton) (Reward -0.02))
   (if (Values ?l2 london) (Reward 1)) # final state
-  (if (Values ?l2 harbor) (TransitionProb 0.2))
+
+  (if (Values ?l2 harbor) (Reward -0.06) (TransitionProb 0.1))
   (if (Values ?l2 airport) (TransitionProb 0.8))
+  (if (Values ?l2 airport) (Reward 0.1))
   (else (Reward -0.04) (TransitionProb 1)) # in all the other states
 
   (ResourceUsage (Usage Money 40))
@@ -72,7 +67,7 @@
   (Head !enter(?v))
   (Pre p2 agent_at(?v))
   (Add e1 hasMoney(true))
-  (Reward -0.04)
+  (Reward 0.04)
   (TransitionProb 1)
   (ResourceUsage (Usage Money 10))
 
@@ -123,8 +118,8 @@
 (:method
 (Head moveTo(london))
 (Pre p1 has(ship))
-(Sub s1 !moveTo(harbor soton ship))
-(Sub s2 !moveTo(soton london ship))
+(Sub s1 !moveTo(harbor london ship))
+#(Sub s2 !moveTo(soton london ship))
 )
 
 

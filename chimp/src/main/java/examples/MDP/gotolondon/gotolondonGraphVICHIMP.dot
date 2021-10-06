@@ -2,22 +2,21 @@ digraph {
   node [color="#40b9e5" ]
  size="60,17";
 "5" [label=" S5   : (r:1.0 ), Utility : 1.0 " color = red ,  shape=doubleoctagon]
-"7" [label=" S7   : (r:1.0 ), Utility : 1.0 " color = red ,  shape=doubleoctagon]
-"11" [label=" S11   : (r:1.0 ), Utility : 1.0 " color = red ,  shape=doubleoctagon]
-"15" [label=" S15   : (r:1.0 ), Utility : 1.0  , (resource : 17:{110,110})  " shape=doubleoctagon];
-"0" [label=" S0   : (reward:-0.4 ), Utility : 0.1359999999999999  , (resource : 2:{0,150}) "]"1" [label=" S1   : (reward:-0.04 ), Utility : 0.5359999999999999  , (resource : 3:{130,130}) "]"2" [label=" S2   : (reward:-0.04 ), Utility : 0.8999999999999999  , (resource : 4:{90,90}) "]"3" [label=" S3   : (reward:-0.04 ), Utility : 0.94  , (resource : 5:{70,70}) "]"4" [label=" S4   : (reward:-0.04 ), Utility : 0.96  , (resource : 6:{30,30}) "]"6" [label=" S6   : (reward:-0.02 ), Utility : 0.98  , (resource : 8:{30,30}) "]"8" [label=" S8   : (reward:-0.04 ), Utility : 0.72  , (resource : 10:{90,90}) "]"9" [label=" S9   : (reward:-0.01 ), Utility : 0.95  , (resource : 11:{70,70}) "]"10" [label=" S10   : (reward:-0.04 ), Utility : 0.96  , (resource : 12:{30,30}) "]"12" [label=" S12   : (reward:-0.04 ), Utility : 0.9299999999999999  , (resource : 14:{70,70}) "]"13" [label=" S13   : (reward:-0.02 ), Utility : 0.97  , (resource : 15:{150,150}) "]"14" [label=" S14   : (reward:-0.01 ), Utility : 0.99  , (resource : 16:{150,150}) "]"0" -> "1" [ label="getVehicle(car) (ProbTrans : 1,00)"
-, arrowhead = diamond , color=green];"1" -> "2" [ label="moveTo(home,harbor,car) (ProbTrans : 0,20)"
-, arrowhead = diamond , color=green];"1" -> "8" [ label="moveTo(home,airport,car) (ProbTrans : 0,80)"
-,style=dotted, arrowhead=tee];"2" -> "3" [ label="getVehicle(ship) (ProbTrans : 1,00)"
-, arrowhead = diamond , color=green];"3" -> "4" [ label="moveTo(harbor,lpool,ship) (ProbTrans : 1,00)"
-,style=dotted, arrowhead=tee];"3" -> "6" [ label="moveTo(harbor,soton,ship) (ProbTrans : 1,00)"
-, arrowhead = diamond , color=green];"4" -> "5" [ label="moveTo(lpool,london,ship) (ProbTrans : 1,00)"
-, arrowhead = diamond , color=green];"6" -> "7" [ label="moveTo(soton,london,ship) (ProbTrans : 1,00)"
-, arrowhead = diamond , color=green];"8" -> "9" [ label="getVehicle(plane) (ProbTrans : 0,80)"
-, arrowhead = diamond , color=green];"9" -> "10" [ label="moveTo(airport,nyc,plane) (ProbTrans : 1,00)"
-, arrowhead = diamond , color=green];"9" -> "12" [ label="walkTo(airport,bank) (ProbTrans : 1,00)"
-,style=dotted, arrowhead=tee];"10" -> "11" [ label="moveTo(nyc,london,plane) (ProbTrans : 1,00)"
-, arrowhead = diamond , color=green];"12" -> "13" [ label="enter(bank) (ProbTrans : 1,00)"
-, arrowhead = diamond , color=green];"13" -> "14" [ label="walkTo(bank,airport) (ProbTrans : 1,00)"
-, arrowhead = diamond , color=green];"14" -> "15" [ label="moveTo(airport,london,plane) (ProbTrans : 1,00)"
+"9" [label=" S9   : (r:1.0 ), Utility : 1.0  , (resource : 110)  " shape=doubleoctagon];
+"13" [label=" S13   : (r:1.0 ), Utility : 1.0 " color = red ,  shape=doubleoctagon]
+"14" [label=" S14   : (r:1.0 ), Utility : 1.0  , (resource : 30)  " shape=doubleoctagon];
+"0" [label=" S0   : (reward:-0.4 ), Utility : 0.45999999999999996  , (resource : 150) "]"1" [label=" S1   : (reward:-0.04 ), Utility : 0.86  , (resource : 130) "]"2" [label=" S2   : (reward:0.1 ), Utility : 0.9  , (resource : 90) "]"3" [label=" S3   : (reward:-0.01 ), Utility : 1.0  , (resource : 70) "]"4" [label=" S4   : (reward:-0.04 ), Utility : 0.96  , (resource : 30) "]"6" [label=" S6   : (reward:-0.04 ), Utility : 1.01  , (resource : 70) "]"7" [label=" S7   : (reward:0.06 ), Utility : 1.05  , (resource : 150) "]"8" [label=" S8   : (reward:-0.01 ), Utility : 0.99  , (resource : 150) "]"10" [label=" S10   : (reward:-0.06 ), Utility : 0.8999999999999999  , (resource : 90) "]"11" [label=" S11   : (reward:-0.04 ), Utility : 0.96  , (resource : 70) "]"12" [label=" S12   : (reward:-0.04 ), Utility : 0.96  , (resource : 30) "]"0" -> "1" [ label="getVehicle(car) (ProbTrans : 1,00)"
+, arrowhead = diamond , color=green];"1" -> "2" [ label="moveTo(home,airport,car) (ProbTrans : 1,00)"
+, arrowhead = diamond , color=green];"1" -> "10" [ label="moveTo(home,harbor,car) (ProbTrans : 1,00)"
+,style=dotted, arrowhead=tee];"2" -> "3" [ label="getVehicle(plane) (ProbTrans : 0,80)"
+, arrowhead = diamond , color=green];"3" -> "4" [ label="moveTo(airport,nyc,plane) (ProbTrans : 1,00)"
+,style=dotted, arrowhead=tee];"3" -> "6" [ label="walkTo(airport,bank) (ProbTrans : 1,00)"
+, arrowhead = diamond , color=green];"4" -> "5" [ label="moveTo(nyc,london,plane) (ProbTrans : 1,00)"
+, arrowhead = diamond , color=green];"6" -> "7" [ label="enter(bank) (ProbTrans : 1,00)"
+, arrowhead = diamond , color=green];"7" -> "8" [ label="walkTo(bank,airport) (ProbTrans : 1,00)"
+, arrowhead = diamond , color=green];"8" -> "9" [ label="moveTo(airport,london,plane) (ProbTrans : 1,00)"
+, arrowhead = diamond , color=green];"10" -> "11" [ label="getVehicle(ship) (ProbTrans : 1,00)"
+, arrowhead = diamond , color=green];"11" -> "12" [ label="moveTo(harbor,lpool,ship) (ProbTrans : 1,00)"
+,style=dotted, arrowhead=tee];"11" -> "14" [ label="moveTo(harbor,london,ship) (ProbTrans : 1,00)"
+, arrowhead = diamond , color=green];"12" -> "13" [ label="moveTo(lpool,london,ship) (ProbTrans : 1,00)"
 , arrowhead = diamond , color=green];}

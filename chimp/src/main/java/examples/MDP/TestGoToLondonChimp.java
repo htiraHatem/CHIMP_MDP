@@ -29,7 +29,15 @@ public class TestGoToLondonChimp {
 
 	public static void main(String[] args) throws Exception {
 		String problemFile = "src/main/java/examples/MDP/gotolondon/problem.pdl";
-		String domainFile = "src/main/java/examples/MDP/gotolondon/domain.ddl";
+		//String domainFile = "src/main/java/examples/MDP/gotolondon/domain.ddl";
+
+		
+		// original domain with reward and transition probability without resourceSolver
+		//String domainFile = "src/main/java/examples/MDP/gotolondon/domainOrigin.ddl";
+		
+		//favorise going to airport and entering the Bank!
+		String domainFile = "src/main/java/examples/MDP/gotolondon/domain2.ddl";
+
 
 		ValueOrderingH valOH = new UnifyDeepestWeightNewestbindingsValOH();
 		CHIMP.CHIMPBuilder builder;
@@ -53,7 +61,7 @@ public class TestGoToLondonChimp {
 		HtnMdpFactory<HTNState, HTNAction> mdp = HTNChimpToMDP.MDP(expander, fullyExpanded);
 
 		// value iteration
-		ValueIteration<HTNState, HTNAction> pi = new ValueIteration<HTNState, HTNAction>(1.0);
+		ValueIteration<HTNState, HTNAction> pi = new ValueIteration<HTNState, HTNAction>(1);
 		Map<HTNState, Double> policy = pi.valueIteration(mdp, 0.0001);
 
 		for (Entry<HTNState, Double> s : policy.entrySet()) {
