@@ -29,13 +29,21 @@ public class TestGoToLondonChimp {
 
 	public static void main(String[] args) throws Exception {
 		String problemFile = "src/main/java/examples/MDP/gotolondon/problem.pdl";
+	
+		// original domain with reward and transition probability with initial construct rules
+		//without resourceSolver 
+		//String domainFile = "src/main/java/examples/MDP/gotolondon/domainOrigin.ddl";
+		
+		
+		// resource solver with all the construct rules
+		// if discounter = 1 favorise going through bank if less than 1 the shortest path
 		//String domainFile = "src/main/java/examples/MDP/gotolondon/domain.ddl";
 
 		
-		// original domain with reward and transition probability without resourceSolver
-		//String domainFile = "src/main/java/examples/MDP/gotolondon/domainOrigin.ddl";
-		
-		//favorise going to airport and entering the Bank!
+
+		//discounter=1
+		//favorise going to airport and entering the Bank! if money = 150
+		//and the shortest path when enough money is available (350) TODO 
 		String domainFile = "src/main/java/examples/MDP/gotolondon/domain2.ddl";
 
 
@@ -69,7 +77,7 @@ public class TestGoToLondonChimp {
 		}
 
 		// convert to dot language
-		String mdpGraph = "src/main/java/examples/MDP/gotolondon/gotolondonGraphVICHIMP.dot";
+		String mdpGraph = "src/main/java/examples/MDP/gotolondon/gotolondonGraphVICHIMP0.dot";
 
 		if (mdpGraph != null) {
 			FileWriter writer = new FileWriter(mdpGraph);

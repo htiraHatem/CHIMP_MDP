@@ -15,7 +15,7 @@
   (Head !getVehicle(?v))
   (Add e1 has(?v))
   (Reward -0.04)
-    (TransitionProb 1)
+  (TransitionProb 1)
 
 )
 
@@ -26,9 +26,10 @@
   (Del p2)
   (Add e1 agent_at(?l2))
   (if (Values ?l2 london) (Reward 1)) # final state
+  (if (Values ?l2 airport) (Reward -0.03)) # change the reward of reaching the airport
 
   (Reward -0.04)
-    (TransitionProb 1)
+  (TransitionProb 1)
 
 
 )

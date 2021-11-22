@@ -1,5 +1,6 @@
 package htn.htnExpanderDecomposition;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -107,6 +108,7 @@ public class HTNChimpToMDP {
 		if (!fullyExpanded.getResourceSchedulers().isEmpty()) {
 			resourceSolver=true;
 			maxResourceLevel = fullyExpanded.getResourceSchedulers().get(0).getCapacity();
+			//create TCSP solver and add variables for each state
 			metaSolver = new TCSPSolver(0, maxResourceLevel, 0);
 			groundSolver = (DistanceConstraintSolver) metaSolver.getConstraintSolvers()[0];
 			init = groundSolver.getSink();
@@ -178,19 +180,23 @@ public class HTNChimpToMDP {
 									if (m.getValueRestriction().constants.contains(var.toString()))
 										transitionModel.setTransitionProbability(si, action, sj,
 												m.getTransitionProbability());
-									else if ((temMDP.getReward() != null) && (!transitionModel.exists(si, action, sj)))
-										transitionModel.setTransitionProbability(si, action, sj, 1);
-								} else // TODO to check !!!
-								{
-									transitionModel.setTransitionProbability(si, action, sj, 1);
+									else if ((temMDP.getTransitionProbability() != null)
+											&& (!transitionModel.exists(si, action, sj)))
+										transitionModel.setTransitionProbability(si, action, sj,
+												temMDP.getTransitionProbability());
+								} else { // when if (T)( Only Reward), assign the Else
+									if ((temMDP.getTransitionProbability() != null))
+										transitionModel.setTransitionProbability(si, action, sj,
+												temMDP.getTransitionProbability());
 								}
 							}
+						//when no if else
 						else if ((temMDP.getTransitionProbability() != null))
 							transitionModel.setTransitionProbability(si, action, sj, temMDP.getTransitionProbability());
 
 						// assign for the initial state
-						if ((si.getTask().toString().equals("s0")) && (!transitionModel.exists(si, action, sj)))
-							transitionModel.setTransitionProbability(si, action, sj, 1);
+//						if ((si.getTask().toString().equals("s0")) && (!transitionModel.exists(si, action, sj)))
+//							transitionModel.setTransitionProbability(si, action, sj, 1);
 
 						if(resourceSolver) {
 						// create the distance constraints of TCSP
@@ -313,12 +319,21 @@ public class HTNChimpToMDP {
 							// increase/decrease the reward
 							if (m.getIC() != null) {
 
-								if (switchf(remainedRC, m))
+								if (!switchf(remainedRC, m)) // if IC == True
+									rewardFunction.setReward(sp, 0.02);
+								else 
+									if(!sp.isFinal())
 									rewardFunction.setReward(sp, rewardMan(m, temMDP));
-								else
-									rewardFunction.setReward(sp, temMDP.getReward());
-							} else
-								rewardFunction.setReward(sp, rewardMan(m, temMDP));
+									else
+									{
+										Double a = rewardMan(m, rewardFunction.getRewardFor(sp)) ;
+										rewardFunction.setReward(sp, rewardMan(m, rewardFunction.getRewardFor(sp)));
+
+									}
+										
+							} 
+//							else
+//								rewardFunction.setReward(sp, rewardMan(m, temMDP));
 						}
 
 					}
@@ -334,14 +349,32 @@ public class HTNChimpToMDP {
 	}
 
 	private static Double rewardMan(MDPTemplate m, MDPTemplate temMDP) {
+		double value =0;
 		switch (m.getRManip()) {
 		case Decrease:
-			return temMDP.getReward() - m.getReward();
+			value = temMDP.getReward() - m.getReward();
+			return Math.round(value*1e5)/1e5;
 		case Increase:
-			return temMDP.getReward() + m.getReward();
+			 value = temMDP.getReward() + m.getReward();
+			return Math.round(value*1e5)/1e5;
 		}
 		return null;
 	}
+	
+	private static Double rewardMan(MDPTemplate m, Double finalReward ) {
+		double value =0;
+		switch (m.getRManip()) {
+		case Decrease:
+			value = finalReward - m.getReward();
+			return Math.round(value*1e5)/1e5;
+		case Increase:
+			 value = finalReward + m.getReward();
+			return Math.round(value*1e5)/1e5;
+		}
+		return null;
+	}
+	
+	
 
 	private static boolean switchf(long remained, MDPTemplate m) {
 		IntegerConstraintTemplate integerConstr = m.getIC();
