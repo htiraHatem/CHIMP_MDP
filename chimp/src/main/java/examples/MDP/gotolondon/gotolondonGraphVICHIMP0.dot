@@ -6,10 +6,10 @@ digraph {
 "13" [label=" S13   : (r:0.98 ), Utility : 0.98 " color = red ,  shape=doubleoctagon]
 "14" [label=" S14   : (r:1.0 ), Utility : 1.0  , (resource : 30)  " shape=doubleoctagon];
 "0" [label=" S0   : (reward:-0.4 ), Utility : 0.1585399999999999  , (resource : 150) "]"1" [label=" S1   : (reward:-0.04 ), Utility : 0.6205999999999999  , (resource : 130) "]"2" [label=" S2   : (reward:-0.04 ), Utility : 0.6127552  , (resource : 90) "]"3" [label=" S3   : (reward:-0.01 ), Utility : 0.815944  , (resource : 70) "]"4" [label=" S4   : (reward:-0.04 ), Utility : 0.842  , (resource : 30) "]"6" [label=" S6   : (reward:0.0 ), Utility : 0.8428  , (resource : 70) "]"7" [label=" S7   : (reward:0.0 ), Utility : 0.8428  , (resource : 150) "]"8" [label=" S8   : (reward:-0.04 ), Utility : 0.86  , (resource : 150) "]"10" [label=" S10   : (reward:-0.04 ), Utility : 0.734  , (resource : 90) "]"11" [label=" S11   : (reward:-0.04 ), Utility : 0.86  , (resource : 70) "]"12" [label=" S12   : (reward:-0.04 ), Utility : 0.842  , (resource : 30) "]"0" -> "1" [ label="getVehicle(car) (ProbTrans : 0,90)"
-, arrowhead = diamond , color=green];"1" -> "2" [ label="moveTo(home,airport,car) (ProbTrans : 0,90)"
+, arrowhead = diamond , color=green];"1" -> "2" [ label="moveTo(home,airport,car) (ProbTrans : 0,80)"
 ,style=dotted, arrowhead=tee];"1" -> "10" [ label="moveTo(home,harbor,car) (ProbTrans : 0,90)"
 , arrowhead = diamond , color=green];"2" -> "3" [ label="getVehicle(plane) (ProbTrans : 0,80)"
-, arrowhead = diamond , color=green];"3" -> "4" [ label="moveTo(airport,nyc,plane) (ProbTrans : 0,90)"
+, arrowhead = diamond , color=green];"3" -> "4" [ label="moveTo(airport,nyc,plane) (ProbTrans : 0,70)"
 ,style=dotted, arrowhead=tee];"3" -> "6" [ label="walkTo(airport,bank) (ProbTrans : 0,98)"
 , arrowhead = diamond , color=green];"4" -> "5" [ label="moveTo(nyc,london,plane) (ProbTrans : 0,90)"
 , arrowhead = diamond , color=green];"6" -> "7" [ label="enter(bank) (ProbTrans : 1,00)"

@@ -184,7 +184,7 @@ public class HTNChimpToMDP {
 										transitionModel.setTransitionProbability(si, action, sj,
 												temMDP.getTransitionProbability());
 								} else { // when if (T)( Only Reward), assign the Else
-									if ((temMDP.getTransitionProbability() != null))
+									if ((temMDP.getTransitionProbability() != null) && (!transitionModel.exists(si, action, sj)))
 										transitionModel.setTransitionProbability(si, action, sj,
 												temMDP.getTransitionProbability());
 								}
