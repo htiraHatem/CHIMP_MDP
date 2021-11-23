@@ -37,7 +37,7 @@ public class Dot2Graph {
 		out.println("  node [color=\"#40b9e5\" ]\r\n" + " size=\"60,17\";");
 
 		if (printState) {
-			for (HTNState s : source.getFinalstates()) {
+			for (HTNState s : source.getFinalStates()) {
 				ArrayList<String> OhneStatic = new ArrayList<String>();
 				Object[] a = s.getHtnState().iterator().next().toArray();
 				 MultiTimePoint RCVariable = ((htn.htnExpanderDecomposition.Task) s.getTask()).getRCVariable();

@@ -338,6 +338,9 @@ public class HTNChimpDomain extends HTNDomain {
 		return htnActions;
 	}
 	
+	public ArrayList<Method> getMethods() {
+		return htnMethods;
+	}
 	public void addHtnAction(Task t) {
 		this.htnActions.add(t);
 	}

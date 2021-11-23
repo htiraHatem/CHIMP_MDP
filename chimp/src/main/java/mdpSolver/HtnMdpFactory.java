@@ -80,7 +80,7 @@ public class HtnMdpFactory<HTNState, HTNAction extends Action> implements Markov
 		}
 	}
 
-	public List<HTNState> getFinalstates() {
+	public List<HTNState> getFinalStates() {
 		return finalstates;
 	}
 

@@ -15,6 +15,7 @@ import aima.core.probability.mdp.Policy;
 import aima.core.probability.mdp.impl.ModifiedPolicyEvaluation;
 import aima.core.probability.mdp.search.PolicyIteration;
 import aima.core.probability.mdp.search.ValueIteration;
+import edu.cmu.ita.htn.RunStats;
 import fluentSolver.FluentNetworkSolver;
 import htn.htnExpanderDecomposition.HTNChimpDomain;
 import htn.htnExpanderDecomposition.HTNChimpToMDP;
@@ -28,6 +29,9 @@ import mdpSolver.HTNTaskNetwork;
 import mdpSolver.HtnMdpFactory;
 import planner.CHIMP;
 import ui.Dot2Graph;
+import htn.Stats;
+import htn.Stats.Timer;
+import htn.Stats.TimerName;
 
 public class TestRaceMDP {
 
@@ -71,15 +75,19 @@ public class TestRaceMDP {
 
 		// expanding the HTN
 		HTNTaskNetwork tasknetwork = new HTNTaskNetwork(fluentSolver);
+
 		HTNChimpDomain HTNd = HTNChimpDomain.parseHTNChimpDomain(builder);
+		startTimer(TimerName.EXPANDER);
+
 		HTNExpander expander = new HTNExpander();
 		HTNTaskNetwork fullyExpanded = expander.createFullyExpandedHTN(fluentSolver.getConstraintSolvers()[0],
 				tasknetwork, HTNd);
+		endTimer(TimerName.EXPANDER);
+
 
 		HtnMdpFactory<HTNState, HTNAction> mdp = HTNChimpToMDP.MDP(expander, fullyExpanded);
 
 		// value iteration
-		// TODO update gamme value and test it
 		ValueIteration<HTNState, HTNAction> pi = new ValueIteration<HTNState, HTNAction>(1);
 		Map<HTNState, Double> policy = pi.valueIteration(mdp, 0.0001);
 
@@ -98,13 +106,14 @@ public class TestRaceMDP {
 //			System.out.println("S"+s.getId() + "  policy  :  " + policy.action(s));
 //		}
 
+		System.out.println(converter.stats.toString());
+
 		// convert to dot language
 		if (mdpGraph != null) {
 			FileWriter writer = new FileWriter(mdpGraph);
 			logger.info("Writing MDP Graph into " + mdpGraph);
 			Dot2Graph.printMDPDot(writer, mdp, true, policy);
 			writer.close();
-
 		}
 
 //		// generate a solution based on chimp Backtrack algorithm
@@ -120,6 +129,33 @@ public class TestRaceMDP {
 //			}
 //			chimp.printFullPlan();
 //		}
+		
+		
 
+	}
+
+	private Stats stats;
+	/**
+	 * A "macro" method to check the {@link RunStats} stats object before starting a
+	 * {@link Timer}.
+	 * 
+	 * @param tm
+	 */
+	private final void startTimer(TimerName tm) {
+		if (stats != null) {
+			stats.startRuntime(tm);
+		}
+	}
+
+	/**
+	 * A "macro" method to check the {@link RunStats} stats object before ending a
+	 * {@link Timer}.
+	 * 
+	 * @param tm
+	 */
+	private final void endTimer(TimerName tm) {
+		if (stats != null) {
+			stats.endRuntime(tm);
+		}
 	}
 }
