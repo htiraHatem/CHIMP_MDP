@@ -37,14 +37,15 @@ public class TestGoToLondonChimp {
 		
 		// resource solver with all the construct rules
 		// if discounter = 1 favorise going through bank if less than 1 the shortest path
-		String domainFile = "src/main/java/examples/MDP/gotolondon/domain.ddl";
+		//String domainFile = "src/main/java/examples/MDP/gotolondon/domain.ddl";
 
 		
 
 		//discounter=1
-		//favorise going to airport and entering the Bank! if money = 150
-		//and the shortest path when enough money is available (350) TODO 
-		//String domainFile = "src/main/java/examples/MDP/gotolondon/domain2.ddl";
+		//favorise shortest path! if money = 150 two option across bank and not 
+		String domainFile = "src/main/java/examples/MDP/gotolondon/domain2.ddl";
+		//and the shortest path when enough money is available (350) 
+		//String domainFile = "src/main/java/examples/MDP/gotolondon/domain3.ddl";
 
 
 		ValueOrderingH valOH = new UnifyDeepestWeightNewestbindingsValOH();

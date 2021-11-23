@@ -6,8 +6,7 @@
   has agent_at !getVehicle !moveTo obtainVehicle goTo moveTo hasMoney true !enter !walkTo onFoot
   connected)
 
-
-(Resource Money 150)
+(Resource Money 350)
 
 ################################
 ####  OPERATORS ################
@@ -26,7 +25,6 @@
 (ResourceUsage (Usage Money 20))
 )
 
-# move from ?l1 to ?l2
 # move from ?l1 to ?l2
 (:operator 
   (Head !moveTo(?l1 ?l2 ?v))
