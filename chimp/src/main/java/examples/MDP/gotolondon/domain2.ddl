@@ -7,8 +7,8 @@
   connected)
 
 
-(Resource Money 150)
-#(Resource Money 350)
+#(Resource Money 150)
+(Resource Money 350)
 
 ################################
 ####  OPERATORS ################
@@ -22,10 +22,8 @@
    # reward is attached with action and will be assigned to the current state 
  # (if (Values ?v car ship) (Reward -0.01) (TransitionProb 1))
   (if (Values ?v plane) (Reward -0.01) (TransitionProb 0.8))
+  (if (Values ?v plane) (TransitionProb 0.8))
   (else (Reward -0.04) (TransitionProb 0.9))
-
-  #tofix  not working
-    (if (Values ?v plane) (TransitionProb 0.8))
 
 (ResourceUsage (Usage Money 20))
 )
@@ -44,7 +42,7 @@
   (else (Reward -0.04) (TransitionProb 0.9)) # in all the other states
 
   (ResourceUsage (Usage Money 40))
-  # to fix
+
   (if (IC ?Money < 10) (Decrease (Reward 0.02)))
 
  
@@ -62,7 +60,7 @@
   (ResourceUsage (Usage Money 0))
 
     # increase the cost if the condition is met
- # (if (IC ?Money < 75) (Increase (Reward -0.04)))
+
  (if (IC ?Money < 75) (Increase (Reward 0.04)))
 )
 

@@ -296,11 +296,13 @@ public class HTNChimpToMDP {
 		HTNReward rewardFunction = new HTNReward() {
 		};
 		for (HTNState sp : states) {
+			if ( sp.isFinal())
+				System.out.println("final" + sp.getTask().getActionName());
 			MDPTemplate temMDP = ((Task) sp.getTask()).getmDPTemplate();
 			List<MDPTemplate> templates = temMDP.getMdpTemplates();
 			Unifier terms = sp.getTask().getUnifier();
-			long remainedRC=-1 ;
-			if(resourceSolver)
+			long remainedRC=-99 ;
+			if((resourceSolver)&& (sp.getRemainedResource()))
 				remainedRC= ((Task) sp.getTask()).getRCVariable().getUpperBound();
 			if ((templates.size() > 0) && (temMDP.getReward() != null))
 				for (MDPTemplate m : templates) {
@@ -315,21 +317,29 @@ public class HTNChimpToMDP {
 								rewardFunction.setReward(sp, m.getReward());
 							else if ((temMDP.getReward() != null) && (!rewardFunction.exists(sp)))
 								rewardFunction.setReward(sp, temMDP.getReward());
-						} else if ((m.getRManip() != null) && (remainedRC > -1)) {
+						} else if ((m.getRManip() != null)) {
 							// increase/decrease the reward
 							if (m.getIC() != null) {
 
-								if (!switchf(remainedRC, m)) // if IC == True
-									rewardFunction.setReward(sp, 0.02);
-								else 
-									if(!sp.isFinal())
-									rewardFunction.setReward(sp, rewardMan(m, temMDP));
-									else
-									{
-										Double a = rewardMan(m, rewardFunction.getRewardFor(sp)) ;
+								IntegerConstraintTemplate integerConstr = m.getIC();
+								int threshold = integerConstr.cste;
+
+								System.out.println("switchf(remainedRC, m) :" + switchf(remainedRC, m));
+								System.out.println("threshold:" + threshold + "remainedRC" + remainedRC);
+								if (switchf(remainedRC, m)) // if IC == True
+									if (!sp.isFinal())
+										rewardFunction.setReward(sp, rewardMan(m, temMDP));
+									else {
+										Double a = rewardMan(m, rewardFunction.getRewardFor(sp));
 										rewardFunction.setReward(sp, rewardMan(m, rewardFunction.getRewardFor(sp)));
 
 									}
+								else if (sp.isFinal()) //for final states IC = False
+									rewardFunction.setReward(sp, rewardFunction.getRewardFor(sp)); // to fix
+								else //non-final states + IC = False
+									rewardFunction.setReward(sp, temMDP.getReward()); // to fix
+
+
 										
 							} 
 //							else
