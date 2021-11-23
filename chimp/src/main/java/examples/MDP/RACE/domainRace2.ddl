@@ -8,7 +8,7 @@
 
 ####################
 #######RESOURCES##############
-(Resource BatteryStorageCapacity 100)
+(Resource BatteryStorageCapacity 200)
 
 
 ################################
@@ -50,7 +50,12 @@
   (Del p1)
   (Add e1 robotAt(?l2))
   
-  (Reward -0.04) (TransitionProb 0.88)
+  (if (Values ?l2 table2) (Reward 1)) #table2 always is the final state
+  (if (Values ?l2 corner1) (Reward -0.06) (TransitionProb 0.9)) #
+  (if (Values ?l2 corner2) (Reward -0.06) (TransitionProb 0.9)) #
+  (else (Reward -0.04) (TransitionProb 0.7)) #
+
+  (if (IC ?Money < 10) (Decrease (Reward 0.02)))
 
   (ResourceUsage 
     (Usage BatteryStorageCapacity 30))
@@ -67,8 +72,7 @@
  (Constraint Overlaps(task,e1))
  (Del p1)
 
-  (if (Values ?toArea preManipulationAreaEastCounter1) (Reward 1)) #premanipulationArea always is the final state
-  (else (Reward -0.04) (TransitionProb 0.9)) #
+  (Reward -0.04) (TransitionProb 0.9)
 
  (ResourceUsage 
     (Usage navigationCapacity 25))

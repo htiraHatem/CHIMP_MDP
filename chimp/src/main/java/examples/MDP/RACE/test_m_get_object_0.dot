@@ -1,10 +1,7 @@
 digraph {
+  node [color="#40b9e5" ]
  size="60,17";
-"3" [label="[~on(tray,placingAreaEastRightCounter1), on(appetizer,placingAreaSouthTable), ~robotAt(preManipulationAreaEastCounter1), holding(leftArm,tray), on(cup,placingAreaNorthTable), ~holding(leftArm,nothing), ~robotAt(manipulationAreaEastCounter1), holding(rightArm,nothing), robotAt(preManipulationAreaEastCounter1)] (r:1.0 ), Utility : 1.0 "];
-"0" [label="[on(appetizer,placingAreaSouthTable), on(cup,placingAreaNorthTable), holding(leftArm,nothing), holding(rightArm,nothing), robotAt(preManipulationAreaEastCounter1), on(tray,placingAreaEastRightCounter1)] (reward:-0.04 ), Utility : 0.8799999999999999 "];
-"1" [label="[on(appetizer,placingAreaSouthTable), ~robotAt(preManipulationAreaEastCounter1), on(cup,placingAreaNorthTable), robotAt(manipulationAreaEastCounter1), holding(leftArm,nothing), holding(rightArm,nothing), on(tray,placingAreaEastRightCounter1)] (reward:-0.04 ), Utility : 0.9199999999999999 "];
-"2" [label="[~on(tray,placingAreaEastRightCounter1), on(appetizer,placingAreaSouthTable), ~robotAt(preManipulationAreaEastCounter1), holding(leftArm,tray), on(cup,placingAreaNorthTable), robotAt(manipulationAreaEastCounter1), ~holding(leftArm,nothing), holding(rightArm,nothing)] (reward:-0.04 ), Utility : 0.96 "];
-"0" -> "1" [ label="move_base_blind(preManipulationAreaEastCounter1,manipulationAreaEastCounter1) (ProbTrans : 1,00)" ];
-"1" -> "2" [ label="grasp_object(tray) (ProbTrans : 1,00)" ];
-"2" -> "3" [ label="move_base_blind(manipulationAreaEastCounter1,preManipulationAreaEastCounter1) (ProbTrans : 1,00)" ];
-}
+"2" [label=" S2   : (r:1.0 ), Utility : 1.0  , (resource : 55)  " shape=doubleoctagon];
+"0" [label=" S0   : (reward:-0.4 ), Utility : 0.374  , (resource : 100) "]"1" [label=" S1   : (reward:-0.04 ), Utility : 0.86  , (resource : 80) "]"0" -> "1" [ label="grasp_object(tray) (ProbTrans : 0,90)"
+, arrowhead = diamond , color=green];"1" -> "2" [ label="move_base_blind(manipulationAreaEastCounter1,preManipulationAreaEastCounter1) (ProbTrans : 0,90)"
+, arrowhead = diamond , color=green];}
