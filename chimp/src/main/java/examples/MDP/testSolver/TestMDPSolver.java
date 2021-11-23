@@ -1,4 +1,4 @@
-package examples.MDP;
+package examples.MDP.testSolver;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;

@@ -1,4 +1,4 @@
-package examples.MDP;
+package examples.MDP.testSolver;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -33,9 +33,9 @@ import mdpSolver.HTNTransitionProbabilityFunction;
 import mdpSolver.HtnMdpFactory;
 import ui.Dot2Graph;
 
-public class TestPI {
+public class TestVI {
 
-	private static final Logger logger = Logger.getLogger(TestPI.class.getName());
+	private static final Logger logger = Logger.getLogger(TestVI.class.getName());
 
 	public static void main(String[] args) throws FileNotFoundException {
 		HTNTaskNetwork HTNfullyExpanded;
@@ -71,7 +71,6 @@ public class TestPI {
 
 			List<Task> tasks = new ArrayList<Task>(fullyExpanded.getOrderedTasks());
 
-			Set<HTNAction> a = actions.actions();
 			// create states
 			Set<HTNState> states = HTNNetworkToMDP.createMDPStates(mStates, tasks);
 
@@ -101,21 +100,33 @@ public class TestPI {
 
 			
 			
-			// Policy iteration
-			PolicyIteration<HTNState, HTNAction> pi = new PolicyIteration<HTNState, HTNAction>(
-					new ModifiedPolicyEvaluation<HTNState, HTNAction>(50, 1.0));
-
-
-			Policy<HTNState, HTNAction> policy = pi.policyIteration(mdp);
-			System.out.println();
-
-			for (HTNState s : states) {
-				System.out.println(s.getLabel() + "  policy  :  " + policy.action(s));
-			}
+//			// Policy iteration
+//			PolicyIteration<HTNState, HTNAction> pi = new PolicyIteration<HTNState, HTNAction>(
+//					new ModifiedPolicyEvaluation<HTNState, HTNAction>(50, 1.0));
+//
+//
+//			Policy<HTNState, HTNAction> policy = pi.policyIteration(mdp);
+//			System.out.println();
+//
+//			for (HTNState s : states) {
+//				System.out.println(s.getLabel() + "  policy  :  " + policy.action(s));
+//			}
 			
+			//value iteration
+
+			
+			ValueIteration<HTNState, HTNAction> pi = new ValueIteration<HTNState, HTNAction>(1.0);
+
+
+			Map<HTNState, Double> policy = pi.valueIteration(mdp, 0.0001);
+
+			
+			for (Entry<HTNState, Double> s : policy.entrySet()) {
+				System.out.println( s.getKey() +"  :  " + s.getValue());
+			}
 
 			//convert to dot language
-//			String mdpGraph = "src/main/java/examples/MDP/gotolondon/gotolondonGraphPI.dot";
+//			String mdpGraph = "src/main/java/examples/MDP/gotolondon/gotolondonGraphVI.dot";
 //
 //			if (mdpGraph != null ) {
 //				FileWriter writer = new FileWriter(mdpGraph);

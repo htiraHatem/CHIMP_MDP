@@ -19,7 +19,7 @@ import edu.cmu.ita.htn.TaskNetwork;
 import edu.cmu.ita.htn.LogicExpressionImpl.LogicalOp;
 import edu.cmu.ita.htn.parser.ParseException;
 import edu.cmu.ita.htn.parser.Token;
-import examples.MDP.TestVI;
+import examples.MDP.testSolver.TestVI;
 import htn.EffectTemplate;
 import htn.HTNPrecondition;
 import htn.MDPTemplate;

@@ -1,4 +1,4 @@
-package examples.MDP;
+package examples.MDP.testSolver;
 
 import aima.core.agent.Action;
 import aima.core.agent.State;
