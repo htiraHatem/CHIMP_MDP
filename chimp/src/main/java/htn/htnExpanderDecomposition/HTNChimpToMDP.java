@@ -1,16 +1,14 @@
 package htn.htnExpanderDecomposition;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
+import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -20,12 +18,18 @@ import org.metacsp.multi.TCSP.DistanceConstraintSolver;
 import org.metacsp.multi.TCSP.MultiTimePoint;
 import org.metacsp.time.Bounds;
 
+import aima.core.probability.mdp.search.ValueIteration;
 import edu.cmu.ita.htn.Constraint;
 import edu.cmu.ita.htn.HTNFactory;
 import edu.cmu.ita.htn.MultiState;
+import edu.cmu.ita.htn.RunStats;
 import edu.cmu.ita.mdp.TransitionMatrix;
+import fluentSolver.FluentNetworkSolver;
 import htn.IntegerConstraintTemplate;
 import htn.MDPTemplate;
+import htn.Stats;
+import htn.Stats.Timer;
+import htn.Stats.TimerName;
 import jason.asSemantics.Unifier;
 import jason.asSyntax.Term;
 import mdpSolver.HTNAction;
@@ -34,6 +38,7 @@ import mdpSolver.HTNState;
 import mdpSolver.HTNTaskNetwork;
 import mdpSolver.HTNTransitionProbabilityFunction;
 import mdpSolver.HtnMdpFactory;
+import planner.CHIMP.CHIMPBuilder;
 import resourceFluent.ResourceUsageTemplate;
 import resourceFluent.ResourceUsageTemplate.ResourceMan;
 
@@ -45,6 +50,8 @@ public class HTNChimpToMDP {
 
 	private static final Logger logger = Logger.getLogger(HTNChimpToMDP.class.getName());
 	static Boolean resourceSolver = false;
+	public HTNTaskNetwork fullyExpanded;
+	public HTNExpander expander;
 
 	public final static HTNAction createMDPActions(LinkedList<htn.htnExpanderDecomposition.Task> linkedList) {
 		HashSet<String> uniqueActions = new HashSet<String>();
@@ -161,8 +168,6 @@ public class HTNChimpToMDP {
 					if (prob != 0) {
 						HTNState si = lstate.get(i);
 						HTNState sj = lstate.get(j);
-						if (sj.getId() == 5)
-							System.out.print(si.getLabel());
 
 						MDPTemplate temMDP = ((Task) sj.getTask()).getmDPTemplate();
 						List<MDPTemplate> templates = temMDP.getMdpTemplates();
@@ -184,7 +189,8 @@ public class HTNChimpToMDP {
 										transitionModel.setTransitionProbability(si, action, sj,
 												temMDP.getTransitionProbability());
 								} else { // when if (T)( Only Reward), assign the Else
-									if ((temMDP.getTransitionProbability() != null) && (!transitionModel.exists(si, action, sj)))
+									if ((temMDP.getTransitionProbability() != null)
+											&& (!transitionModel.exists(si, action, sj)))
 										transitionModel.setTransitionProbability(si, action, sj,
 												temMDP.getTransitionProbability());
 								}
@@ -248,7 +254,6 @@ public class HTNChimpToMDP {
 							else
 								sj.setRemainedResource(false);
 
-							System.out.println(sj.getRemainedResource());
 						}
 
 //						
@@ -296,8 +301,6 @@ public class HTNChimpToMDP {
 		HTNReward rewardFunction = new HTNReward() {
 		};
 		for (HTNState sp : states) {
-			if (sp.isFinal())
-				System.out.println("final" + sp.getTask().getActionName());
 			MDPTemplate temMDP = ((Task) sp.getTask()).getmDPTemplate();
 			List<MDPTemplate> templates = temMDP.getMdpTemplates();
 			Unifier terms = sp.getTask().getUnifier();
@@ -321,11 +324,10 @@ public class HTNChimpToMDP {
 							// increase/decrease the reward
 							if (m.getIC() != null) {
 
-								IntegerConstraintTemplate integerConstr = m.getIC();
-								int threshold = integerConstr.cste;
-
-								System.out.println("switchf(remainedRC, m) :" + switchf(remainedRC, m));
-								System.out.println("threshold:" + threshold + "remainedRC" + remainedRC);
+//								IntegerConstraintTemplate integerConstr = m.getIC();
+//								int threshold = integerConstr.cste;
+//								System.out.println("switchf(remainedRC, m) :" + switchf(remainedRC, m));
+//								System.out.println("threshold:" + threshold + "remainedRC" + remainedRC);
 								if (switchf(remainedRC, m)) // if IC == True
 									if (!sp.isFinal())
 										rewardFunction.setReward(sp, rewardMan(m, temMDP));
@@ -511,11 +513,21 @@ public class HTNChimpToMDP {
 //		return state.getReward();
 //	}
 
-	public final static HtnMdpFactory<HTNState, HTNAction> MDP(HTNExpander expander, HTNTaskNetwork fullyExpanded)
-			throws Exception {
+	public final HtnMdpFactory<HTNState, HTNAction> MDP(FluentNetworkSolver fluentSolver, CHIMPBuilder builder,
+			HTNChimpDomain hTNd) throws Exception {
 		//
-		// get methodes
+
+		HTNTaskNetwork tasknetwork = new HTNTaskNetwork(fluentSolver);
+		// expanding the HTN
+		startTimer(TimerName.EXPANDER);
+		expander = new HTNExpander();
+		fullyExpanded = expander.createFullyExpandedHTN(fluentSolver.getConstraintSolvers()[0], tasknetwork, hTNd);
+		endTimer(TimerName.EXPANDER);
+
+		// get methods
 		HashMap<Task, MultiState> mStates = expander.getMStates();
+
+		gatherStatsHTNStates(mStates);
 
 		// Get actions
 		HTNAction actions = HTNChimpToMDP.createMDPActions(fullyExpanded.getOrderedTasks1());
@@ -533,13 +545,17 @@ public class HTNChimpToMDP {
 		List<Task> tasks = new ArrayList<Task>(fullyExpanded.getOrderedTasks1());
 
 		// create states
+		startTimer(TimerName.STATES);
 		Set<HTNState> states = HTNChimpToMDP.createMDPStates(mStates, tasks);
+		endTimer(TimerName.STATES);
 
 		List<HTNState> finalStates = new ArrayList<HTNState>();
 
 		// get transition function
+		startTimer(TimerName.TRANSITION);
 		HTNTransitionProbabilityFunction transitionModel = HTNChimpToMDP.createTransitionModel(actions, fullyExpanded,
 				states, finalStates);
+		endTimer(TimerName.TRANSITION);
 
 		// Display transitions
 		// transitionModel.display();
@@ -567,6 +583,80 @@ public class HTNChimpToMDP {
 
 		return new HtnMdpFactory<HTNState, HTNAction>(states, new ArrayList<>(states).get(0), actions, transitionModel,
 				rewardFunction);
+	}
+
+	public HtnMdpFactory<HTNState, HTNAction> convertHTN(FluentNetworkSolver fluentSolver, CHIMPBuilder builder,
+			HTNChimpDomain hTNd) throws Exception {
+
+		startTimer(TimerName.CONVERTER);
+		HtnMdpFactory<HTNState, HTNAction> mdp = MDP(fluentSolver, builder, hTNd);
+		endTimer(TimerName.CONVERTER);
+		return mdp;
+
+	}
+
+	public Map<HTNState, Double> PlanVI(HtnMdpFactory<HTNState, HTNAction> mdp, double discountFactor) {
+
+		startTimer(TimerName.SOLVER);
+		ValueIteration<HTNState, HTNAction> pi = new ValueIteration<HTNState, HTNAction>(discountFactor);
+		Map<HTNState, Double> policy = pi.valueIteration(mdp, 0.0001);
+		endTimer(TimerName.SOLVER);
+
+		return policy;
+	}
+
+	public static Stats stats;
+
+	/**
+	 * A "macro" method to check the {@link RunStats} stats object before starting a
+	 * {@link Timer}.
+	 * 
+	 * @param tm
+	 */
+	private final static void startTimer(TimerName tm) {
+		if (stats != null) {
+			stats.startRuntime(tm);
+		}
+	}
+
+	/**
+	 * A "macro" method to check the {@link RunStats} stats object before ending a
+	 * {@link Timer}.
+	 * 
+	 * @param tm
+	 */
+	private final static void endTimer(TimerName tm) {
+		if (stats != null) {
+			stats.endRuntime(tm);
+		}
+	}
+
+	/*
+	 * Returns the number of unique states in the set of possible states
+	 * 
+	 * @param mStates
+	 * 
+	 * @return
+	 */
+	final static MultiState uniqueStates(HashMap<Task, MultiState> mStates) {
+		MultiState megaState = new MultiState();
+		for (MultiState ms : mStates.values()) {
+			megaState.addAll(ms);
+		}
+		return megaState;
+	}
+
+	/**
+	 * A "macro" method to add stats to the {@link RunStats} object if existent
+	 * 
+	 * @param mStates
+	 */
+	private final static void gatherStatsHTNStates(HashMap<Task, MultiState> mStates) {
+		int htnStates = uniqueStates(mStates).size();
+		if (stats != null) {
+			stats.htnStates = htnStates;
+		}
+		logger.info("Number of states in the HTN: " + htnStates);
 	}
 
 }

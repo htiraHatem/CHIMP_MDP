@@ -39,7 +39,7 @@ public class Stats {
 	long uniqueObjects;
 	long uniquePreds;
 	long herbrandBase;
-	long htnStates;
+	public long htnStates;
 	long uniqueStates;
 	long totalMethods;
 	long totalOperators;
@@ -78,13 +78,14 @@ public class Stats {
 	 * @param domain
 	 * @param fullyExpanded
 	 * @param mdp
+	 * @param expander 
 	 */
-	void computeStats(HTNTaskNetwork problem, HTNChimpDomain domain, HTNTaskNetwork fullyExpanded,HtnMdpFactory<HTNState, HTNAction> mdp) {
+	public void computeStats(HTNTaskNetwork problem, HTNChimpDomain domain,HtnMdpFactory<HTNState, HTNAction> mdp, HTNExpander expander) {
 		uniqueStates = (mdp!=null)?(mdp.getFinalStates().size()+mdp.getNonFinalStates().size()):0;
-		herbrandBase = calculateRawStateSpace(problem, domain, null);
+		herbrandBase = calculateRawStateSpace(problem, domain, expander);
 		totalMethods = domain.getMethods().size();
 		totalOperators = domain.getActions().size();
-		totalTasks = fullyExpanded.getTasks1().size();
+		totalTasks = problem.getTasks1().size();
 		maxBranching = calculateMaxBranching(domain);
 	}
 	
@@ -98,7 +99,7 @@ public class Stats {
 		}
 		
 		for(Task t:domain.getActions()) {
-			Operator op = (Operator) t.getOp();
+			edu.cmu.ita.htn.Operator op = t.getOp();
 			for(Pred p:op.getPreconditions().getPropositions()) {
 				objects.addAll(getNonVars(p.getTerms()));
 				preds.add(p.getPredicateIndicator());
@@ -161,6 +162,9 @@ public class Stats {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
+		sb.append(System.getProperty("line.separator"));
+		sb.append("=============================="); sb.append(System.getProperty("line.separator"));
+
 		sb.append("Unique Objects : "+uniqueObjects); sb.append(System.getProperty("line.separator"));
 		sb.append("Unique Preds   : "+uniquePreds); sb.append(System.getProperty("line.separator"));
 		sb.append("Unique States  : "+uniqueStates); sb.append(System.getProperty("line.separator"));
@@ -170,11 +174,12 @@ public class Stats {
 		sb.append("Total Operators: "+totalOperators); sb.append(System.getProperty("line.separator"));
 		sb.append("Total Tasks    : "+totalTasks); sb.append(System.getProperty("line.separator"));
 		sb.append("Max Branching  : "+maxBranching); sb.append(System.getProperty("line.separator"));
-		//sb.append("Runtime        : "+runtime); sb.append(System.getProperty("line.separator"));
 		sb.append("Times"); sb.append(System.getProperty("line.separator"));
 		for(Timer t:timers) {
 			sb.append(t.toString()); sb.append(System.getProperty("line.separator"));
 		}
+		sb.append("=============================="); sb.append(System.getProperty("line.separator"));
+
 		return sb.toString();
 	}
 	

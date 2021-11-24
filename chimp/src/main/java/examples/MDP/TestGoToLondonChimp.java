@@ -67,7 +67,10 @@ public class TestGoToLondonChimp {
 		HTNTaskNetwork fullyExpanded = expander.createFullyExpandedHTN(fluentSolver.getConstraintSolvers()[0],
 				tasknetwork, HTNd);
 
-		HtnMdpFactory<HTNState, HTNAction> mdp = HTNChimpToMDP.MDP(expander, fullyExpanded);
+	//	HtnMdpFactory<HTNState, HTNAction> mdp = HTNChimpToMDP.MDP(expander, fullyExpanded);
+		
+		HTNChimpToMDP converter =  new HTNChimpToMDP();
+		HtnMdpFactory<HTNState, HTNAction> mdp = converter.MDP(fluentSolver, builder, HTNd);
 
 		// value iteration
 		ValueIteration<HTNState, HTNAction> pi = new ValueIteration<HTNState, HTNAction>(1);

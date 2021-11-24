@@ -270,7 +270,7 @@ public class HTNNetworkToMDP {
 			HtnMdpFactory<HTNState, HTNAction> mdp = new HtnMdpFactory<HTNState, HTNAction>(states,
 					new ArrayList<>(states).get(0), actions, transitionModel, rewardFunction);
 
-			System.out.println("finalStates: " + mdp.getFinalstates().size());
+			System.out.println("finalStates: " + mdp.getFinalStates().size());
 			System.out.println("nonFinalStates: " + mdp.getNonFinalStates().size());
 			for (int i = 0; i < finalStates.size(); i++)
 				System.out.println("state: " + finalStates.get(i) + " || reward : " + mdp.reward(finalStates.get(i)));

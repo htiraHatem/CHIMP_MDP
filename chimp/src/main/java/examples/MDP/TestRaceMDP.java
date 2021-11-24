@@ -1,37 +1,20 @@
 package examples.MDP;
 
 import java.io.FileWriter;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.Map.Entry;
 import java.util.logging.Logger;
 
-import org.metacsp.framework.ValueOrderingH;
-import org.metacsp.framework.Variable;
-
-import aima.core.probability.mdp.Policy;
-import aima.core.probability.mdp.impl.ModifiedPolicyEvaluation;
-import aima.core.probability.mdp.search.PolicyIteration;
-import aima.core.probability.mdp.search.ValueIteration;
-import edu.cmu.ita.htn.RunStats;
 import fluentSolver.FluentNetworkSolver;
+import htn.Stats;
+import htn.Stats.TimerName;
 import htn.htnExpanderDecomposition.HTNChimpDomain;
 import htn.htnExpanderDecomposition.HTNChimpToMDP;
-import htn.htnExpanderDecomposition.HTNExpander;
-import htn.htnExpanderDecomposition.Task;
-import htn.valOrderingHeuristics.UnifyDeepestWeightNewestbindingsValOH;
 import hybridDomainParsing.DomainParsingException;
 import mdpSolver.HTNAction;
 import mdpSolver.HTNState;
-import mdpSolver.HTNTaskNetwork;
 import mdpSolver.HtnMdpFactory;
 import planner.CHIMP;
 import ui.Dot2Graph;
-import htn.Stats;
-import htn.Stats.Timer;
-import htn.Stats.TimerName;
 
 public class TestRaceMDP {
 
@@ -49,23 +32,21 @@ public class TestRaceMDP {
 		// robot at preManArea
 //		String problemFile = "src/main/java/examples/MDP/RACE/test_m_get_object_1.pdl";
 //		String mdpGraph = "src/main/java/examples/MDP/RACE/test_m_get_object_1.dot";
-			
+
 		String domainFile = "src/main/java/examples/MDP/RACE/domainRace2.ddl";
-		
+
 		// drive to table2 holding tray + A or B
 		String problemFile = "src/main/java/examples/MDP/RACE/test_m_drive_robot_1.pdl";
 		String mdpGraph = "src/main/java/examples/MDP/RACE/test_m_drive_robot_1.dot";
-
 
 		// test spatial Solver and spatial fluents : works !
 //		String problemFile = "src/main/java/examples/MDP/RACE/test_m_get_object_testSpatialFluent.pdl";
 //		String mdpGraph = "src/main/java/examples/MDP/RACE/test_spatialFluent.dot";
 
-		ValueOrderingH valOH = new UnifyDeepestWeightNewestbindingsValOH();
 		CHIMP.CHIMPBuilder builder;
 
 		try {
-			builder = new CHIMP.CHIMPBuilder(domainFile, problemFile).valHeuristic(valOH).htnUnification(true);
+			builder = new CHIMP.CHIMPBuilder(domainFile, problemFile);
 		} catch (DomainParsingException e) {
 			e.printStackTrace();
 			return;
@@ -73,27 +54,26 @@ public class TestRaceMDP {
 		CHIMP chimp = builder.build();
 		FluentNetworkSolver fluentSolver = chimp.getFluentSolver();
 
-		// expanding the HTN
-		HTNTaskNetwork tasknetwork = new HTNTaskNetwork(fluentSolver);
+		HTNChimpToMDP.stats = new Stats();
+		HTNChimpToMDP.stats.startRuntime(TimerName.TOTAL);
 
 		HTNChimpDomain HTNd = HTNChimpDomain.parseHTNChimpDomain(builder);
-		startTimer(TimerName.EXPANDER);
+		HTNChimpToMDP converter = new HTNChimpToMDP();
 
-		HTNExpander expander = new HTNExpander();
-		HTNTaskNetwork fullyExpanded = expander.createFullyExpandedHTN(fluentSolver.getConstraintSolvers()[0],
-				tasknetwork, HTNd);
-		endTimer(TimerName.EXPANDER);
+		// expanding the HTN and convert it to mdp
+		HtnMdpFactory<HTNState, HTNAction> mdp = converter.convertHTN(fluentSolver, builder, HTNd);
 
+		// value iteration algo
+		Map<HTNState, Double> policy = converter.PlanVI(mdp, 1);
 
-		HtnMdpFactory<HTNState, HTNAction> mdp = HTNChimpToMDP.MDP(expander, fullyExpanded);
+		HTNChimpToMDP.stats.endRuntime(TimerName.TOTAL);
 
-		// value iteration
-		ValueIteration<HTNState, HTNAction> pi = new ValueIteration<HTNState, HTNAction>(1);
-		Map<HTNState, Double> policy = pi.valueIteration(mdp, 0.0001);
+		HTNChimpToMDP.stats.computeStats(converter.fullyExpanded, HTNd, mdp, converter.expander);
+		System.out.println(HTNChimpToMDP.stats.toString());
 
-		for (Entry<HTNState, Double> s : policy.entrySet()) {
-			System.out.println("**" + s.getKey() + "  :  " + s.getValue());
-		}
+//		for (Entry<HTNState, Double> s : policy.entrySet()) {
+//			System.out.println("**" + s.getKey() + "  :  " + s.getValue());
+//		}
 
 		// test PI
 
@@ -105,8 +85,6 @@ public class TestRaceMDP {
 //		for (HTNState s : mdp.states()) {
 //			System.out.println("S"+s.getId() + "  policy  :  " + policy.action(s));
 //		}
-
-		System.out.println(converter.stats.toString());
 
 		// convert to dot language
 		if (mdpGraph != null) {
@@ -129,33 +107,7 @@ public class TestRaceMDP {
 //			}
 //			chimp.printFullPlan();
 //		}
-		
-		
 
 	}
 
-	private Stats stats;
-	/**
-	 * A "macro" method to check the {@link RunStats} stats object before starting a
-	 * {@link Timer}.
-	 * 
-	 * @param tm
-	 */
-	private final void startTimer(TimerName tm) {
-		if (stats != null) {
-			stats.startRuntime(tm);
-		}
-	}
-
-	/**
-	 * A "macro" method to check the {@link RunStats} stats object before ending a
-	 * {@link Timer}.
-	 * 
-	 * @param tm
-	 */
-	private final void endTimer(TimerName tm) {
-		if (stats != null) {
-			stats.endRuntime(tm);
-		}
-	}
 }
