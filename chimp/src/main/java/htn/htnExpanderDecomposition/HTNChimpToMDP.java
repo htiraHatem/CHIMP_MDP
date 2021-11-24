@@ -561,6 +561,7 @@ public class HTNChimpToMDP {
 		// transitionModel.display();
 
 		// use the the specified rewards in the domain
+		
 		HTNReward rewardFunction = HTNChimpToMDP.useDefaultReward(states, fullyExpanded);
 
 		// get or create reward function

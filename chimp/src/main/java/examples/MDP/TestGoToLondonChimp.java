@@ -2,22 +2,18 @@ package examples.MDP;
 
 import java.io.FileWriter;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.logging.Logger;
 
-import org.metacsp.framework.ValueOrderingH;
 import org.metacsp.framework.Variable;
 
-import aima.core.probability.mdp.search.ValueIteration;
 import fluentSolver.FluentNetworkSolver;
+import htn.Stats;
+import htn.Stats.TimerName;
 import htn.htnExpanderDecomposition.HTNChimpDomain;
 import htn.htnExpanderDecomposition.HTNChimpToMDP;
-import htn.htnExpanderDecomposition.HTNExpander;
-import htn.valOrderingHeuristics.UnifyDeepestWeightNewestbindingsValOH;
 import hybridDomainParsing.DomainParsingException;
 import mdpSolver.HTNAction;
 import mdpSolver.HTNState;
-import mdpSolver.HTNTaskNetwork;
 import mdpSolver.HtnMdpFactory;
 import planner.CHIMP;
 import ui.Dot2Graph;
@@ -48,11 +44,10 @@ public class TestGoToLondonChimp {
 		//String domainFile = "src/main/java/examples/MDP/gotolondon/domain3.ddl";
 
 
-		ValueOrderingH valOH = new UnifyDeepestWeightNewestbindingsValOH();
 		CHIMP.CHIMPBuilder builder;
 
 		try {
-			builder = new CHIMP.CHIMPBuilder(domainFile, problemFile).valHeuristic(valOH).htnUnification(true);
+			builder = new CHIMP.CHIMPBuilder(domainFile, problemFile);
 		} catch (DomainParsingException e) {
 			e.printStackTrace();
 			return;
@@ -60,25 +55,26 @@ public class TestGoToLondonChimp {
 		CHIMP chimp = builder.build();
 		FluentNetworkSolver fluentSolver = chimp.getFluentSolver();
 
-		// expanding the HTN
-		HTNTaskNetwork tasknetwork = new HTNTaskNetwork(fluentSolver);
+		HTNChimpToMDP.stats = new Stats();
+		HTNChimpToMDP.stats.startRuntime(TimerName.TOTAL);
+
 		HTNChimpDomain HTNd = HTNChimpDomain.parseHTNChimpDomain(builder);
-		HTNExpander expander = new HTNExpander();
-		HTNTaskNetwork fullyExpanded = expander.createFullyExpandedHTN(fluentSolver.getConstraintSolvers()[0],
-				tasknetwork, HTNd);
+		HTNChimpToMDP converter = new HTNChimpToMDP();
 
-	//	HtnMdpFactory<HTNState, HTNAction> mdp = HTNChimpToMDP.MDP(expander, fullyExpanded);
-		
-		HTNChimpToMDP converter =  new HTNChimpToMDP();
-		HtnMdpFactory<HTNState, HTNAction> mdp = converter.MDP(fluentSolver, builder, HTNd);
+		// expanding the HTN and convert it to mdp
+		HtnMdpFactory<HTNState, HTNAction> mdp = converter.convertHTN(fluentSolver, builder, HTNd);
 
-		// value iteration
-		ValueIteration<HTNState, HTNAction> pi = new ValueIteration<HTNState, HTNAction>(1);
-		Map<HTNState, Double> policy = pi.valueIteration(mdp, 0.0001);
+		// value iteration algo
+		Map<HTNState, Double> policy = converter.PlanVI(mdp, 1);
 
-		for (Entry<HTNState, Double> s : policy.entrySet()) {
-			System.out.println(s.getKey() + "  :  " + s.getValue());
-		}
+		HTNChimpToMDP.stats.endRuntime(TimerName.TOTAL);
+
+		HTNChimpToMDP.stats.computeStats(converter.fullyExpanded, HTNd, mdp, converter.expander);
+		System.out.println(HTNChimpToMDP.stats.toString());
+
+//		for (Entry<HTNState, Double> s : policy.entrySet()) {
+//			System.out.println("**" + s.getKey() + "  :  " + s.getValue());
+//		}
 
 		// convert to dot language
 		String mdpGraph = "src/main/java/examples/MDP/gotolondon/gotolondonGraphVICHIMP0.dot";

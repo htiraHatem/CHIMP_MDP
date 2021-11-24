@@ -260,6 +260,14 @@ public class HTNTaskNetwork extends TaskNetwork {
 		return true;
 	}
 
+	/**
+	 * Returns the number of tasks in this TaskNetwork.	
+	 * @return
+	 */
+	public final int getTaskSize() {
+		return tasks.size();
+	}
+	
 	public Task getFirstTask() {
 		return getOrderedTasks1().getFirst();
 	}
