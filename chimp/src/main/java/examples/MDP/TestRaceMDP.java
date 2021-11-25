@@ -2,6 +2,7 @@ package examples.MDP;
 
 import java.io.FileWriter;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.logging.Logger;
 
 import fluentSolver.FluentNetworkSolver;
@@ -33,11 +34,20 @@ public class TestRaceMDP {
 //		String problemFile = "src/main/java/examples/MDP/RACE/test_m_get_object_1.pdl";
 //		String mdpGraph = "src/main/java/examples/MDP/RACE/test_m_get_object_1.dot";
 
-		String domainFile = "src/main/java/examples/MDP/RACE/domainRace2.ddl";
+		//no possibility of chargin the Battery
+//		String domainFile = "src/main/java/examples/MDP/RACE/domainRace2.ddl";
 
 		// drive to table2 holding tray + A or B
-		String problemFile = "src/main/java/examples/MDP/RACE/test_m_drive_robot_1.pdl";
-		String mdpGraph = "src/main/java/examples/MDP/RACE/test_m_drive_robot_1.dot";
+//		String problemFile = "src/main/java/examples/MDP/RACE/test_m_drive_robot_1.pdl";
+//		String mdpGraph = "src/main/java/examples/MDP/RACE/test_m_drive_robot_1.dot";
+		
+		
+		//possibility of charging the Battery  
+		String domainFile = "src/main/java/examples/MDP/RACE/domainRace3.ddl";
+
+		// drive to table2 holding tray + A or B
+		String problemFile = "src/main/java/examples/MDP/RACE/test_m_drive_robot_2.pdl";
+		String mdpGraph = "src/main/java/examples/MDP/RACE/test_m_drive_robot_2.dot";
 
 		// test spatial Solver and spatial fluents : works !
 //		String problemFile = "src/main/java/examples/MDP/RACE/test_m_get_object_testSpatialFluent.pdl";

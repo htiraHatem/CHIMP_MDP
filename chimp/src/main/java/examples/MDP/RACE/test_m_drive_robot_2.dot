@@ -1,0 +1,28 @@
+digraph {
+  node [color="#40b9e5" ]
+ size="60,17";
+"7" [label=" S7   : (r:1.0 ), Utility : 1.0  , (resource : 25)  " shape=doubleoctagon];
+"10" [label=" S10   : (r:0.98 ), Utility : 0.98 " color = red ,  shape=doubleoctagon]
+"12" [label=" S12   : (r:0.98 ), Utility : 0.98 " color = red ,  shape=doubleoctagon]
+"17" [label=" S17   : (r:1.0 ), Utility : 1.0  , (resource : 25)  " shape=doubleoctagon];
+"19" [label=" S19   : (r:0.98 ), Utility : 0.98 " color = red ,  shape=doubleoctagon]
+"0" [label=" S0   : (reward:-0.4 ), Utility : -0.2598914200000001  , (resource : 200) "]"1" [label=" S1   : (reward:-0.04 ), Utility : 0.15567619999999996  , (resource : 180) "]"2" [label=" S2   : (reward:-0.04 ), Utility : 0.21741799999999997  , (resource : 155) "]"3" [label=" S3   : (reward:-0.045 ), Utility : 0.36773999999999996  , (resource : 125) "]"4" [label=" S4   : (reward:-0.04 ), Utility : 0.45859999999999995  , (resource : 100) "]"5" [label=" S5   : (reward:-0.04 ), Utility : 0.5539999999999999  , (resource : 80) "]"6" [label=" S6   : (reward:-0.04 ), Utility : 0.6599999999999999  , (resource : 55) "]"8" [label=" S8   : (reward:-0.04 ), Utility : 0.5413999999999999  , (resource : 25) "]"9" [label=" S9   : (reward:-0.04 ), Utility : 0.6459999999999999  , (resource : 0) "]"11" [label=" S11   : (reward:-0.045 ), Utility : 0.6409999999999999  , (resource : 25) "]"13" [label=" S13   : (reward:-0.045 ), Utility : 0.36773999999999996  , (resource : 125) "]"14" [label=" S14   : (reward:-0.04 ), Utility : 0.45859999999999995  , (resource : 100) "]"15" [label=" S15   : (reward:-0.04 ), Utility : 0.5539999999999999  , (resource : 80) "]"16" [label=" S16   : (reward:-0.04 ), Utility : 0.6599999999999999  , (resource : 55) "]"18" [label=" S18   : (reward:-0.045 ), Utility : 0.6409999999999999  , (resource : 25) "]"0" -> "1" [ label="grasp_object(tray) (ProbTrans : 0,90)"
+, arrowhead = diamond , color=green];"1" -> "2" [ label="move_base_blind(manipulationAreaEastCounter1,preManipulationAreaEastCounter1) (ProbTrans : 0,90)"
+, arrowhead = diamond , color=green];"2" -> "3" [ label="moveTo(preManipulationAreaEastCounter1,preManipulationNorthTable) (ProbTrans : 0,70)"
+, arrowhead = diamond , color=green];"2" -> "13" [ label="moveTo(preManipulationAreaEastCounter1,preManipulationSouthTable) (ProbTrans : 0,70)"
+,style=dotted, arrowhead=tee];"3" -> "4" [ label="move_base_blind(preManipulationNorthTable,manipulationNorthTable) (ProbTrans : 0,90)"
+, arrowhead = diamond , color=green];"4" -> "5" [ label="grasp_object(cup) (ProbTrans : 0,90)"
+, arrowhead = diamond , color=green];"5" -> "6" [ label="move_base_blind(manipulationNorthTable,preManipulationNorthTable) (ProbTrans : 0,90)"
+, arrowhead = diamond , color=green];"6" -> "7" [ label="moveTo(preManipulationNorthTable,table2) (ProbTrans : 0,70)"
+, arrowhead = diamond , color=green];"6" -> "8" [ label="moveTo1(preManipulationNorthTable,corner1) (ProbTrans : 0,90)"
+,style=dotted, arrowhead=tee];"6" -> "11" [ label="moveTo(preManipulationNorthTable,corner1) (ProbTrans : 0,90)"
+,style=dotted, arrowhead=tee];"8" -> "9" [ label="charge_battery(corner1) (ProbTrans : 0,90)"
+, arrowhead = diamond , color=green];"9" -> "10" [ label="moveTo1(corner1,table2) (ProbTrans : 0,70)"
+, arrowhead = diamond , color=green];"11" -> "12" [ label="moveTo(corner1,table2) (ProbTrans : 0,70)"
+, arrowhead = diamond , color=green];"13" -> "14" [ label="move_base_blind(preManipulationSouthTable,manipulationAreaSouthTable) (ProbTrans : 0,90)"
+, arrowhead = diamond , color=green];"14" -> "15" [ label="grasp_object(appetizer) (ProbTrans : 0,90)"
+, arrowhead = diamond , color=green];"15" -> "16" [ label="move_base_blind(manipulationAreaSouthTable,preManipulationSouthTable) (ProbTrans : 0,90)"
+, arrowhead = diamond , color=green];"16" -> "17" [ label="moveTo(preManipulationSouthTable,table2) (ProbTrans : 0,70)"
+, arrowhead = diamond , color=green];"16" -> "18" [ label="moveTo(preManipulationSouthTable,corner2) (ProbTrans : 0,90)"
+,style=dotted, arrowhead=tee];"18" -> "19" [ label="moveTo(corner2,table2) (ProbTrans : 0,70)"
+, arrowhead = diamond , color=green];}

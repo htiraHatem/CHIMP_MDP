@@ -64,12 +64,15 @@ public class Dot2Graph {
 			}
 			for (HTNState s : source.getNonFinalStates()) {
 				ArrayList<String> OhneStatic = new ArrayList<String>();
+				MultiTimePoint RCVariable=null;
+				if(s.getHtnState().size()!=0) {
 				Object[] a = s.getHtnState().iterator().next().toArray();
-				 MultiTimePoint RCVariable = ((htn.htnExpanderDecomposition.Task) s.getTask()).getRCVariable();
+				RCVariable = ((htn.htnExpanderDecomposition.Task) s.getTask()).getRCVariable();
 
 				for (Object i : a) {
 					if ((!i.toString().contains("crossLinked")) && (!i.toString().contains("connected")))
 						OhneStatic.add(i.toString());
+				}
 				}
 				// easy to understand
 				out.print("\"" + s.getId() + "\" [label=\" S" + s.getId() + "   : (reward:" + source.reward(s) + " )");

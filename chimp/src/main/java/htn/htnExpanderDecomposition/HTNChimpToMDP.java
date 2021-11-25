@@ -73,13 +73,21 @@ public class HTNChimpToMDP {
 		HTNState states[] = new HTNState[tasks.size()];
 
 		for (int i = 0; i < tasks.size(); i++) {
+			
 			Task ti = tasks.get(i);
 			MultiState m = new MultiState(mStates.get(ti), false);
 			MultiState si = new MultiState(m, false);
 
+
 			for (int j = 0; j < i; j++) {
 				Task tj = tasks.get(j);
+				//pour ignorer l'ecrasement 
+				//if(!tj.getName().startsWith(ti.getName())) {
+				//	si.removeAll(mStates.get(tj));
+				//}
 				si.removeAll(mStates.get(tj));
+
+
 			}
 			states[i] = new HTNState(i, si.toString(), si, ti);
 
