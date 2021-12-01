@@ -2,13 +2,11 @@ digraph {
   node [color="#40b9e5" ]
  size="60,17";
 "7" [label=" S7   : (r:0.98 ), Utility : 0.98 " color = red ,  shape=doubleoctagon]
-"10" [label=" S10   : (r:0.98 ), Utility : 0.98 " color = red ,  shape=doubleoctagon]
+"10" [label=" S10   : (r:1.0 ), Utility : 1.0  , (resource : 85)  " shape=doubleoctagon];
 "12" [label=" S12   : (r:0.98 ), Utility : 0.98 " color = red ,  shape=doubleoctagon]
 "17" [label=" S17   : (r:0.98 ), Utility : 0.98 " color = red ,  shape=doubleoctagon]
 "19" [label=" S19   : (r:0.98 ), Utility : 0.98 " color = red ,  shape=doubleoctagon]
-"0" [label=" S0   : (reward:-0.4 ), Utility : -0.2656782220000001  , (resource : 170) "]"1" [label=" S1   : (reward:-0.04 ), Utility : 0.14924641999999994  , (resource : 150) "]"2" [label=" S2   : (reward:-0.04 ), Utility : 0.21027379999999993  , (resource : 125) "]"3" [label=" S3   : (reward:-0.045 ), Utility : 0.35753399999999996  , (resource : 95) "]"4" [label=" S4   : (reward:-0.04 ), Utility : 0.44725999999999994  , (resource : 70) "]"5" [label=" S5   : (reward:-0.04 ), Utility : 0.5413999999999999  , (resource : 50) "]"6" [label=" S6   : (reward:-0.04 ), Utility : 0.6459999999999999  , (resource : 25) "]"8" [label=" S8   : (reward:-0.06 ), Utility : 0.5213999999999999 " color = red ]
-"9" [label=" S9   : (reward:-0.04 ), Utility : 0.6459999999999999 " color = red ]
-"11" [label=" S11   : (reward:-0.065 ), Utility : 0.621 " color = red ]
+"0" [label=" S0   : (reward:-0.4 ), Utility : -0.2656782220000001  , (resource : 170) "]"1" [label=" S1   : (reward:-0.04 ), Utility : 0.14924641999999994  , (resource : 150) "]"2" [label=" S2   : (reward:-0.04 ), Utility : 0.21027379999999993  , (resource : 125) "]"3" [label=" S3   : (reward:-0.045 ), Utility : 0.35753399999999996  , (resource : 95) "]"4" [label=" S4   : (reward:-0.04 ), Utility : 0.44725999999999994  , (resource : 70) "]"5" [label=" S5   : (reward:-0.04 ), Utility : 0.5413999999999999  , (resource : 50) "]"6" [label=" S6   : (reward:-0.04 ), Utility : 0.6459999999999999  , (resource : 25) "]"8" [label=" S8   : (reward:-0.06 ), Utility : 0.534  , (resource : 5) "]"9" [label=" S9   : (reward:-0.04 ), Utility : 0.6599999999999999  , (resource : 105) "]"11" [label=" S11   : (reward:-0.065 ), Utility : 0.621 " color = red ]
 "13" [label=" S13   : (reward:-0.045 ), Utility : 0.35753399999999996  , (resource : 95) "]"14" [label=" S14   : (reward:-0.04 ), Utility : 0.44725999999999994  , (resource : 70) "]"15" [label=" S15   : (reward:-0.04 ), Utility : 0.5413999999999999  , (resource : 50) "]"16" [label=" S16   : (reward:-0.04 ), Utility : 0.6459999999999999  , (resource : 25) "]"18" [label=" S18   : (reward:-0.065 ), Utility : 0.621 " color = red ]
 "0" -> "1" [ label="grasp_object(tray) (ProbTrans : 0,90)"
 , arrowhead = diamond , color=green];"1" -> "2" [ label="move_base_blind(manipulationAreaEastCounter1,preManipulationAreaEastCounter1) (ProbTrans : 0,90)"

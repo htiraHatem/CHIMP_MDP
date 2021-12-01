@@ -8,7 +8,7 @@
 
 ####################
 #######RESOURCES##############
-(Resource BatteryStorageCapacity 200)
+(Resource BatteryStorageCapacity 170)
 
 
 ################################
@@ -79,7 +79,7 @@
   (if (IC ?Money < 10) (Decrease (Reward 0.02)))
 
   (ResourceUsage 
-    (Usage BatteryStorageCapacity 30))
+    (Usage BatteryStorageCapacity 20))
 )
 
 # MOVE_BASE_BLIND   ManArea to PreArea or opposite
@@ -110,8 +110,8 @@
    (if (Values ?cornerArea corner1) (Increase Money 100))
 
 
- (ResourceUsage 
-    (Usage navigationCapacity 25))
+ #(ResourceUsage 
+ #   (Usage navigationCapacity 25))
 )
 
 (:method

@@ -34,20 +34,45 @@ public class TestRaceMDP {
 //		String problemFile = "src/main/java/examples/MDP/RACE/test_m_get_object_1.pdl";
 //		String mdpGraph = "src/main/java/examples/MDP/RACE/test_m_get_object_1.dot";
 
-		//no possibility of chargin the Battery
-//		String domainFile = "src/main/java/examples/MDP/RACE/domainRace2.ddl";
+//--------------------------------------------------------------------------------------------------
+		
+		//no possibility of charging the Battery
+		String domainFile = "src/main/java/examples/MDP/RACE/domainRace2.ddl";
 
 		// drive to table2 holding tray + A or B
 //		String problemFile = "src/main/java/examples/MDP/RACE/test_m_drive_robot_1.pdl";
 //		String mdpGraph = "src/main/java/examples/MDP/RACE/test_m_drive_robot_1.dot";
 		
+		// drive from northtable to table2 (hold cup)
+//		String problemFile = "src/main/java/examples/MDP/RACE/test_m_moveTo1.pdl";
+//		String mdpGraph = "src/main/java/examples/MDP/RACE/test_m_moveTo1.dot";
+		
+		// drive from south to table2 (hold appetizer)
+		String problemFile = "src/main/java/examples/MDP/RACE/test_m_moveTo2.pdl";
+		String mdpGraph = "src/main/java/examples/MDP/RACE/test_m_moveTo2.dot";
+
+//--------------------------------------------------------------------------------------------------
 		
 		//possibility of charging the Battery  
-		String domainFile = "src/main/java/examples/MDP/RACE/domainRace3.ddl";
+		
+		//resource = 200
+//		String domainFile = "src/main/java/examples/MDP/RACE/domainRace3.ddl";
 
-		// drive to table2 holding tray + A or B
-		String problemFile = "src/main/java/examples/MDP/RACE/test_m_drive_robot_2.pdl";
-		String mdpGraph = "src/main/java/examples/MDP/RACE/test_m_drive_robot_2.dot";
+//		// drive to table2 enough resource(200) ==> shortest consistent path without charging
+//		String problemFile = "src/main/java/examples/MDP/RACE/test_m_drive_robot_2.pdl";
+//		String mdpGraph = "src/main/java/examples/MDP/RACE/test_m_drive_robot_2.dot";
+		
+//--------------------------------------------------------------------------------------------------
+
+		// charge battery resource = 170
+//		String domainFile = "src/main/java/examples/MDP/RACE/domainRace4.ddl";
+
+		// drive to table2 not enough resource(170) ! ==> charging_Battery
+//		String problemFile = "src/main/java/examples/MDP/RACE/test_m_drive_robot_3.pdl";
+//		String mdpGraph = "src/main/java/examples/MDP/RACE/test_m_drive_robot_3.dot";
+
+
+		//--------------------------------------------------------------------------------------------------
 
 		// test spatial Solver and spatial fluents : works !
 //		String problemFile = "src/main/java/examples/MDP/RACE/test_m_get_object_testSpatialFluent.pdl";
