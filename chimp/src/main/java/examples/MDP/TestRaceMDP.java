@@ -24,20 +24,20 @@ public class TestRaceMDP {
 
 	public static void main(String[] args) throws Exception {
 
-//		String domainFile = "src/main/java/examples/MDP/RACE/domainRace.ddl";
+		String domainFile = "src/main/java/examples/MDP/RACE/domainRace.ddl";
 
 		// robot at manArea
 //		String problemFile = "src/main/java/examples/MDP/RACE/test_m_get_object_0.pdl";
 //		String mdpGraph = "src/main/java/examples/MDP/RACE/test_m_get_object_0.dot";
 
 		// robot at preManArea
-//		String problemFile = "src/main/java/examples/MDP/RACE/test_m_get_object_1.pdl";
-//		String mdpGraph = "src/main/java/examples/MDP/RACE/test_m_get_object_1.dot";
+		String problemFile = "src/main/java/examples/MDP/RACE/test_m_get_object_1.pdl";
+		String mdpGraph = "src/main/java/examples/MDP/RACE/test_m_get_object_1.dot";
 
 //--------------------------------------------------------------------------------------------------
 		
 		//no possibility of charging the Battery
-		String domainFile = "src/main/java/examples/MDP/RACE/domainRace2.ddl";
+//		String domainFile = "src/main/java/examples/MDP/RACE/domainRace2.ddl";
 
 		// drive to table2 holding tray + A or B
 //		String problemFile = "src/main/java/examples/MDP/RACE/test_m_drive_robot_1.pdl";
@@ -48,8 +48,8 @@ public class TestRaceMDP {
 //		String mdpGraph = "src/main/java/examples/MDP/RACE/test_m_moveTo1.dot";
 		
 		// drive from south to table2 (hold appetizer)
-		String problemFile = "src/main/java/examples/MDP/RACE/test_m_moveTo2.pdl";
-		String mdpGraph = "src/main/java/examples/MDP/RACE/test_m_moveTo2.dot";
+//		String problemFile = "src/main/java/examples/MDP/RACE/test_m_moveTo2.pdl";
+//		String mdpGraph = "src/main/java/examples/MDP/RACE/test_m_moveTo2.dot";
 
 //--------------------------------------------------------------------------------------------------
 		

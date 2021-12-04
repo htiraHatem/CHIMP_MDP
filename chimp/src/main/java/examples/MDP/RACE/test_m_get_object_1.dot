@@ -1,8 +1,11 @@
 digraph {
   node [color="#40b9e5" ]
  size="60,17";
-"3" [label=" S3   : (r:1.0 ), Utility : 1.0  , (resource : 30)  " shape=doubleoctagon];
-"0" [label=" S0   : (reward:-0.4 ), Utility : 0.26059999999999994  , (resource : 100) "]"1" [label=" S1   : (reward:-0.04 ), Utility : 0.734  , (resource : 75) "]"2" [label=" S2   : (reward:-0.04 ), Utility : 0.86  , (resource : 55) "]"0" -> "1" [ label="move_base_blind(preManipulationAreaEastCounter1,manipulationAreaEastCounter1) (ProbTrans : 0,90)"
-, arrowhead = diamond , color=green];"1" -> "2" [ label="grasp_object(tray) (ProbTrans : 0,90)"
-, arrowhead = diamond , color=green];"2" -> "3" [ label="move_base_blind(manipulationAreaEastCounter1,preManipulationAreaEastCounter1) (ProbTrans : 0,90)"
+"3" [label=" S3  " shape=doubleoctagon];
+"0" [label=" S0 "];
+"1" [label=" S1 "];
+"2" [label=" S2 "];
+"0" -> "1" [ label="move_base_blind(preManipulationAreaEastCounter1,manipulationAreaEastCounter1)"
+, arrowhead = diamond , color=green];"1" -> "2" [ label="grasp_object(tray)"
+, arrowhead = diamond , color=green];"2" -> "3" [ label="move_base_blind(manipulationAreaEastCounter1,preManipulationAreaEastCounter1)"
 , arrowhead = diamond , color=green];}
