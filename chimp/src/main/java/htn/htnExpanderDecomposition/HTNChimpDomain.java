@@ -9,6 +9,10 @@ import java.util.Vector;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import org.metacsp.framework.Constraint;
+import org.metacsp.framework.ConstraintSolver;
+import org.metacsp.multi.spatial.rectangleAlgebra.UnaryRectangleConstraint;
+
 import edu.cmu.ita.htn.HTNDomain;
 import edu.cmu.ita.htn.HTNFactory;
 import edu.cmu.ita.htn.LogicExpression;
@@ -20,6 +24,7 @@ import edu.cmu.ita.htn.LogicExpressionImpl.LogicalOp;
 import edu.cmu.ita.htn.parser.ParseException;
 import edu.cmu.ita.htn.parser.Token;
 import examples.MDP.testSolver.TestVI;
+import fluentSolver.FluentNetworkSolver;
 import htn.EffectTemplate;
 import htn.HTNPrecondition;
 import htn.MDPTemplate;
@@ -64,6 +69,9 @@ public class HTNChimpDomain extends HTNDomain {
 			resourceSchedulers.add(f);
 
 		}
+		
+		FluentNetworkSolver fluentSolver=builder.build().getFluentSolver();
+		ConstraintSolver spatialSolver=fluentSolver.getConstraintSolvers()[2];
 
 		// operators
 		for (PlanReportroryItem i : O) {
@@ -104,6 +112,7 @@ public class HTNChimpDomain extends HTNDomain {
 			head = convertLISPAtom(i.getName(), pars);
 			add.addAll(del.negateAll());
 			op = new Operator(HTNFactory.createOperator(head, pre, add, cost));
+		
 			this.addHtnAction(new Task( HTNFactory.createPrimitiveTask(op), i.getResourceUsageTemplate(), i.GetMDPTemplate()));
 		}
 

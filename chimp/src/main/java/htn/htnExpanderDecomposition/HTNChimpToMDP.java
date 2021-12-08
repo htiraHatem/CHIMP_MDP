@@ -525,11 +525,10 @@ public class HTNChimpToMDP {
 			HTNChimpDomain hTNd) throws Exception {
 		//
 
-		HTNTaskNetwork tasknetwork = new HTNTaskNetwork(fluentSolver);
 		// expanding the HTN
 		startTimer(TimerName.EXPANDER);
 		expander = new HTNExpander();
-		fullyExpanded = expander.createFullyExpandedHTN(fluentSolver.getConstraintSolvers()[0], tasknetwork, hTNd);
+		fullyExpanded = expander.createFullyExpandedHTN(fluentSolver, hTNd);
 		endTimer(TimerName.EXPANDER);
 
 		// get methods

@@ -36,10 +36,10 @@ true false undef
 # spatial fluents
 
 #counter objects
-(UnarySpatialFluent sp9 At(tray [49,49] [55,55] [49,49] [69,69]))
+(UnarySpatialFluent sp1 At(preManipulationAreaEastCounter1 [49,49] [55,55] [49,49] [69,69]))
+(UnarySpatialFluent sp2 At(manipulationAreaEastCounter1 [60,60] [70,70] [49,49] [69,69]))
 (UnarySpatialFluent sp03 Size(placingAreaEastRightCounter1 [100,100] [30,30]))
-#(UnarySpatialFluent sp1 Size(tray [4,4] [18,18]))
-(UnarySpatialFluent sp2 Size(tray2 [4,4] [18,18]))
+
 #Counter1 Constraints
 (RectangularSpatialFluent sp1_x During(tray placingAreaEastRightCounter1))
 (RectangularSpatialFluent sp1_y During(tray placingAreaEastRightCounter1))

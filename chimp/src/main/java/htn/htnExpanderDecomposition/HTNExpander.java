@@ -1,6 +1,7 @@
 package htn.htnExpanderDecomposition;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -12,15 +13,18 @@ import org.metacsp.framework.Variable;
 import org.metacsp.meta.TCSP.TCSPSolver;
 import org.metacsp.multi.TCSP.DistanceConstraintSolver;
 import org.metacsp.multi.TCSP.MultiTimePoint;
+import org.metacsp.multi.spatial.rectangleAlgebra.UnaryRectangleConstraint;
 
 import edu.cmu.ita.htn.Constraint;
 import edu.cmu.ita.htn.HTNFactory;
 import edu.cmu.ita.htn.MultiState;
 import edu.cmu.ita.htn.Operator;
 import edu.cmu.ita.htn.State;
+import fluentSolver.FluentNetworkSolver;
 import jason.asSemantics.Unifier;
 import mdpSolver.HTNTaskNetwork;
 import resourceFluent.FluentResourceUsageScheduler;
+import resourceFluent.ResourceUsageTemplate;
 import unify.CompoundSymbolicVariable;
 
 public class HTNExpander {
@@ -50,12 +54,16 @@ public class HTNExpander {
 		mStateBefore = new HashMap<Task, MultiState>();
 	}
 
-	public HTNTaskNetwork createFullyExpandedHTN(ConstraintSolver constraintSolver, HTNTaskNetwork problem,
-			HTNChimpDomain domain) {
+	public HTNTaskNetwork createFullyExpandedHTN(FluentNetworkSolver fluentSolver, HTNChimpDomain domain) throws Exception {
 		S0 = new State();
-		Variable[] sa = constraintSolver.getVariables();
-		Object task = constraintSolver.getComponents().values().toArray()[0];
-		
+
+		HTNTaskNetwork problem = new HTNTaskNetwork(fluentSolver);
+
+		ConstraintSolver symbolicConstraintSolver = fluentSolver.getConstraintSolvers()[0];
+		Variable[] sa = symbolicConstraintSolver.getVariables();
+		Object task = symbolicConstraintSolver.getComponents().values().toArray()[0];
+
+		ConstraintSolver spatialConstraintSolver = fluentSolver.getConstraintSolvers()[2];
 		
 		for (Variable i : sa) {
 			if (!task.toString().contains(i.toString())) {
@@ -77,6 +85,62 @@ public class HTNExpander {
 		}
 		initialState = new MultiState(S0);
 		HTNTaskNetwork fd = fullDecomposition(problem, domain);
+		//get spatial knowledge
+
+		if (spatialConstraintSolver.getConstraints().length > 0) {
+
+			System.out.println(spatialConstraintSolver.getConstraints().length);
+			ArrayList<UnaryRectangleConstraint> u = new ArrayList<UnaryRectangleConstraint>();
+
+			for (org.metacsp.framework.Constraint c : spatialConstraintSolver.getConstraints())
+				if (c.isUnary() && ((UnaryRectangleConstraint) c).getType().name().equals("At")) {
+					u.add((UnaryRectangleConstraint) c);
+					System.out.println(u.get(0).getScope()[0].getComponent());
+					System.out.println(u.get(0).getBounds()[0]);
+					System.out.println(u.get(0).getBounds()[1]);
+					// ((UnaryRectangleConstraint) c)
+				}
+
+//			if(i.getName().equalsIgnoreCase("move_base_blind")) {
+			//
+//					}
+
+			UnaryRectangleConstraint term1 = null;
+			UnaryRectangleConstraint term2 = null;
+
+			for (Task t : fd.getOrderedTasks1()) {
+				// check if the the spatial variables exists or not
+				// Boolean a =u.filter(t.getName()::contains).findAny();
+				String[] moveOp = { "move_base_blind", "moveTo" };
+				if ((Arrays.asList(moveOp).contains(t.getName()))) {
+					System.out.println(t.getName());
+					System.out.println(t.getTerms());
+					for (UnaryRectangleConstraint ucr : u) {
+
+						if (t.getTermsArray()[0].toString().equalsIgnoreCase(ucr.getScope()[0].getComponent()))
+							term1 = ucr;
+						if (t.getTermsArray()[1].toString().equalsIgnoreCase(ucr.getScope()[0].getComponent()))
+							term2 = ucr;
+
+					}
+					System.out.println(term1.getEdgeLabel());
+					System.out.println(term2.getEdgeLabel());
+					
+					
+
+
+					// *********
+					t.getResourceUsageIndicators().get(0).setResourceUsageLevel(5);
+					
+					System.out.println(t.getResourceUsageIndicators());
+
+				}
+
+			}
+
+		}
+		
+		
 		// get resources
 		List<FluentResourceUsageScheduler> fluentSchedulers = domain.getResourceSchedulers();
 			fd.setResourceSchedulers(fluentSchedulers);		

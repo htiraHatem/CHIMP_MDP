@@ -24,15 +24,15 @@ public class TestRaceMDP {
 
 	public static void main(String[] args) throws Exception {
 
-		String domainFile = "src/main/java/examples/MDP/RACE/domainRace.ddl";
+		//String domainFile = "src/main/java/examples/MDP/RACE/domainRace.ddl";
 
 		// robot at manArea
 //		String problemFile = "src/main/java/examples/MDP/RACE/test_m_get_object_0.pdl";
 //		String mdpGraph = "src/main/java/examples/MDP/RACE/test_m_get_object_0.dot";
 
 		// robot at preManArea
-		String problemFile = "src/main/java/examples/MDP/RACE/test_m_get_object_1.pdl";
-		String mdpGraph = "src/main/java/examples/MDP/RACE/test_m_get_object_1.dot";
+//		String problemFile = "src/main/java/examples/MDP/RACE/test_m_get_object_1.pdl";
+//		String mdpGraph = "src/main/java/examples/MDP/RACE/test_m_get_object_1.dot";
 
 //--------------------------------------------------------------------------------------------------
 		
@@ -65,7 +65,7 @@ public class TestRaceMDP {
 //--------------------------------------------------------------------------------------------------
 
 		// charge battery resource = 170
-//		String domainFile = "src/main/java/examples/MDP/RACE/domainRace4.ddl";
+		String domainFile = "src/main/java/examples/MDP/RACE/domainRace4.ddl";
 
 		// drive to table2 not enough resource(170) ! ==> charging_Battery
 //		String problemFile = "src/main/java/examples/MDP/RACE/test_m_drive_robot_3.pdl";
@@ -75,8 +75,8 @@ public class TestRaceMDP {
 		//--------------------------------------------------------------------------------------------------
 
 		// test spatial Solver and spatial fluents : works !
-//		String problemFile = "src/main/java/examples/MDP/RACE/test_m_get_object_testSpatialFluent.pdl";
-//		String mdpGraph = "src/main/java/examples/MDP/RACE/test_spatialFluent.dot";
+		String problemFile = "src/main/java/examples/MDP/RACE/test_m_get_object_testSpatialFluent.pdl";
+		String mdpGraph = "src/main/java/examples/MDP/RACE/test_m_get_object_testSpatialFluent.dot";
 
 		CHIMP.CHIMPBuilder builder;
 

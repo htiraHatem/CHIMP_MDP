@@ -1,0 +1,7 @@
+digraph {
+  node [color="#40b9e5" ]
+ size="60,17";
+"2" [label=" S2   : (r:-0.04 ), Utility : -0.04  , (resource : 145)  " shape=doubleoctagon];
+"0" [label=" S0   : (reward:-0.4 ), Utility : -0.4  , (resource : 170) "]"1" [label=" S1   : (reward:-0.04 ), Utility : -0.04  , (resource : 150) "]"0" -> "1" [ label="grasp_object(tray) (ProbTrans : 0,90)"
+, arrowhead = diamond , color=green];"1" -> "2" [ label="move_base_blind(manipulationAreaEastCounter1,preManipulationAreaEastCounter1) (ProbTrans : 0,90)"
+, arrowhead = diamond , color=green];}
