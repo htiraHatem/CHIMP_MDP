@@ -89,32 +89,21 @@ public class HTNExpander {
 
 		if (spatialConstraintSolver.getConstraints().length > 0) {
 
-			System.out.println(spatialConstraintSolver.getConstraints().length);
 			ArrayList<UnaryRectangleConstraint> u = new ArrayList<UnaryRectangleConstraint>();
 
 			for (org.metacsp.framework.Constraint c : spatialConstraintSolver.getConstraints())
-				if (c.isUnary() && ((UnaryRectangleConstraint) c).getType().name().equals("At")) {
+				if (c.isUnary() && ((UnaryRectangleConstraint) c).getType().name().equals("At"))
 					u.add((UnaryRectangleConstraint) c);
-					System.out.println(u.get(0).getScope()[0].getComponent());
-					System.out.println(u.get(0).getBounds()[0]);
-					System.out.println(u.get(0).getBounds()[1]);
-					// ((UnaryRectangleConstraint) c)
-				}
-
-//			if(i.getName().equalsIgnoreCase("move_base_blind")) {
-			//
-//					}
 
 			UnaryRectangleConstraint term1 = null;
 			UnaryRectangleConstraint term2 = null;
 
 			for (Task t : fd.getOrderedTasks1()) {
 				// check if the the spatial variables exists or not
-				// Boolean a =u.filter(t.getName()::contains).findAny();
-				String[] moveOp = { "move_base_blind", "moveTo" };
+				String[] moveOp = { "move_base_blind", "moveTo","moveTo1" };
 				if ((Arrays.asList(moveOp).contains(t.getName()))) {
-					System.out.println(t.getName());
-					System.out.println(t.getTerms());
+//					System.out.println(t.getName());
+//					System.out.println(t.getTerms());
 					for (UnaryRectangleConstraint ucr : u) {
 
 						if (t.getTermsArray()[0].toString().equalsIgnoreCase(ucr.getScope()[0].getComponent()))
@@ -123,16 +112,43 @@ public class HTNExpander {
 							term2 = ucr;
 
 					}
-					System.out.println(term1.getEdgeLabel());
-					System.out.println(term2.getEdgeLabel());
+//					System.out.println(term1.getEdgeLabel());
+//					System.out.println(term2.getEdgeLabel());
+					
+					//get The center of rectangle of obj1
+					long obj1X1 = term1.getBounds()[0].min;
+					long obj1X2 = term1.getBounds()[1].max;
+					long obj1XCenter = (obj1X1 + obj1X2)/2;
+					
+					long obj1Y1 = term1.getBounds()[2].min;
+					long obj1Y2 = term1.getBounds()[3].max;
+					long obj1YCenter = (obj1Y1 + obj1Y2)/2;
 					
 					
+					//get The center of rectangle of obj1
+					long obj2X1 = term2.getBounds()[0].min;
+					long obj2X2 = term2.getBounds()[1].max;
+					long obj2XCenter = (obj2X1 + obj2X2)/2;
+					
+					long obj2Y1 = term2.getBounds()[2].min;
+					long obj2Y2 = term2.getBounds()[3].max;
+					long obj2YCenter = (obj2Y1 + obj2Y2)/2;
 
-
-					// *********
-					t.getResourceUsageIndicators().get(0).setResourceUsageLevel(5);
 					
-					System.out.println(t.getResourceUsageIndicators());
+					int dist = (int) Math.hypot(obj1XCenter-obj2XCenter, obj1YCenter-obj2YCenter);
+					//System.out.println("distance between" + t.getTerms() + " = " + dist);
+
+					//System.out.println(domain.getResourceSchedulers().get(0).getCapacity());
+					
+					Double nbr = ((double) dist/100);
+					int rslt = (int) ((domain.getResourceSchedulers().get(0).getCapacity() *10 /100) * nbr);
+					//System.out.println(rslt);
+					
+					//10 % reduced from global value every 100U distance
+					// ********* assign the calculated distance
+					t.getResourceUsageIndicators().get(0).setResourceUsageLevel(rslt);
+			    	t.getResourceUsageIndicators().get(0).setResourceName("NavigationCapaicty");
+
 
 				}
 
@@ -141,7 +157,7 @@ public class HTNExpander {
 		}
 		
 		
-		// get resources
+		// get global resources value
 		List<FluentResourceUsageScheduler> fluentSchedulers = domain.getResourceSchedulers();
 			fd.setResourceSchedulers(fluentSchedulers);		
 		return fd;

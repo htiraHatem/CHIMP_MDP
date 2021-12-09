@@ -1,0 +1,24 @@
+digraph {
+  node [color="#40b9e5" ]
+ size="60,17";
+"7" [label=" S7   : (r:1.0 ), Utility : 1.0  , (resource : 47)  " shape=doubleoctagon];
+"9" [label=" S9   : (r:1.0 ), Utility : 1.0  , (resource : 45)  " shape=doubleoctagon];
+"14" [label=" S14   : (r:1.0 ), Utility : 1.0  , (resource : 47)  " shape=doubleoctagon];
+"16" [label=" S16   : (r:1.0 ), Utility : 1.0  , (resource : 45)  " shape=doubleoctagon];
+"0" [label=" S0   : (reward:-0.4 ), Utility : -0.25705642000000006  , (resource : 100) "]"1" [label=" S1   : (reward:-0.04 ), Utility : 0.15882619999999997  , (resource : 80) "]"2" [label=" S2   : (reward:-0.04 ), Utility : 0.22091799999999998  , (resource : 77) "]"3" [label=" S3   : (reward:-0.04 ), Utility : 0.37273999999999996  , (resource : 75) "]"4" [label=" S4   : (reward:-0.04 ), Utility : 0.45859999999999995  , (resource : 72) "]"5" [label=" S5   : (reward:-0.04 ), Utility : 0.5539999999999999  , (resource : 52) "]"6" [label=" S6   : (reward:-0.04 ), Utility : 0.6599999999999999  , (resource : 49) "]"8" [label=" S8   : (reward:-0.04 ), Utility : 0.6599999999999999  , (resource : 47) "]"10" [label=" S10   : (reward:-0.04 ), Utility : 0.37273999999999996  , (resource : 75) "]"11" [label=" S11   : (reward:-0.04 ), Utility : 0.45859999999999995  , (resource : 72) "]"12" [label=" S12   : (reward:-0.04 ), Utility : 0.5539999999999999  , (resource : 52) "]"13" [label=" S13   : (reward:-0.04 ), Utility : 0.6599999999999999  , (resource : 49) "]"15" [label=" S15   : (reward:-0.04 ), Utility : 0.6599999999999999  , (resource : 47) "]"0" -> "1" [ label="grasp_object(tray) (ProbTrans : 0,90)"
+, arrowhead = diamond , color=green];"1" -> "2" [ label="move_base_blind(manipulationAreaEastCounter1,preManipulationAreaEastCounter1) (ProbTrans : 0,90)"
+, arrowhead = diamond , color=green];"2" -> "3" [ label="moveTo(preManipulationAreaEastCounter1,preManipulationNorthTable) (ProbTrans : 0,70)"
+, arrowhead = diamond , color=green];"2" -> "10" [ label="moveTo(preManipulationAreaEastCounter1,preManipulationSouthTable) (ProbTrans : 0,70)"
+,style=dotted, arrowhead=tee];"3" -> "4" [ label="move_base_blind(preManipulationNorthTable,manipulationNorthTable) (ProbTrans : 0,90)"
+, arrowhead = diamond , color=green];"4" -> "5" [ label="grasp_object(cup) (ProbTrans : 0,90)"
+, arrowhead = diamond , color=green];"5" -> "6" [ label="move_base_blind(manipulationNorthTable,preManipulationNorthTable) (ProbTrans : 0,90)"
+, arrowhead = diamond , color=green];"6" -> "7" [ label="moveTo(preManipulationNorthTable,table2) (ProbTrans : 0,70)"
+, arrowhead = diamond , color=green];"6" -> "8" [ label="moveTo(preManipulationNorthTable,corner1) (ProbTrans : 0,90)"
+,style=dotted, arrowhead=tee];"8" -> "9" [ label="moveTo(corner1,table2) (ProbTrans : 0,70)"
+, arrowhead = diamond , color=green];"10" -> "11" [ label="move_base_blind(preManipulationSouthTable,manipulationAreaSouthTable) (ProbTrans : 0,90)"
+, arrowhead = diamond , color=green];"11" -> "12" [ label="grasp_object(appetizer) (ProbTrans : 0,90)"
+, arrowhead = diamond , color=green];"12" -> "13" [ label="move_base_blind(manipulationAreaSouthTable,preManipulationSouthTable) (ProbTrans : 0,90)"
+, arrowhead = diamond , color=green];"13" -> "14" [ label="moveTo(preManipulationSouthTable,table2) (ProbTrans : 0,70)"
+, arrowhead = diamond , color=green];"13" -> "15" [ label="moveTo(preManipulationSouthTable,corner2) (ProbTrans : 0,90)"
+,style=dotted, arrowhead=tee];"15" -> "16" [ label="moveTo(corner2,table2) (ProbTrans : 0,70)"
+, arrowhead = diamond , color=green];}

@@ -14,8 +14,8 @@ public class ResourceUsageTemplate {
 	}
 
 	/** The resource's name */
-	private final String resourceName;
-	
+	private String resourceName;
+
 	/** The type of the fluent */
 	private String fluentType;
 	
@@ -144,5 +144,8 @@ public class ResourceUsageTemplate {
 		return ResManip;
 	}
 	
+	public void setResourceName(String resourceName) {
+		this.resourceName = resourceName;
+	}
 	
 }

@@ -1,0 +1,52 @@
+(Problem
+
+(ArgumentSymbols
+table2
+counter northTable appetizer corner1 corner2 leftArm rightArm nothing
+tray cup placingAreaEastLeftTable1 manipulationAreaSouthTable1 
+placingAreaEastRightCounter1 manipulationAreaEastCounter1 preManipulationAreaEastCounter1
+placingAreaSouthTable manipulationAreaSouthTable preManipulationSouthTable
+placingAreaNorthTable manipulationNorthTable preManipulationNorthTable
+)
+
+(Fluent f00 holding(leftArm nothing))
+(Fluent f01 holding(rightArm nothing))
+
+(Fluent f1 robotAt(manipulationAreaEastCounter1))
+(Constraint Release[0,0](f1))
+(Fluent c0 connected(placingAreaEastRightCounter1 manipulationAreaEastCounter1 preManipulationAreaEastCounter1))
+(Fluent c1 connected(placingAreaSouthTable manipulationAreaSouthTable preManipulationSouthTable))
+(Fluent c2 connected(placingAreaNorthTable manipulationNorthTable preManipulationNorthTable))
+
+
+(Fluent f21 on(tray placingAreaEastRightCounter1))
+(Fluent f22 on(appetizer placingAreaSouthTable))
+(Fluent f23 on(cup placingAreaNorthTable))
+
+(Fluent f4 crossLinked(preManipulationNorthTable table2))
+(Fluent f5 crossLinked(preManipulationNorthTable corner1))
+(Fluent f6 crossLinked(corner1 table2))
+
+(Fluent f7 crossLinked(preManipulationSouthTable table2))
+(Fluent f8 crossLinked(preManipulationSouthTable corner2))
+(Fluent f9 crossLinked(corner2 table2))
+
+#spatial fluents
+# all spatial vairables should be defined!
+(UnarySpatialFluent sp1 At(preManipulationAreaEastCounter1 [60,60] [70,70] [49,49] [69,69]))
+(UnarySpatialFluent sp2 At(manipulationAreaEastCounter1 [49,49] [55,55] [49,49] [69,69]))
+
+(UnarySpatialFluent sp3 At(preManipulationNorthTable [200,200] [250,250] [400,400] [460,460]))
+(UnarySpatialFluent sp4 At(manipulationNorthTable [200,200] [250,250] [450,450] [510,510]))
+
+(UnarySpatialFluent sp5 At(preManipulationSouthTable [200,200] [250,250] [50,50] [80,80]))
+(UnarySpatialFluent sp6 At(manipulationAreaSouthTable [200,200] [250,250] [20,20] [40,40]))
+
+
+(UnarySpatialFluent sp7 At(corner1 [390,390] [400,400] [400,400] [460,460]))
+(UnarySpatialFluent sp8 At(corner2 [390,390] [400,400] [0,0] [60,60]))
+(UnarySpatialFluent sp9 At(table2 [390,390] [400,400] [49,49] [69,69]))
+
+(Task t1 drive_robot(table2))
+
+)

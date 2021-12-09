@@ -65,18 +65,28 @@ public class TestRaceMDP {
 //--------------------------------------------------------------------------------------------------
 
 		// charge battery resource = 170
-		String domainFile = "src/main/java/examples/MDP/RACE/domainRace4.ddl";
+//		String domainFile = "src/main/java/examples/MDP/RACE/domainRace4.ddl";
 
 		// drive to table2 not enough resource(170) ! ==> charging_Battery
 //		String problemFile = "src/main/java/examples/MDP/RACE/test_m_drive_robot_3.pdl";
 //		String mdpGraph = "src/main/java/examples/MDP/RACE/test_m_drive_robot_3.dot";
 
 
-		//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+		//Domain for spatial tests
+		String domainFile = "src/main/java/examples/MDP/RACE/domainRace5.ddl";
 
-		// test spatial Solver and spatial fluents : works !
-		String problemFile = "src/main/java/examples/MDP/RACE/test_m_get_object_testSpatialFluent.pdl";
-		String mdpGraph = "src/main/java/examples/MDP/RACE/test_m_get_object_testSpatialFluent.dot";
+		// use spatial fluents : pickup object + move_base_blind
+//		String problemFile = "src/main/java/examples/MDP/RACE/test_SpatialFluent_m_get_object.pdl";
+//		String mdpGraph = "src/main/java/examples/MDP/RACE/test_SpatialFluent_m_get_object.dot";
+		
+		// use spatial fluents : move from northTable to table2
+//		String problemFile = "src/main/java/examples/MDP/RACE/test_SpatialFluent_m_moveTo0.pdl";
+//		String mdpGraph = "src/main/java/examples/MDP/RACE/test_SpatialFluent_m_moveTo0.dot";
+		
+		// move from counter1 to table2
+		String problemFile = "src/main/java/examples/MDP/RACE/test_SpatialFluent_m_drive_robot.pdl";
+		String mdpGraph = "src/main/java/examples/MDP/RACE/test_SpatialFluent_m_drive_robot.dot";
 
 		CHIMP.CHIMPBuilder builder;
 

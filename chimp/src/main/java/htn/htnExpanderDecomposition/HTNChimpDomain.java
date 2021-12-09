@@ -69,9 +69,7 @@ public class HTNChimpDomain extends HTNDomain {
 			resourceSchedulers.add(f);
 
 		}
-		
-		FluentNetworkSolver fluentSolver=builder.build().getFluentSolver();
-		ConstraintSolver spatialSolver=fluentSolver.getConstraintSolvers()[2];
+
 
 		// operators
 		for (PlanReportroryItem i : O) {
