@@ -26,7 +26,7 @@ public class ResourceUsageTemplate {
 	private final String[] resourceRequirements;
 	
 	/**  The amount of capacity the resource uses */
-	private int resourceUsageLevel;
+	final int resourceUsageLevel;
 
 	private final ResourceMan ResManip;
 
@@ -112,10 +112,6 @@ public class ResourceUsageTemplate {
 
 	public int getResourceUsageLevel() {
 		return resourceUsageLevel;
-	}
-	
-	public void setResourceUsageLevel(int resourceUsageLevel) {
-		this.resourceUsageLevel = resourceUsageLevel;
 	}
 	
 	public void setResourceManipulationTemplate(ResourceUsageTemplate resourceUsageTemplate) {

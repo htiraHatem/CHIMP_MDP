@@ -146,8 +146,12 @@ public class HTNExpander {
 					
 					//10 % reduced from global value every 100U distance
 					// ********* assign the calculated distance
-					t.getResourceUsageIndicators().get(0).setResourceUsageLevel(rslt);
-			    	t.getResourceUsageIndicators().get(0).setResourceName("NavigationCapaicty");
+
+					List<ResourceUsageTemplate> lst =new ArrayList<ResourceUsageTemplate>();
+					ResourceUsageTemplate a = new ResourceUsageTemplate("navigationCapacity", null,null, rslt);
+					lst.add(a);
+					t.setResourceUsageIndicators(lst);
+					//System.out.println(t.getResourceUsageIndicators().get(0));
 
 
 				}
