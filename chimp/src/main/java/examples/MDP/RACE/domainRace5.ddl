@@ -41,7 +41,7 @@
   (Reward -0.04) (TransitionProb 0.9)
 
    (ResourceUsage 
-    (Usage navigationCapacity 20))
+    (Usage navigationCapacity 2))
 )
 
 (:operator 
@@ -55,7 +55,7 @@
   (if (Values ?l2 corner2) (Reward -0.06) (TransitionProb 0.9)) #
   (else (Reward -0.04) (TransitionProb 0.7)) #
 
-  (if (IC ?Money < 10) (Decrease (Reward 0.02)))
+  (if (IC ?Money < 5) (Decrease (Reward 0.02)))
 
 #determined by spatial knowledge
 #  (ResourceUsage 
