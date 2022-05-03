@@ -30,10 +30,11 @@ public class Stats {
 	public enum TimerName {
 		EXPANDER  { public String toString() { return "HTN Expansion Time "; } },
 		STATES    { public String toString() { return "MDP States Time    "; } },
+		REWARD    { public String toString() { return "MDP Reward Time    "; } },
 		TRANSITION{ public String toString() { return "MDP Transition/resource Time"; } },
 		CONVERTER { public String toString() { return "HTN to MDP Time    "; } },
 		SOLVER    { public String toString() { return "MDP Solver Time    "; } },
-		TOTAL     { public String toString() { return "Total Runtime      "; } },
+		TOTAL     { public String toString() { return "Total Runtime      "; } }
 		}
 	final Timer timers[] = new Timer[TimerName.values().length];
 	long uniqueObjects;

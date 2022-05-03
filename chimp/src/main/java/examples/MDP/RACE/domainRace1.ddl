@@ -3,12 +3,12 @@
 (MaxArgs 3)
 
 (PredicateSymbols
-  holding robotAt get_object !moveTo obtainObject drive_robot moveTo crossLinked !grasp_object 
-  on connected !move_base_blind isCollision !charge_battery charger_at !moveTo1 charged)
+  holding robotAt get_object !moveTo obtainObject drive_robot moveTo crossLinked !grasp_object
+  on connected !move_base_blind isCollision)
 
 ####################
 #######RESOURCES##############
-(Resource BatteryStorageCapacity 170)
+#(Resource BatteryStorageCapacity 100)
 
 
 ################################
@@ -39,46 +39,16 @@
   (Del p4)
   (Add e1 holding(?arm ?obj))
   (Reward -0.04) (TransitionProb 0.9)
-
-   (ResourceUsage 
-    (Usage navigationCapacity 20))
 )
 
 (:operator 
   (Head !moveTo(?l1 ?l2))
   (Pre p1 robotAt(?l1))
-  (Pre p2 charger_at(?cornerArea))
   (Del p1)
   (Add e1 robotAt(?l2))
   
-  (if (Values ?l2 table2) (Reward 1)) #table2 always is the final state
-  (if (Values ?l2 corner1) (Reward -0.06) (TransitionProb 0.9)) #
-  (if (Values ?l2 corner2) (Reward -0.06) (TransitionProb 0.9)) #
-  (else (Reward -0.045) (TransitionProb 0.7)) #
+  (Reward -0.04) (TransitionProb 0.88)
 
-  (if (IC ?Money < 20) (Decrease (Reward 0.05)))
-
-  (ResourceUsage 
-    (Usage BatteryStorageCapacity 30))
-)
-
-(:operator 
-  (Head !moveTo1(?l1 ?l2))
-  (Pre p1 robotAt(?l1))
-  (Pre p2 charger_at(?cornerArea))
-  (Del p1)
-  (Add e1 robotAt(?l2))
-  #to reach charge point or to leave it
-  (Add e2 charged(Agent True ?l2)) #to differentiate between the other move in state generation
-
-  (if (Values ?l2 table2) (Reward 1.7)) #table2 always is the final state / scenario3 r=1 , scenario2 r = 1.7
-  (if (Values ?l2 corner1) (Reward -0.06)) #
-  (else (Reward -0.06) (TransitionProb 0.9)) #
-
-  (if (IC ?Money < 5) (Decrease (Reward 0.05)))
-
-  (ResourceUsage 
-    (Usage BatteryStorageCapacity 20))
 )
 
 # MOVE_BASE_BLIND   ManArea to PreArea or opposite
@@ -92,25 +62,9 @@
  (Constraint Overlaps(task,e1))
  (Del p1)
 
- (Reward -0.04) (TransitionProb 0.9)
+  (if (Values ?toArea preManipulationAreaEastCounter1) (Reward 1)) #premanipulationArea always is the final state
+  (else (Reward -0.04) (TransitionProb 0.9)) #
 
- (ResourceUsage 
-    (Usage navigationCapacity 25))
-)
-
-# charge the battery at corner1
-(:operator
- (Head !charge_battery(?cornerArea))
- (Pre p1 robotAt(?cornerArea))    
- (Pre p2 charger_at(?cornerArea))
- (Add e1 chargedBattery(true)) #just for test ==> differentiate between statesin expansion
-
- (Reward -0.04) (TransitionProb 0.9)
-   (if (Values ?cornerArea corner1) (Increase Money 100))
-
-
- #(ResourceUsage 
- #   (Usage navigationCapacity 25))
 )
 
 (:method
@@ -147,20 +101,6 @@
 (Sub s1 !moveTo(preManipulationNorthTable corner1))
 (Sub s2 !moveTo(corner1 table2))
 )
-
-# with charge stop
-(:method 
-(Head moveTo(table2))
-(Pre p1 holding(?arm cup))
-(Pre p2 holding(?otherArm tray))
-(Pre p3 crossLinked(preManipulationNorthTable corner1))
-(Pre p4 crossLinked(corner1 table2))
-(Pre p5 charger_at(corner1))
-(Sub s1 !moveTo1(preManipulationNorthTable corner1))
-(Sub s2 !charge_battery(corner1))
-(Sub s3 !moveTo1(corner1 table2))
-)
-
 
 (:method 
 (Head moveTo(table2))

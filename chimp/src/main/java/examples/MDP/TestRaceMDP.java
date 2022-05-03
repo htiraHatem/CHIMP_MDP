@@ -24,7 +24,11 @@ public class TestRaceMDP {
 
 	public static void main(String[] args) throws Exception {
 
+		// with resource definition
 		//String domainFile = "src/main/java/examples/MDP/RACE/domainRace.ddl";
+		
+		// without resource definition
+//		String domainFile = "src/main/java/examples/MDP/RACE/domainRace1.ddl";
 
 		// robot at manArea
 //		String problemFile = "src/main/java/examples/MDP/RACE/test_m_get_object_0.pdl";
@@ -57,26 +61,31 @@ public class TestRaceMDP {
 		
 		//resource = 200
 //		String domainFile = "src/main/java/examples/MDP/RACE/domainRace3.ddl";
-
-//		// drive to table2 enough resource(200) ==> shortest consistent path without charging
+//
+////		// drive to table2 enough resource(200) ==> shortest consistent path without charging
 //		String problemFile = "src/main/java/examples/MDP/RACE/test_m_drive_robot_2.pdl";
 //		String mdpGraph = "src/main/java/examples/MDP/RACE/test_m_drive_robot_2.dot";
 		
 //--------------------------------------------------------------------------------------------------
 
 		// charge battery resource = 170
-//		String domainFile = "src/main/java/examples/MDP/RACE/domainRace4.ddl";
+		String domainFile = "src/main/java/examples/MDP/RACE/domainRace4.ddl";
 
 		// drive to table2 not enough resource(170) ! ==> charging_Battery
 //		String problemFile = "src/main/java/examples/MDP/RACE/test_m_drive_robot_3.pdl";
 //		String mdpGraph = "src/main/java/examples/MDP/RACE/test_m_drive_robot_3.dot";
+		
+		
+		// chargin possible : pickup object + move_base_blind + robot at manArea
+		String problemFile = "src/main/java/examples/MDP/RACE/test_SpatialFluent_m_get_object.pdl";
+		String mdpGraph = "src/main/java/examples/MDP/RACE/test_SpatialFluent_m_get_object.dot";
 
 
 //--------------------------------------------------------------------------------------------------
 		//Domain for spatial tests
-		String domainFile = "src/main/java/examples/MDP/RACE/domainRace5.ddl";
+//		String domainFile = "src/main/java/examples/MDP/RACE/domainRace5.ddl";
 
-		// use spatial fluents : pickup object + move_base_blind
+		// use spatial fluents : pickup object + move_base_blind + robot at manArea
 //		String problemFile = "src/main/java/examples/MDP/RACE/test_SpatialFluent_m_get_object.pdl";
 //		String mdpGraph = "src/main/java/examples/MDP/RACE/test_SpatialFluent_m_get_object.dot";
 		
@@ -85,8 +94,8 @@ public class TestRaceMDP {
 //		String mdpGraph = "src/main/java/examples/MDP/RACE/test_SpatialFluent_m_moveTo0.dot";
 		
 		// move from counter1 to table2
-		String problemFile = "src/main/java/examples/MDP/RACE/test_SpatialFluent_m_drive_robot.pdl";
-		String mdpGraph = "src/main/java/examples/MDP/RACE/test_SpatialFluent_m_drive_robot.dot";
+//		String problemFile = "src/main/java/examples/MDP/RACE/test_SpatialFluent_m_drive_robot.pdl";
+//		String mdpGraph = "src/main/java/examples/MDP/RACE/test_SpatialFluent_m_drive_robot.dot";
 
 		CHIMP.CHIMPBuilder builder;
 

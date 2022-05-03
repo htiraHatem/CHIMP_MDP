@@ -1,0 +1,27 @@
+digraph {
+  node [color="#40b9e5" ]
+ size="60,17";
+"5" [label=" S5, U : 1.0  " shape=doubleoctagon];
+"7" [label=" S7, U : 1.0  " shape=doubleoctagon];
+"11" [label=" S11, U : 1.0  " shape=doubleoctagon];
+"0" [label=" S0, R: -0.4, U : 0,45 "];
+"1" [label=" S1, R: -0.04, U : 0,85 "];
+"2" [label=" S2, R: -0.04, U : 0,88 "];
+"3" [label=" S3, R: -0.04, U : 0,92 "];
+"4" [label=" S4, R: -0.04, U : 0,96 "];
+"6" [label=" S6, R: -0.04, U : 0,96 "];
+"8" [label=" S8, R: -0.03, U : 0,89 "];
+"9" [label=" S9, R: -0.04, U : 0,92 "];
+"10" [label=" S10, R: -0.04, U : 0,96 "];
+"0" -> "1" [ label="getVehicle(car)"
+, arrowhead = diamond , color=green];"1" -> "2" [ label="moveTo(home,harbor,car)"
+,style=dotted, arrowhead=tee];"1" -> "8" [ label="moveTo(home,airport,car)"
+, arrowhead = diamond , color=green];"2" -> "3" [ label="getVehicle(ship)"
+, arrowhead = diamond , color=green];"3" -> "4" [ label="moveTo(harbor,lpool,ship)"
+, arrowhead = diamond , color=green];"3" -> "6" [ label="moveTo(harbor,soton,ship)"
+,style=dotted, arrowhead=tee];"4" -> "5" [ label="moveTo(lpool,london,ship)"
+, arrowhead = diamond , color=green];"6" -> "7" [ label="moveTo(soton,london,ship)"
+, arrowhead = diamond , color=green];"8" -> "9" [ label="getVehicle(plane)"
+, arrowhead = diamond , color=green];"9" -> "10" [ label="moveTo(airport,nyc,plane)"
+, arrowhead = diamond , color=green];"10" -> "11" [ label="moveTo(nyc,london,plane)"
+, arrowhead = diamond , color=green];}

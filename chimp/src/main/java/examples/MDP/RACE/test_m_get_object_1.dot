@@ -1,10 +1,10 @@
 digraph {
   node [color="#40b9e5" ]
  size="60,17";
-"3" [label=" S3  " shape=doubleoctagon];
-"0" [label=" S0 "];
-"1" [label=" S1 "];
-"2" [label=" S2 "];
+"3" [label=" S3, U : 1.0  " shape=doubleoctagon];
+"0" [label=" S0, R: -0.4, U : 0,26 "];
+"1" [label=" S1, R: -0.04, U : 0,73 "];
+"2" [label=" S2, R: -0.04, U : 0,86 "];
 "0" -> "1" [ label="move_base_blind(preManipulationAreaEastCounter1,manipulationAreaEastCounter1)"
 , arrowhead = diamond , color=green];"1" -> "2" [ label="grasp_object(tray)"
 , arrowhead = diamond , color=green];"2" -> "3" [ label="move_base_blind(manipulationAreaEastCounter1,preManipulationAreaEastCounter1)"

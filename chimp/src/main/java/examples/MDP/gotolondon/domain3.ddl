@@ -15,15 +15,17 @@
 (:operator 
   (Head !getVehicle(?v))
   (Add e1 has(?v))
-  (Reward -0.04)
    # transition probability is attached to the Task
    # reward is attached with action and will be assigned to the current state 
  # (if (Values ?v car ship) (Reward -0.01) (TransitionProb 1))
-  (if (Values ?v plane) (Reward -0.01) (TransitionProb 0.8))
+  (if (Values ?v plane) (Reward 0.04) (TransitionProb 0.8))
   (else (Reward -0.04) (TransitionProb 0.9))
 
 (ResourceUsage (Usage Money 20))
 )
+
+
+# move from ?l1 to ?l2
 
 # move from ?l1 to ?l2
 (:operator 
@@ -34,13 +36,12 @@
   (Add e1 agent_at(?l2))
   (if (Values ?l2 london) (Reward 1)) # final state
   (if (Values ?l2 harbor) (Reward -0.05) (TransitionProb 0.9))
-  (if (Values ?l2 airport)  (Reward 0.1) (TransitionProb 0.8))
   (if (Values ?l2 nyc)  (Reward -0.04) (TransitionProb 0.7))
   (else (Reward -0.04) (TransitionProb 0.9)) # in all the other states
 
   (ResourceUsage (Usage Money 40))
 
-  (if (IC ?Money < 10) (Decrease (Reward 0.02)))
+  (if (IC ?Money < 10) (Decrease (Reward 0.06)))
 )
 
 (:operator 
@@ -54,7 +55,7 @@
   (ResourceUsage (Usage Money 0))
 
  # increase the cost if the condition is met
- (if (IC ?Money < 75) (Increase (Reward 0.04)))
+ (if (IC ?Money < 40) (Increase (Reward 0.1)))
 )
 
 (:operator 

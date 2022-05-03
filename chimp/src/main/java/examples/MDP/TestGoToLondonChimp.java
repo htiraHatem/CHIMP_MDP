@@ -24,7 +24,11 @@ public class TestGoToLondonChimp {
 	static final boolean PRINT_PLAN = true;
 
 	public static void main(String[] args) throws Exception {
-		String problemFile = "src/main/java/examples/MDP/gotolondon/problem.pdl";
+		// the main problem definition
+		//String problemFile = "src/main/java/examples/MDP/gotolondon/problem.pdl";
+		
+		//to test other initial state
+		String problemFile = "src/main/java/examples/MDP/gotolondon/problemNewIni.pdl";
 	
 		// original domain with reward and transition probability with initial construct rules
 		//without resourceSolver 
@@ -38,10 +42,14 @@ public class TestGoToLondonChimp {
 		
 
 		//discounter=1
-		//favorise shortest path! if money = 150 two option across bank and not 
-		String domainFile = "src/main/java/examples/MDP/gotolondon/domain2.ddl";
+		//favorise goin to bank path! if money = 100 
+//		String domainFile = "src/main/java/examples/MDP/gotolondon/domain2.ddl";
+//		String mdpGraph = "src/main/java/examples/MDP/gotolondon/gotolondonGraphVICHIMP (r=100).dot";
+
 		//and the shortest path when enough money is available (350) 
-		//String domainFile = "src/main/java/examples/MDP/gotolondon/domain3.ddl";
+		String domainFile = "src/main/java/examples/MDP/gotolondon/domain3.ddl";
+		String mdpGraph = "src/main/java/examples/MDP/gotolondon/gotolondonGraphVICHIMP (r=350).dot";
+
 
 
 		CHIMP.CHIMPBuilder builder;
@@ -63,7 +71,11 @@ public class TestGoToLondonChimp {
 
 		// expanding the HTN and convert it to mdp
 		HtnMdpFactory<HTNState, HTNAction> mdp = converter.convertHTN(fluentSolver, builder, HTNd);
-
+	
+//		for (HTNState s : mdp.getNonFinalStates()) {
+//		System.out.println("State " +  s.getId() + " : " + s.getLabel());
+//	}
+		
 		// value iteration algo
 		Map<HTNState, Double> policy = converter.PlanVI(mdp, 1);
 
@@ -77,7 +89,6 @@ public class TestGoToLondonChimp {
 //		}
 
 		// convert to dot language
-		String mdpGraph = "src/main/java/examples/MDP/gotolondon/gotolondonGraphVICHIMP0.dot";
 
 		if (mdpGraph != null) {
 			FileWriter writer = new FileWriter(mdpGraph);
@@ -97,6 +108,8 @@ public class TestGoToLondonChimp {
 					System.out.println(c++ + ".\t" + act);
 			}
 			chimp.printFullPlan();
+	        System.out.println("Found plan? " + chimp.generatePlan());
+	        chimp.printStats(System.out);
 		}
 
 	}

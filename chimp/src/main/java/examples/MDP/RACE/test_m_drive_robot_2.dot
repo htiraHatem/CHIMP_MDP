@@ -1,32 +1,28 @@
 digraph {
   node [color="#40b9e5" ]
  size="60,17";
-"7" [label=" S7   : (r:0.98 ), Utility : 0.98 " color = red ,  shape=doubleoctagon]
-"10" [label=" S10   : (r:0.98 ), Utility : 0.98 " color = red ,  shape=doubleoctagon]
-"12" [label=" S12   : (r:0.98 ), Utility : 0.98 " color = red ,  shape=doubleoctagon]
-"17" [label=" S17   : (r:0.98 ), Utility : 0.98 " color = red ,  shape=doubleoctagon]
-"19" [label=" S19   : (r:0.98 ), Utility : 0.98 " color = red ,  shape=doubleoctagon]
-"0" [label=" S0   : (reward:-0.4 ), Utility : -0.2656782220000001  , (resource : 170) "]"1" [label=" S1   : (reward:-0.04 ), Utility : 0.14924641999999994  , (resource : 150) "]"2" [label=" S2   : (reward:-0.04 ), Utility : 0.21027379999999993  , (resource : 125) "]"3" [label=" S3   : (reward:-0.045 ), Utility : 0.35753399999999996  , (resource : 95) "]"4" [label=" S4   : (reward:-0.04 ), Utility : 0.44725999999999994  , (resource : 70) "]"5" [label=" S5   : (reward:-0.04 ), Utility : 0.5413999999999999  , (resource : 50) "]"6" [label=" S6   : (reward:-0.04 ), Utility : 0.6459999999999999  , (resource : 25) "]"8" [label=" S8   : (reward:-0.06 ), Utility : 0.5213999999999999 " color = red ]
-"9" [label=" S9   : (reward:-0.04 ), Utility : 0.6459999999999999 " color = red ]
-"11" [label=" S11   : (reward:-0.065 ), Utility : 0.621 " color = red ]
-"13" [label=" S13   : (reward:-0.045 ), Utility : 0.35753399999999996  , (resource : 95) "]"14" [label=" S14   : (reward:-0.04 ), Utility : 0.44725999999999994  , (resource : 70) "]"15" [label=" S15   : (reward:-0.04 ), Utility : 0.5413999999999999  , (resource : 50) "]"16" [label=" S16   : (reward:-0.04 ), Utility : 0.6459999999999999  , (resource : 25) "]"18" [label=" S18   : (reward:-0.065 ), Utility : 0.621 " color = red ]
-"0" -> "1" [ label="grasp_object(tray) (ProbTrans : 0,90)"
-, arrowhead = diamond , color=green];"1" -> "2" [ label="move_base_blind(manipulationAreaEastCounter1,preManipulationAreaEastCounter1) (ProbTrans : 0,90)"
-, arrowhead = diamond , color=green];"2" -> "3" [ label="moveTo(preManipulationAreaEastCounter1,preManipulationNorthTable) (ProbTrans : 0,70)"
-, arrowhead = diamond , color=green];"2" -> "13" [ label="moveTo(preManipulationAreaEastCounter1,preManipulationSouthTable) (ProbTrans : 0,70)"
-,style=dotted, arrowhead=tee];"3" -> "4" [ label="move_base_blind(preManipulationNorthTable,manipulationNorthTable) (ProbTrans : 0,90)"
-, arrowhead = diamond , color=green];"4" -> "5" [ label="grasp_object(cup) (ProbTrans : 0,90)"
-, arrowhead = diamond , color=green];"5" -> "6" [ label="move_base_blind(manipulationNorthTable,preManipulationNorthTable) (ProbTrans : 0,90)"
-, arrowhead = diamond , color=green];"6" -> "7" [ label="moveTo(preManipulationNorthTable,table2) (ProbTrans : 0,70)"
-, arrowhead = diamond , color=green];"6" -> "8" [ label="moveTo1(preManipulationNorthTable,corner1) (ProbTrans : 0,90)"
-,style=dotted, arrowhead=tee];"6" -> "11" [ label="moveTo(preManipulationNorthTable,corner1) (ProbTrans : 0,90)"
-,style=dotted, arrowhead=tee];"8" -> "9" [ label="charge_battery(corner1) (ProbTrans : 0,90)"
-, arrowhead = diamond , color=green];"9" -> "10" [ label="moveTo1(corner1,table2) (ProbTrans : 0,70)"
-, arrowhead = diamond , color=green];"11" -> "12" [ label="moveTo(corner1,table2) (ProbTrans : 0,70)"
-, arrowhead = diamond , color=green];"13" -> "14" [ label="move_base_blind(preManipulationSouthTable,manipulationAreaSouthTable) (ProbTrans : 0,90)"
-, arrowhead = diamond , color=green];"14" -> "15" [ label="grasp_object(appetizer) (ProbTrans : 0,90)"
-, arrowhead = diamond , color=green];"15" -> "16" [ label="move_base_blind(manipulationAreaSouthTable,preManipulationSouthTable) (ProbTrans : 0,90)"
-, arrowhead = diamond , color=green];"16" -> "17" [ label="moveTo(preManipulationSouthTable,table2) (ProbTrans : 0,70)"
-, arrowhead = diamond , color=green];"16" -> "18" [ label="moveTo(preManipulationSouthTable,corner2) (ProbTrans : 0,90)"
-,style=dotted, arrowhead=tee];"18" -> "19" [ label="moveTo(corner2,table2) (ProbTrans : 0,70)"
+"7" [label=" S7, U : 1.0  : [25]  " shape=doubleoctagon];
+"10" [label=" S10, U : 1.7  : [70]  " shape=doubleoctagon];
+"12" [label=" S12, U : 0.95 " color = red ,  shape=doubleoctagon]
+"17" [label=" S17, U : 1.0  : [25]  " shape=doubleoctagon];
+"19" [label=" S19, U : 0.95 " color = red ,  shape=doubleoctagon]
+"0" [label=" S0, R: -0.4, U : -0,18 : [200] "]"1" [label=" S1, R: -0.04, U : 0,25 : [180] "]"2" [label=" S2, R: -0.04, U : 0,32 : [155] "]"3" [label=" S3, R: -0.045, U : 0,51 : [125] "]"4" [label=" S4, R: -0.04, U : 0,62 : [100] "]"5" [label=" S5, R: -0.04, U : 0,73 : [80] "]"6" [label=" S6, R: -0.04, U : 0,86 : [55] "]"8" [label=" S8, R: -0.04, U : 0,99 : [25] "]"9" [label=" S9, R: -0.04, U : 1,15 : [100] "]"11" [label=" S11, R: -0.045, U : 0,62 : [25] "]"13" [label=" S13, R: -0.045, U : 0,37 : [125] "]"14" [label=" S14, R: -0.04, U : 0,46 : [100] "]"15" [label=" S15, R: -0.04, U : 0,55 : [80] "]"16" [label=" S16, R: -0.04, U : 0,66 : [55] "]"18" [label=" S18, R: -0.045, U : 0,62 : [25] "]"0" -> "1" [ label="grasp_object(tray)"
+, arrowhead = diamond , color=green];"1" -> "2" [ label="move_base_blind(manipulationAreaEastCounter1,preManipulationAreaEastCounter1)"
+, arrowhead = diamond , color=green];"2" -> "3" [ label="moveTo(preManipulationAreaEastCounter1,preManipulationNorthTable)"
+, arrowhead = diamond , color=green];"2" -> "13" [ label="moveTo(preManipulationAreaEastCounter1,preManipulationSouthTable)"
+,style=dotted, arrowhead=tee];"3" -> "4" [ label="move_base_blind(preManipulationNorthTable,manipulationNorthTable)"
+, arrowhead = diamond , color=green];"4" -> "5" [ label="grasp_object(cup)"
+, arrowhead = diamond , color=green];"5" -> "6" [ label="move_base_blind(manipulationNorthTable,preManipulationNorthTable)"
+, arrowhead = diamond , color=green];"6" -> "7" [ label="moveTo(preManipulationNorthTable,table2)"
+, arrowhead = diamond , color=green];"6" -> "8" [ label="moveTo1(preManipulationNorthTable,corner1)"
+,style=dotted, arrowhead=tee];"6" -> "11" [ label="moveTo(preManipulationNorthTable,corner1)"
+,style=dotted, arrowhead=tee];"8" -> "9" [ label="charge_battery(corner1)"
+, arrowhead = diamond , color=green];"9" -> "10" [ label="moveTo1(corner1,table2)"
+, arrowhead = diamond , color=green];"11" -> "12" [ label="moveTo(corner1,table2)"
+, arrowhead = diamond , color=green];"13" -> "14" [ label="move_base_blind(preManipulationSouthTable,manipulationAreaSouthTable)"
+, arrowhead = diamond , color=green];"14" -> "15" [ label="grasp_object(appetizer)"
+, arrowhead = diamond , color=green];"15" -> "16" [ label="move_base_blind(manipulationAreaSouthTable,preManipulationSouthTable)"
+, arrowhead = diamond , color=green];"16" -> "17" [ label="moveTo(preManipulationSouthTable,table2)"
+, arrowhead = diamond , color=green];"16" -> "18" [ label="moveTo(preManipulationSouthTable,corner2)"
+,style=dotted, arrowhead=tee];"18" -> "19" [ label="moveTo(corner2,table2)"
 , arrowhead = diamond , color=green];}

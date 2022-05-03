@@ -569,7 +569,9 @@ public class HTNChimpToMDP {
 
 		// use the the specified rewards in the domain
 		
+		startTimer(TimerName.REWARD);
 		HTNReward rewardFunction = HTNChimpToMDP.useDefaultReward(states, fullyExpanded);
+		endTimer(TimerName.REWARD);
 
 		// get or create reward function
 		// HTNReward rewardFunction = createProportionalRewardFunction(states,

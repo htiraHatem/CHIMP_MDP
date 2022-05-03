@@ -48,12 +48,12 @@ public class Dot2Graph {
 
 				// out.print("\""+s.getId()+"\" [label=\""+OhneStatic+" (r:"+source.reward(s) +
 				 //" )");
-				out.print("\"" + s.getId() + "\" [label=\" S" + s.getId() + "   : (r:" + source.reward(s) + " )");
+				out.print("\"" + s.getId() + "\" [label=\" S" + s.getId());
 				if (policy != null)
-					out.print(", Utility : " + policy.get(s));
+					out.print(", U : " + policy.get(s));
 				if (RCVariable != null)
 					if (s.getRemainedResource()) {
-						out.print("  , (resource : " +RCVariable.getUpperBound() + ")");
+						out.print("  : [" +RCVariable.getUpperBound() + "]");
 						out.println("  \" shape=doubleoctagon];");
 					} else
 						out.println(" \" color = red ,  shape=doubleoctagon]");
@@ -75,18 +75,20 @@ public class Dot2Graph {
 				}
 				}
 				// easy to understand
-				out.print("\"" + s.getId() + "\" [label=\" S" + s.getId() + "   : (reward:" + source.reward(s) + " )");
+				out.print("\"" + s.getId() + "\" [label=\" S" + s.getId() + ", R: " +source.reward(s));
 			
 				// more details !!
 				// out.print("\""+s.getId()+"\" [label=\""+s.getLabel()+"
 				// (reward:"+source.reward(s)+ " )");
+		        DecimalFormat decf = new DecimalFormat("#.##");
+
 				
 				if (policy != null)
-					out.print(", Utility : " + policy.get(s));
+					out.print(", U : " +decf.format(policy.get(s)));
 
 				if (RCVariable != null)
 					if (s.getRemainedResource())
-						out.print("  , (resource : " + RCVariable.getUpperBound()	+ ") \"]");
+						out.print(" : [" + RCVariable.getUpperBound()	+ "] \"]");
 					else
 						out.println(" \" color = red ]");
 				else
@@ -109,7 +111,7 @@ public class Dot2Graph {
 						out.print(" [ label=\"" + a.getName());
 						double prob = source.gethTNTransitionProbabilityFunction().getTransitionProbability(is, a, ds);
 						// if(prob != 1) {
-						out.print(" (ProbTrans : " + df.format(prob) + ")");
+						//out.print(" (ProbTrans : " + df.format(prob) + ")");
 						
 						// }
 

@@ -56,7 +56,7 @@
   (if (Values ?l2 corner2) (Reward -0.06) (TransitionProb 0.9)) #
   (else (Reward -0.045) (TransitionProb 0.7)) #
 
-  (if (IC ?Money < 10) (Decrease (Reward 0.02)))
+  (if (IC ?Money < 10) (Decrease (Reward 0.05)))
 
   (ResourceUsage 
     (Usage BatteryStorageCapacity 30))
@@ -71,12 +71,12 @@
   #to reach charge point or to leave it
   (Add e2 charged(Agent True ?l2)) #to differentiate between the other move in state generation
 
-  (if (Values ?l2 table2) (Reward 1)) #table2 always is the final state
+  (if (Values ?l2 table2) (Reward 1.7)) #table2 always is the final state
   (if (Values ?l2 corner1) (Reward -0.06) (TransitionProb 0.9)) #
   (if (Values ?l2 corner2) (Reward -0.06) (TransitionProb 0.9)) #
   (else (Reward -0.04) (TransitionProb 0.7)) #
 
-  (if (IC ?Money < 10) (Decrease (Reward 0.02)))
+  (if (IC ?Money < 10) (Decrease (Reward 0.05)))
 
   (ResourceUsage 
     (Usage BatteryStorageCapacity 30))

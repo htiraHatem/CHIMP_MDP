@@ -1,0 +1,12 @@
+digraph {
+  node [color="#40b9e5" ]
+ size="60,17";
+"2" [label=" S2, U : 1.0  : [270]  " shape=doubleoctagon];
+"6" [label=" S6, U : 1.0  : [310]  " shape=doubleoctagon];
+"0" [label=" S0, R: -0.4, U : 0,39 : [350] "]"1" [label=" S1, R: -0.04, U : 0,86 : [310] "]"3" [label=" S3, R: -0.04, U : 0,8 : [350] "]"4" [label=" S4, R: 0.0, U : 0,84 : [350] "]"5" [label=" S5, R: -0.04, U : 0,86 : [350] "]"0" -> "1" [ label="moveTo(airport,nyc,plane)"
+, arrowhead = diamond , color=green];"0" -> "3" [ label="walkTo(airport,bank)"
+,style=dotted, arrowhead=tee];"1" -> "2" [ label="moveTo(nyc,london,plane)"
+, arrowhead = diamond , color=green];"3" -> "4" [ label="enter(bank)"
+, arrowhead = diamond , color=green];"4" -> "5" [ label="walkTo(bank,airport)"
+, arrowhead = diamond , color=green];"5" -> "6" [ label="moveTo(airport,london,plane)"
+, arrowhead = diamond , color=green];}
